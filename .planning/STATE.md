@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Content Expansion
-status: Executing Phase 05
-last_updated: "2026-05-28T12:44:12.213Z"
+status: Phase complete — ready for verification
+last_updated: "2026-05-28T12:56:27.219Z"
 progress:
   total_phases: 1
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 2
-  completed_plans: 1
-  percent: 50
+  completed_plans: 2
+  percent: 100
 ---
 
 # Project State
@@ -61,6 +61,8 @@ Plan: 2 of 2
 - [Phase 05]: Use AJV allErrors and deterministic errors/warnings arrays for contract validation.
 - [Phase 05]: Enforce transition behavior with required preset whitelist and compatibility pairs.
 - [Phase 05]: Load topic contracts from src/content/topics/<topic>/contract.json and block invalid contracts before batch assembly.
+- [Phase 05]: Keep first content batch limited to TLS/SSH/DNS while validating all manifest topics.
+- [Phase 05]: PR full validation runs contract suites, E2E smoke, and dual-format verification evidence.
 
 ### Pending Todos
 

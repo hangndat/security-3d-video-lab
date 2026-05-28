@@ -19,7 +19,7 @@
 
 ### 🚧 v1.1 Content Expansion (Planned)
 
-- [ ] **Phase 05: Content Authoring Foundation**
+- [x] **Phase 05: Content Authoring Foundation** (completed 2026-05-28)
   - **Goal:** Introduce data-first content authoring and validation contracts for new security modules.
   - **Requirements:** `CONT-01`, `CONT-03`, `AUTHR-01`, `AUTHR-02`
   - **Plans:** 2 plans
@@ -64,7 +64,7 @@ Phase 05 is in progress (1 of 2 plans complete).
 | Phase | Milestone | Requirements | Status |
 |------|-----------|--------------|--------|
 | 01-04 | v1.0 | Archived | Complete |
-| 05 | v1.1 | CONT-01, CONT-03, AUTHR-01, AUTHR-02 | In Progress (1/2 plans) |
+| 05 | 2/2 | Complete   | 2026-05-28 |
 | 06 | v1.1 | CONT-02, AUTHR-03, CINE-01, CINE-03 | Planned |
 | 07 | v1.1 | CINE-02, VER-01, VER-03 | Planned |
 | 08 | v1.1 | VER-02 | Planned |

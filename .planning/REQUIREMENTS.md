@@ -9,7 +9,7 @@ Requirements for the Content Expansion milestone.
 
 ### Content Expansion
 
-- [ ] **CONT-01**: User can generate at least three new security explainer modules beyond TLS/SSH/DNS from structured content packets.
+- [x] **CONT-01**: User can generate at least three new security explainer modules beyond TLS/SSH/DNS from structured content packets.
 - [ ] **CONT-02**: User can stitch new modules into one long-form narrative sequence with explicit transition rationale.
 - [x] **CONT-03**: User can enforce beat-level narration placeholder coverage for every module in a batch.
 
@@ -52,7 +52,7 @@ Deferred to future release.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CONT-01 | Phase 05 | Pending |
+| CONT-01 | Phase 05 | Complete |
 | CONT-02 | Phase 06 | Pending |
 | CONT-03 | Phase 05 | Complete |
 | AUTHR-01 | Phase 05 | Complete |
