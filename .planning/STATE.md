@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Ready to execute
-last_updated: "2026-05-28T07:44:34.056Z"
+last_updated: "2026-05-28T07:50:46.336Z"
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 4
-  completed_plans: 2
-  percent: 50
+  completed_plans: 3
+  percent: 75
 ---
 
 # Project State
@@ -24,12 +24,12 @@ Current focus: phase 02 mvp-engine.
 ## Current Position
 
 Phase: 02 (mvp-engine) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 
 - Phase: 02 of 04 (mvp-engine)
-- Plan: 2 of 3 in current phase
-- Status: Plan 02-01 complete, continuing phase execution
-- Last activity: 2026-05-28 - Completed 02-01 engine contract-first foundation execution
+- Plan: 3 of 3 in current phase
+- Status: Plan 02-02 complete, continuing phase execution
+- Last activity: 2026-05-28 - Completed 02-02 deterministic engine behavior execution
 
 ## Accumulated Context
 
@@ -44,6 +44,9 @@ Plan: 2 of 3
 - [Phase 02]: Use Vitest with filterable deterministic quick runs for contract-first validation.
 - [Phase 02]: Enforce SceneSpec schemaVersion as strict literal 1.0.0 with explicit unsupported-version guidance.
 - [Phase 02]: Gate post-MVP capability switches through an explicit disabled-by-default registry.
+- [Phase 02]: Scheduler compares by startFrame/track/id with stable tie-break.
+- [Phase 02]: Camera cues require explicit transitions for deterministic shot changes.
+- [Phase 02]: Packet lifecycle state remains engine-side while interpolation remains client-side pure math.
 
 ### Pending Todos
 
@@ -56,5 +59,5 @@ Plan: 2 of 3
 ## Session Continuity
 
 - Last session: 2026-05-28
-- Stopped at: Completed 02-01-PLAN.md
+- Stopped at: Completed 02-02-PLAN.md
 - Resume file: None
