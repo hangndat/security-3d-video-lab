@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 2 * * *"
+
+jobs:
+  pr-render-smoke:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        scenario: [tls, ssh, dns]
+    env:
+      RENDER_PROFILE: reduced
+      CANONICAL_SCENARIO: ${{ matrix.scenario }}
+      NODE_VERSION: "25.6.0"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - name: Install FFmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Verify pinned runtime and toolchain
+        run: |
+          node --version
+          ffmpeg -version
+      - name: Install dependencies
+        run: npm ci
+      - name: Run deterministic smoke gate
+        run: npm run test:e2e:render-smoke
+      - name: Run baseline test suite
+        run: npm test
+      - name: Upload failure evidence bundle
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-smoke-${{ matrix.scenario }}-evidence
+          path: |
+            .artifacts/repro/**
+            .artifacts/logs/**
+            .artifacts/trace/**
+          if-no-files-found: warn
+          retention-days: 7
+
+  nightly-render-matrix:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        scenario: [tls, ssh, dns]
+    env:
+      RENDER_PROFILE: full
+      CANONICAL_SCENARIO: ${{ matrix.scenario }}
+      NODE_VERSION: "25.6.0"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - name: Install FFmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Verify pinned runtime and toolchain
+        run: |
+          node --version
+          ffmpeg -version
+      - name: Install dependencies
+        run: npm ci
+      - name: Run nightly deterministic gate (one retry on transient failure)
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 15
+          max_attempts: 2
+          retry_on: error
+          command: npm run test:e2e:render-smoke
+      - name: Run full test suite
+        run: npm test
+      - name: Upload nightly evidence bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-${{ matrix.scenario }}-evidence
+          path: |
+            .artifacts/repro/**
+            .artifacts/logs/**
+            .artifacts/trace/**
+          if-no-files-found: warn
+          retention-days: 14
