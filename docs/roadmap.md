@@ -333,6 +333,29 @@ Progression is gated; a phase may start only after the required gate is passed.
 
 ---
 
+# MVP Scope Boundaries (Task 4)
+
+## In Scope for MVP Window
+
+- Core engine readiness (Phase 1).
+- First publishable content batch and KPI capture (Phase 2).
+- Limited visual expansion only when it directly improves MVP clarity (Phase 3 subset).
+
+## Out of Scope Until MVP Validation
+
+- Enterprise simulation packaging.
+- Full educational SaaS platform build-out.
+- Broad brand monetization experiments beyond baseline publishing.
+- Large automation investments not required for first content validation.
+
+## Anti-Scope-Creep Checks
+
+- Any new work item must map to an MVP outcome (engine reliability, content output, or validation signal).
+- If a task has no direct KPI, quality, or delivery impact for MVP, defer it to a post-MVP phase.
+- Phase 4+ exploratory topics cannot preempt unresolved Phase 2 validation findings.
+
+---
+
 # Recommended Initial Workflow
 
 ## Script
