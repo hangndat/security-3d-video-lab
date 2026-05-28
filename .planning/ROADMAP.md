@@ -11,8 +11,8 @@
 - `04-e2e-testing` requires readiness of both `02-mvp-engine` and `03-first-content-batch`.
 
 ## Current Status
-- `01-docs-foundation`: in_progress
-- `02-mvp-engine`: blocked (waiting for phase 01 done and implementation workspace active)
+- `01-docs-foundation`: done (plan `01-01` completed with summary and verification evidence)
+- `02-mvp-engine`: blocked (waiting for implementation workspace activation)
 - `03-first-content-batch`: blocked (waiting for phase 02 done)
 - `04-e2e-testing`: planned (queued behind phase 02 and 03 readiness; planning-only until implementation workspace is active)
 
