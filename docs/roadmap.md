@@ -1,5 +1,23 @@
 # Roadmap — Security Cinematic Lab
 
+# BRD-to-Roadmap Traceability (Task 1)
+
+This section maps the BRD scope to delivery phases and highlights current gaps.
+
+## BRD Concept Coverage
+
+- **Scene engine + timeline + render pipeline:** Covered in Phase 1 and expanded in Phase 5.
+- **Protocol visualization (TLS/SSH/JWT/DNS/CDN/WAF):** Initial coverage in Phase 2, broader expansion in Phase 4.
+- **Packet flow primitives and cinematic style system:** Covered in Phases 1 and 3.
+- **Audio pipeline (AI narration, subtitles, soundtrack sync):** Partially covered in Phase 5.
+- **Distribution and ecosystem growth:** Covered in Phase 6.
+
+## Gaps Identified
+
+- **Gap 1 - Explicit quality gates:** Phases describe work, but measurable done criteria are not yet standardized.
+- **Gap 2 - Dependency discipline:** Dependencies are implied by order, but no per-phase gate criteria exist yet.
+- **Gap 3 - MVP boundary controls:** Scope controls are weak; expansion work could start before MVP validation is complete.
+
 # Phase 0 — Research & Style Exploration (Week 1–2)
 
 ## Goals
