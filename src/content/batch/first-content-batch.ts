@@ -1,4 +1,6 @@
 export type TopicId = "tls" | "ssh" | "dns";
+import type { SceneSpec } from "../../engine/contracts/scene-spec.js";
+import { stitchSceneSpecsInOrder } from "../../render/remotion/render-composition.js";
 
 export interface StoryboardBeat {
   id: string;
@@ -216,6 +218,37 @@ export function createKpiCaptureSkeleton(assetId: string): KpiCapture {
   };
 }
 
+function assertValidTopicSequence(sequence: TopicId[]): void {
+  if (sequence.join(",") !== "tls,ssh,dns") {
+    throw new Error("Long-form sequence must be TLS -> SSH -> DNS.");
+  }
+}
+
+export function validateLongFormTransitionCoherence(assembly: LongFormAssembly = longFormAssembly): void {
+  assertValidTopicSequence(assembly.sequence);
+  const expectedPairs = assembly.sequence
+    .slice(0, -1)
+    .map((fromTopic, index) => `${fromTopic}->${assembly.sequence[index + 1]}`);
+  const actualPairs = assembly.transitions.map(
+    (transition) => `${transition.fromTopic}->${transition.toTopic}`
+  );
+
+  for (const pair of expectedPairs) {
+    if (!actualPairs.includes(pair)) {
+      throw new Error(`Missing long-form transition coherence link: ${pair}.`);
+    }
+  }
+}
+
+export function buildLongFormSceneSpec(topicScenes: Record<TopicId, SceneSpec>): SceneSpec {
+  validateLongFormTransitionCoherence(longFormAssembly);
+  const orderedScenes = longFormAssembly.sequence.map((topic) => ({
+    topic,
+    scene: topicScenes[topic]
+  }));
+  return stitchSceneSpecsInOrder(orderedScenes, longFormAssembly.slug);
+}
+
 export function validateBatchCompleteness(): string[] {
   const errors: string[] = [];
   const topics = firstContentBatchPackets.map((packet) => packet.topic);
@@ -240,6 +273,11 @@ export function validateBatchCompleteness(): string[] {
 
   if (longFormAssembly.sequence.join(",") !== "tls,ssh,dns") {
     errors.push("Long-form sequence must be TLS -> SSH -> DNS.");
+  }
+  try {
+    validateLongFormTransitionCoherence(longFormAssembly);
+  } catch (error) {
+    errors.push(error instanceof Error ? error.message : "Long-form transitions are invalid.");
   }
   if (longFormAssembly.targetWindowMinutes.min < 4 || longFormAssembly.targetWindowMinutes.max > 6) {
     errors.push("Long-form duration window must stay within 4-6 minutes.");

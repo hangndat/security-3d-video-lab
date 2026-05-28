@@ -36,6 +36,63 @@ export function buildDeterministicTraceInputs(sceneSpec: SceneSpec, frames: numb
   return frames.map((frame) => deriveRenderFrameState(sceneSpec, frame).timelineTraceInput);
 }
 
+export function stitchSceneSpecsInOrder(
+  orderedScenes: Array<{ topic: string; scene: SceneSpec }>,
+  stitchedSceneId: string
+): SceneSpec {
+  if (orderedScenes.length === 0) {
+    throw new Error("At least one scene is required to stitch a long-form composition.");
+  }
+
+  let frameOffset = 0;
+  const actors = new Map<string, SceneSpec["actors"][number]>();
+  const packets = new Map<string, SceneSpec["packets"][number]>();
+  const timeline: SceneSpec["timeline"] = [];
+  const seeds: string[] = [];
+  const capabilities: Record<string, boolean> = {};
+
+  for (const { topic, scene } of orderedScenes) {
+    seeds.push(`${topic}:${scene.seed}`);
+    for (const actor of scene.actors) {
+      const actorId = `${topic}-${actor.id}`;
+      actors.set(actorId, { ...actor, id: actorId });
+    }
+
+    for (const packet of scene.packets) {
+      const packetId = `${topic}-${packet.id}`;
+      packets.set(packetId, { ...packet, id: packetId });
+    }
+
+    for (const cue of scene.timeline) {
+      const payload = { ...cue.payload };
+      if (typeof payload.packetId === "string") {
+        payload.packetId = `${topic}-${payload.packetId}`;
+      }
+
+      timeline.push({
+        ...cue,
+        id: `${topic}-${cue.id}`,
+        startFrame: cue.startFrame + frameOffset,
+        payload
+      });
+    }
+
+    Object.assign(capabilities, scene.capabilities);
+    frameOffset += scene.totalFrames;
+  }
+
+  return {
+    schemaVersion: "1.0.0",
+    seed: seeds.join("|"),
+    sceneId: stitchedSceneId,
+    actors: [...actors.values()],
+    packets: [...packets.values()],
+    timeline,
+    totalFrames: frameOffset,
+    capabilities
+  };
+}
+
 function colorFromTrace(traceInput: string): [number, number, number] {
   const digest = createHash("sha256").update(traceInput).digest();
   return [digest[0] ?? 0, digest[1] ?? 0, digest[2] ?? 0];
