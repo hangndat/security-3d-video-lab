@@ -12,7 +12,7 @@
 
 ## Current Status
 - `01-docs-foundation`: done (plan `01-01` completed with summary and verification evidence)
-- `02-mvp-engine`: blocked (waiting for implementation workspace activation)
+- `02-mvp-engine`: in_progress (plan `02-01` completed; 1/4 plan summaries present)
 - `03-first-content-batch`: blocked (waiting for phase 02 done)
 - `04-e2e-testing`: planned (queued behind phase 02 and 03 readiness; planning-only until implementation workspace is active)
 
