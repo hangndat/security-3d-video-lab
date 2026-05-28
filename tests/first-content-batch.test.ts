@@ -5,6 +5,8 @@ import {
   firstContentBatchPackets,
   longFormAssembly,
   narrationPlaceholders,
+  populateKpiCapture,
+  validateKpiCaptureCompleteness,
   validateBatchCompleteness
 } from "../src/content/batch/first-content-batch.js";
 
@@ -51,6 +53,29 @@ describe("phase 03 first content batch contracts", () => {
     });
     expect(kpi.feedbackTags).toEqual([]);
     expect(kpi.pacingVerdict).toBeNull();
+  });
+
+  it("KPI gate rejects null checkpoints and null pacing verdict", () => {
+    const kpi = createKpiCaptureSkeleton("tls-short-v1");
+    expect(() => validateKpiCaptureCompleteness(kpi)).toThrow(
+      "KPI retention checkpoint p25 must be non-null."
+    );
+  });
+
+  it("KPI gate passes with complete measurable checkpoints and verdict", () => {
+    const kpi = populateKpiCapture(createKpiCaptureSkeleton("tls-short-v1"), {
+      retentionCheckpoints: {
+        p25: 0.82,
+        p50: 0.68,
+        p75: 0.51,
+        completion: 0.44
+      },
+      pacingVerdict: "balanced",
+      feedbackTags: ["clear-pacing"],
+      notes: "Stable retention for baseline."
+    });
+
+    expect(() => validateKpiCaptureCompleteness(kpi)).not.toThrow();
   });
 
   it("passes batch completeness validation", () => {
