@@ -12,9 +12,9 @@
 
 ## Current Status
 - `01-docs-foundation`: done (plan `01-01` completed with summary and verification evidence)
-- `02-mvp-engine`: in_progress (plans `02-01` through `02-04` completed; 4/4 plan summaries present, pending phase verification)
-- `03-first-content-batch`: blocked (waiting for phase 02 done)
-- `04-e2e-testing`: planned (queued behind phase 02 and 03 readiness; planning-only until implementation workspace is active)
+- `02-mvp-engine`: done (plans `02-01` through `02-04` completed with verified deterministic render/export pipeline)
+- `03-first-content-batch`: done (legacy `PLAN.md` executed end-to-end with phase summary and asset quality gates)
+- `04-e2e-testing`: planned (ready to execute now that phases 02 and 03 are complete)
 
 ## Status Rules
 - `planned`: phase defined but not started.
