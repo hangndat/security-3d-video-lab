@@ -1,15 +1,14 @@
 ---
 gsd_state_version: 1.0
 milestone: v1.1
-milestone_name: content-expansion
+milestone_name: Content Expansion
 status: Defining requirements and roadmap
-last_updated: "2026-05-28T12:35:00.000Z"
+last_updated: "2026-05-28T12:24:32.389Z"
 progress:
-  total_phases: 4
+  total_phases: 1
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
-  percent: 0
 ---
 
 # Project State
@@ -83,6 +82,7 @@ Items acknowledged and deferred at milestone close on 2026-05-28:
 Goal: Scale from one initial content batch to a repeatable cinematic content pipeline with stronger authoring, composition, and verification governance.
 
 Target features:
+
 - Expand security topic coverage beyond TLS/SSH/DNS
 - Data-first authoring + validation contracts
 - Cinematic composition and quality/publish gates
