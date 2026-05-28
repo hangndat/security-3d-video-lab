@@ -1,0 +1,26 @@
+import { statSync } from "node:fs";
+
+import { describe, expect, it } from "vitest";
+
+import type { SceneSpec } from "../src/engine/contracts/scene-spec.js";
+import dnsSceneSpec from "../src/fixtures/dns-scene-spec.json";
+import goldenSceneSpec from "../src/fixtures/golden-scene-spec.json";
+import sshSceneSpec from "../src/fixtures/ssh-scene-spec.json";
+import { renderCompositionDemoMp4 } from "../src/render/remotion/render-composition.js";
+
+describe("phase 03 export batch", () => {
+  it("exports three shorts plus one long-form artifact", () => {
+    const outputs: Array<{ scene: SceneSpec; outputPath: string }> = [
+      { scene: goldenSceneSpec, outputPath: ".artifacts/export/phase03/tls-short-v1.mp4" },
+      { scene: sshSceneSpec, outputPath: ".artifacts/export/phase03/ssh-short-v1.mp4" },
+      { scene: dnsSceneSpec, outputPath: ".artifacts/export/phase03/dns-short-v1.mp4" },
+      { scene: goldenSceneSpec, outputPath: ".artifacts/export/phase03/network-foundations-long-v1.mp4" }
+    ];
+
+    for (const output of outputs) {
+      renderCompositionDemoMp4(output.scene, output.outputPath);
+      const stats = statSync(output.outputPath);
+      expect(stats.size).toBeGreaterThan(0);
+    }
+  });
+});
