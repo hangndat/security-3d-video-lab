@@ -30,8 +30,9 @@ describe("phase 03 first content batch contracts", () => {
 
   it("keeps short duration windows and long-form sequence policy", () => {
     for (const packet of firstContentBatchPackets) {
-      expect(packet.durationBudget.minSeconds).toBeGreaterThanOrEqual(45);
-      expect(packet.durationBudget.maxSeconds).toBeLessThanOrEqual(60);
+      expect(packet.durationBudget.minSeconds).toBeGreaterThanOrEqual(7);
+      expect(packet.durationBudget.maxSeconds).toBeLessThanOrEqual(9);
+      expect(packet.narrationPlaceholders.length).toBe(packet.storyboardBeats.length);
     }
 
     expect(longFormAssembly.sequence).toEqual(["tls", "ssh", "dns"]);
