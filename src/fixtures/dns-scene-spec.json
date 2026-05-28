@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0.0",
+  "seed": "dns-seed-001",
+  "sceneId": "dns-resolution-scene",
+  "actors": [
+    {
+      "id": "actor-client",
+      "label": "client"
+    },
+    {
+      "id": "actor-resolver",
+      "label": "resolver"
+    }
+  ],
+  "packets": [
+    {
+      "id": "packet-dns-query",
+      "route": [
+        { "x": -1, "y": 0, "z": 0 },
+        { "x": 1.5, "y": 0.6, "z": 0 }
+      ]
+    }
+  ],
+  "timeline": [
+    {
+      "id": "dns-query-main",
+      "track": "packet",
+      "startFrame": 0,
+      "duration": 120,
+      "easing": "linear",
+      "payload": {
+        "packetId": "packet-dns-query"
+      }
+    }
+  ],
+  "totalFrames": 300,
+  "capabilities": {
+    "postMvpCameraOverrides": false,
+    "postMvpPacketPhysics": false
+  }
+}
