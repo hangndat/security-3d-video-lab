@@ -6,7 +6,7 @@
   "scripts": {
     "test:quick": "vitest run --passWithNoTests",
     "test": "vitest run",
-    "render:demo": "node -e \"console.log('render demo placeholder')\"",
+    "render:demo": "vitest run tests/render-composition.test.ts",
     "export:demo": "node -e \"console.log('export demo placeholder')\""
   },
   "dependencies": {
