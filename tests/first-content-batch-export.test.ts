@@ -14,7 +14,7 @@ import {
 import { renderCompositionDemoMp4 } from "../src/render/remotion/render-composition.js";
 
 describe("phase 03 export batch", () => {
-  it("exports three shorts plus one long-form artifact", () => {
+  it("[gap-truth-long-form] exports three shorts plus one stitched long-form artifact", () => {
     validateLongFormTransitionCoherence();
     const longForm = buildLongFormSceneSpec({
       tls: goldenSceneSpec,
@@ -36,9 +36,7 @@ describe("phase 03 export batch", () => {
     }
 
     expect(longForm.sceneId).toBe(longFormAssembly.slug);
-    expect(longForm.seed).toContain("tls");
-    expect(longForm.seed).toContain("ssh");
-    expect(longForm.seed).toContain("dns");
+    expect(longForm.seed).toBe("tls:golden-seed-001|ssh:ssh-seed-001|dns:dns-seed-001");
     expect(longForm.timeline.length).toBe(
       goldenSceneSpec.timeline.length + sshSceneSpec.timeline.length + dnsSceneSpec.timeline.length
     );

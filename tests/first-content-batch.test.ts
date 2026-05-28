@@ -55,14 +55,14 @@ describe("phase 03 first content batch contracts", () => {
     expect(kpi.pacingVerdict).toBeNull();
   });
 
-  it("KPI gate rejects null checkpoints and null pacing verdict", () => {
+  it("[gap-truth-kpi] rejects null checkpoints and null pacing verdict", () => {
     const kpi = createKpiCaptureSkeleton("tls-short-v1");
     expect(() => validateKpiCaptureCompleteness(kpi)).toThrow(
       "KPI retention checkpoint p25 must be non-null."
     );
   });
 
-  it("KPI gate passes with complete measurable checkpoints and verdict", () => {
+  it("[gap-truth-kpi] passes with complete measurable checkpoints and verdict", () => {
     const kpi = populateKpiCapture(createKpiCaptureSkeleton("tls-short-v1"), {
       retentionCheckpoints: {
         p25: 0.82,
@@ -76,6 +76,13 @@ describe("phase 03 first content batch contracts", () => {
     });
 
     expect(() => validateKpiCaptureCompleteness(kpi)).not.toThrow();
+  });
+
+  it("[gap-truth-kpi] acceptance surface reports measurable KPI failures", () => {
+    const incomplete = createKpiCaptureSkeleton("tls-short-v1");
+    const errors = validateBatchCompleteness([incomplete]);
+    expect(errors.some((error) => error.includes("failed KPI acceptance"))).toBe(true);
+    expect(errors.some((error) => error.includes("p25 must be non-null"))).toBe(true);
   });
 
   it("passes batch completeness validation", () => {
