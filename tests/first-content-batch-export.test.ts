@@ -14,7 +14,7 @@ import {
 import { renderCompositionDemoMp4 } from "../src/render/remotion/render-composition.js";
 
 describe("phase 03 export batch", () => {
-  it("[gap-truth-long-form] exports three shorts plus one stitched long-form artifact", () => {
+  it("[gap-truth-long-form] exports three shorts plus one long-form artifact via stitched assembly", () => {
     validateLongFormTransitionCoherence();
     const longForm = buildLongFormSceneSpec({
       tls: goldenSceneSpec,
