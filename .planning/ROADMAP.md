@@ -22,6 +22,10 @@
 - [ ] **Phase 05: Content Authoring Foundation**
   - **Goal:** Introduce data-first content authoring and validation contracts for new security modules.
   - **Requirements:** `CONT-01`, `CONT-03`, `AUTHR-01`, `AUTHR-02`
+  - **Plans:** 2 plans
+  - **Plan List:**
+    - [ ] `05-01-PLAN.md` — Build JSON contract schema, loader/validator pipeline, and deterministic contract tests.
+    - [ ] `05-02-PLAN.md` — Add scaffold workflow, three new topic drafts, and blocking CI/evidence gates.
   - **Success Criteria:**
     1. New topic packets can be declared via data files/contracts without core renderer edits.
     2. Validation errors clearly identify missing beats, invalid windows, or ordering issues.
