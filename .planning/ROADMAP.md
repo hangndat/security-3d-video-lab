@@ -14,7 +14,7 @@
 - `01-docs-foundation`: done (plan `01-01` completed with summary and verification evidence)
 - `02-mvp-engine`: done (plans `02-01` through `02-04` completed with verified deterministic render/export pipeline)
 - `03-first-content-batch`: done (legacy `PLAN.md` executed end-to-end with phase summary and asset quality gates)
-- `04-e2e-testing`: planned (ready to execute now that phases 02 and 03 are complete)
+- `04-e2e-testing`: done (legacy `PLAN.md` executed with canonical TLS/SSH/DNS E2E pipeline, deterministic replay checks, and CI command gates)
 
 ## Status Rules
 - `planned`: phase defined but not started.

@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Phase complete — ready for verification
-last_updated: "2026-05-28T08:40:28.418Z"
+last_updated: "2026-05-28T09:01:00.000Z"
 progress:
   total_phases: 4
-  completed_phases: 2
-  total_plans: 5
-  completed_plans: 5
+  completed_phases: 4
+  total_plans: 6
+  completed_plans: 6
   percent: 100
 ---
 
@@ -19,17 +19,17 @@ progress:
 See `.planning/PROJECT.md` (updated 2026-05-28)
 
 Core value: cinematic, deterministic security/infrastructure visualization.
-Current focus: phase 04 e2e-testing planning/execution readiness.
+Current focus: post-phase verification and CI hardening.
 
 ## Current Position
 
-Phase: 03 (first-content-batch) — COMPLETE
+Phase: 04 (e2e-testing) — COMPLETE
 Plan: 1 of 1 complete
 
-- Phase: 03 of 04 (first-content-batch)
+- Phase: 04 of 04 (e2e-testing)
 - Plan: 1 of 1 in current phase
-- Status: PLAN.md executed with content contracts, narration/KPI schemas, and batch export quality gates
-- Last activity: 2026-05-28 - Completed 03-01 first-content-batch execution
+- Status: PLAN.md executed with canonical TLS/SSH/DNS E2E determinism and artifact gates
+- Last activity: 2026-05-28 - Completed 04-01 e2e-testing execution
 
 ## Accumulated Context
 
@@ -54,6 +54,8 @@ Plan: 1 of 1 complete
 - [Phase 02]: Fingerprint inputs derive from composition trace inputs to match exported output path
 - [Phase 03]: Represent phase 03 deliverables as typed content batch contracts consumed directly by verification tooling.
 - [Phase 03]: Gate phase acceptance with automated tests covering packet completeness and four-asset export output generation.
+- [Phase 04]: Use one canonical E2E test file with scenario-specific command filters instead of duplicating suite files.
+- [Phase 04]: Support CI smoke invocation via a Node runner so test:e2e:all -- --smoke remains stable.
 
 ### Pending Todos
 
@@ -61,10 +63,10 @@ Plan: 1 of 1 complete
 
 ### Blockers/Concerns
 
-- None active for phase 03.
+- None active for phase 04.
 
 ## Session Continuity
 
 - Last session: 2026-05-28
-- Stopped at: Completed 03-01-PLAN.md
+- Stopped at: Completed 04-01-PLAN.md
 - Resume file: None
