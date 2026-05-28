@@ -3,25 +3,30 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 
 import { describe, expect, it } from "vitest";
+import goldenSceneSpec from "../src/fixtures/golden-scene-spec.json";
+import { buildDeterministicTraceInputs } from "../src/render/remotion/render-composition.js";
 
 import {
   assertReproducibleRuns,
   buildDeterministicManifest,
+  buildOutputFingerprintInputFromTraceInputs,
   computeOutputFingerprint
 } from "../src/render/export/fingerprint.js";
 
 describe("render reproducibility smoke gate", () => {
   it("emits equal deterministic manifests for identical runs", () => {
+    const traceInputs = buildDeterministicTraceInputs(goldenSceneSpec, [0, 5, 10, 15, 20, 25]);
+    const fingerprintInput = buildOutputFingerprintInputFromTraceInputs(traceInputs, {
+      codec: "h264",
+      container: "mp4",
+      durationMs: 1000
+    });
     const runInput = {
       sceneId: "tls-canonical",
       specHash: "spec-123",
       seed: "seed-001",
-      frameHashes: ["a1", "b2", "c3"],
-      normalizedMetadata: {
-        codec: "h264",
-        container: "mp4",
-        durationMs: 12_000
-      },
+      frameHashes: fingerprintInput.frameHashes,
+      normalizedMetadata: fingerprintInput.normalizedMetadata,
       provenance: {
         node: "25.6.0",
         remotion: "4.0.468",
@@ -37,26 +42,30 @@ describe("render reproducibility smoke gate", () => {
   });
 
   it("computes output fingerprint from frame hashes and normalized metadata", () => {
+    const traceInputs = buildDeterministicTraceInputs(goldenSceneSpec, [0, 10, 20]);
+    const baseInput = buildOutputFingerprintInputFromTraceInputs(traceInputs, {
+      codec: "h264",
+      container: "mp4",
+      durationMs: 8400
+    });
     const fingerprint = computeOutputFingerprint({
-      frameHashes: ["frame-a", "frame-b", "frame-c"],
-      normalizedMetadata: {
-        codec: "h264",
-        container: "mp4",
-        durationMs: 8400
-      }
+      frameHashes: baseInput.frameHashes,
+      normalizedMetadata: baseInput.normalizedMetadata
     });
 
+    const changedTraceInputs = buildDeterministicTraceInputs(goldenSceneSpec, [0, 10, 21]);
+    const changedInput = buildOutputFingerprintInputFromTraceInputs(changedTraceInputs, {
+      codec: "h264",
+      container: "mp4",
+      durationMs: 8450
+    });
     const changed = computeOutputFingerprint({
-      frameHashes: ["frame-a", "frame-b", "frame-c"],
-      normalizedMetadata: {
-        codec: "h264",
-        container: "mp4",
-        durationMs: 8450
-      }
+      frameHashes: changedInput.frameHashes,
+      normalizedMetadata: changedInput.normalizedMetadata
     });
 
     expect(fingerprint.value).not.toEqual(changed.value);
-    expect(fingerprint.inputs.frameHashes).toEqual(["frame-a", "frame-b", "frame-c"]);
+    expect(fingerprint.inputs.frameHashes).toEqual(baseInput.frameHashes);
   });
 
   it("fails on mismatch and writes diff bundle paths", () => {
@@ -66,7 +75,10 @@ describe("render reproducibility smoke gate", () => {
         sceneId: "dns-canonical",
         specHash: "spec-dns",
         seed: "seed-dns",
-        frameHashes: ["1", "2"],
+        frameHashes: buildOutputFingerprintInputFromTraceInputs(
+          buildDeterministicTraceInputs(goldenSceneSpec, [0, 4]),
+          { codec: "h264", container: "mp4", durationMs: 6000 }
+        ).frameHashes,
         normalizedMetadata: { codec: "h264", container: "mp4", durationMs: 6000 },
         provenance: { node: "25.6.0", remotion: "4.0.468", ffmpeg: "8.1" }
       });
@@ -74,7 +86,10 @@ describe("render reproducibility smoke gate", () => {
         sceneId: "dns-canonical",
         specHash: "spec-dns",
         seed: "seed-dns",
-        frameHashes: ["1", "DIFF"],
+        frameHashes: buildOutputFingerprintInputFromTraceInputs(
+          buildDeterministicTraceInputs(goldenSceneSpec, [0, 5]),
+          { codec: "h264", container: "mp4", durationMs: 6000 }
+        ).frameHashes,
         normalizedMetadata: { codec: "h264", container: "mp4", durationMs: 6000 },
         provenance: { node: "25.6.0", remotion: "4.0.468", ffmpeg: "8.1" }
       });

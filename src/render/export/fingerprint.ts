@@ -65,6 +65,16 @@ export function computeOutputFingerprint(input: OutputFingerprintInput): OutputF
   };
 }
 
+export function buildOutputFingerprintInputFromTraceInputs(
+  traceInputs: string[],
+  normalizedMetadata: NormalizedOutputMetadata
+): OutputFingerprintInput {
+  return {
+    frameHashes: traceInputs.map((traceInput) => sha256(traceInput)),
+    normalizedMetadata: { ...normalizedMetadata }
+  };
+}
+
 export function buildDeterministicManifest(input: DeterministicManifestInput): DeterministicManifest {
   const outputFingerprint = computeOutputFingerprint({
     frameHashes: input.frameHashes,
