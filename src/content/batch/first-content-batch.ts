@@ -2,12 +2,13 @@ import type { SceneSpec } from "../../engine/contracts/scene-spec.js";
 import { stitchSceneSpecsInOrder } from "../../render/remotion/render-composition.js";
 import { loadTopicContracts } from "../contracts/load-topic-contracts.js";
 import { validateTopicContracts } from "../contracts/validate-topic-contracts.js";
-import type {
-  DurationBudgetContract,
-  NarrationPlaceholderContract,
-  StoryboardBeatContract,
-  TopicContract,
-  TopicId
+import {
+  FIRST_CONTENT_BATCH_TOPICS,
+  type DurationBudgetContract,
+  type NarrationPlaceholderContract,
+  type StoryboardBeatContract,
+  type TopicContract,
+  type TopicId
 } from "../contracts/types.js";
 
 export type TopicPacket = TopicContract;
@@ -65,10 +66,14 @@ if (contractValidation.errors.length > 0) {
   throw new Error(`Topic contracts are invalid:\n${detail}`);
 }
 
-export const firstContentBatchPackets: TopicPacket[] = loadedContracts.map(({ contract }) => ({
-  ...contract,
-  storyboardBeats: normalizeBeats(contract.storyboardBeats)
-}));
+export const firstContentBatchPackets: TopicPacket[] = loadedContracts
+  .filter(({ contract }) =>
+    (FIRST_CONTENT_BATCH_TOPICS as readonly string[]).includes(contract.topic)
+  )
+  .map(({ contract }) => ({
+    ...contract,
+    storyboardBeats: normalizeBeats(contract.storyboardBeats)
+  })) as TopicPacket[];
 
 export const longFormAssembly: LongFormAssembly = {
   slug: "network-foundations-long-v1",

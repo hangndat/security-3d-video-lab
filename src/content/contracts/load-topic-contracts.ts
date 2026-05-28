@@ -1,8 +1,9 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { TOPIC_SEQUENCE, type LoadedTopicContract, type TopicContract } from "./types.js";
+import { loadTopicManifest } from "./load-topic-manifest.js";
+import type { LoadedTopicContract, TopicContract } from "./types.js";
 
 const TOPICS_ROOT = resolve(
   dirname(fileURLToPath(import.meta.url)),
@@ -10,27 +11,20 @@ const TOPICS_ROOT = resolve(
 );
 
 export function loadTopicContracts(topicsRoot: string = TOPICS_ROOT): LoadedTopicContract[] {
-  const topicRank = new Map(TOPIC_SEQUENCE.map((topic, index) => [topic, index]));
+  const manifest = loadTopicManifest(topicsRoot);
+  const topicRank = new Map(manifest.order.map((topic, index) => [topic, index]));
   const topicFolders = readdirSync(topicsRoot, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name)
-    .sort((left, right) => {
-      const leftRank = topicRank.get(left);
-      const rightRank = topicRank.get(right);
-      if (leftRank === undefined && rightRank === undefined) {
-        return left.localeCompare(right);
-      }
-      if (leftRank === undefined) {
-        return 1;
-      }
-      if (rightRank === undefined) {
-        return -1;
-      }
-      return leftRank - rightRank;
-    });
+    .filter((folder) => topicRank.has(folder))
+    .sort((left, right) => topicRank.get(left)! - topicRank.get(right)!);
 
-  return topicFolders.map((topicFolder) => {
+  const loaded = topicFolders.map((topicFolder) => {
     const contractPath = resolve(topicsRoot, topicFolder, "contract.json");
+    if (!existsSync(contractPath)) {
+      throw new Error(`Missing contract.json for manifest topic '${topicFolder}'.`);
+    }
+
     const raw = readFileSync(contractPath, "utf-8");
     let contract: TopicContract;
 
@@ -43,4 +37,12 @@ export function loadTopicContracts(topicsRoot: string = TOPICS_ROOT): LoadedTopi
 
     return { contractPath, contract };
   });
+
+  for (const expectedTopic of manifest.order) {
+    if (!loaded.some((entry) => entry.contract.topic === expectedTopic)) {
+      throw new Error(`Manifest topic '${expectedTopic}' is missing from loaded contracts.`);
+    }
+  }
+
+  return loaded;
 }

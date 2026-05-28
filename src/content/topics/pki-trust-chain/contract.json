@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "1.0.0",
+  "topic": "pki-trust-chain",
+  "slug": "pki-trust-chain-short-v1",
+  "hook": "TLS trust depends on a chain of signed certificates, not a single file.",
+  "cta": "Pin roots carefully and monitor intermediate certificate expiry.",
+  "durationBudget": {
+    "minSeconds": 7,
+    "targetSeconds": 8,
+    "maxSeconds": 9
+  },
+  "storyboardBeats": [
+    {
+      "id": "pki-trust-chain-hook",
+      "startFrame": 0,
+      "endFrame": 26,
+      "objective": "Introduce why certificate chains establish trust."
+    },
+    {
+      "id": "pki-leaf-cert-beat",
+      "startFrame": 16,
+      "endFrame": 68,
+      "objective": "Server presents leaf certificate for its hostname."
+    },
+    {
+      "id": "pki-intermediate-beat",
+      "startFrame": 70,
+      "endFrame": 126,
+      "objective": "Intermediate CA signs the leaf and links to a trusted root."
+    },
+    {
+      "id": "pki-root-trust-beat",
+      "startFrame": 128,
+      "endFrame": 182,
+      "objective": "Client trusts only roots in its local trust store."
+    },
+    {
+      "id": "pki-validation-beat",
+      "startFrame": 184,
+      "endFrame": 228,
+      "objective": "Chain validation checks signatures, expiry, and hostname policy."
+    }
+  ],
+  "narrationPlaceholders": [
+    {
+      "beatId": "pki-trust-chain-hook",
+      "analyticKey": "pki-trust-chain:pki-trust-chain-hook",
+      "scriptIntent": "Introduce why certificate chains establish trust.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "pki-leaf-cert-beat",
+      "analyticKey": "pki-trust-chain:pki-leaf-cert-beat",
+      "scriptIntent": "Server presents leaf certificate for its hostname.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "pki-intermediate-beat",
+      "analyticKey": "pki-trust-chain:pki-intermediate-beat",
+      "scriptIntent": "Intermediate CA signs the leaf and links to a trusted root.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "pki-root-trust-beat",
+      "analyticKey": "pki-trust-chain:pki-root-trust-beat",
+      "scriptIntent": "Client trusts only roots in its local trust store.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "pki-validation-beat",
+      "analyticKey": "pki-trust-chain:pki-validation-beat",
+      "scriptIntent": "Chain validation checks signatures, expiry, and hostname policy.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    }
+  ]
+}

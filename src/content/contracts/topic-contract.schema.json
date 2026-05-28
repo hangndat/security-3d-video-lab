@@ -19,7 +19,7 @@
     },
     "topic": {
       "type": "string",
-      "enum": ["tls", "ssh", "dns"]
+      "enum": ["tls", "ssh", "dns", "auth-session", "pki-trust-chain", "mitm-defense"]
     },
     "slug": {
       "type": "string",
@@ -112,7 +112,7 @@
       "properties": {
         "toTopic": {
           "type": "string",
-          "enum": ["tls", "ssh", "dns"]
+          "enum": ["tls", "ssh", "dns", "auth-session", "pki-trust-chain", "mitm-defense"]
         },
         "presetId": {
           "type": "string",

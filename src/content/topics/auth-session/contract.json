@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "1.0.0",
+  "topic": "auth-session",
+  "slug": "auth-session-short-v1",
+  "hook": "Sessions bind identity to requests after initial authentication.",
+  "cta": "Rotate session secrets and enforce secure cookie attributes.",
+  "durationBudget": {
+    "minSeconds": 7,
+    "targetSeconds": 8,
+    "maxSeconds": 9
+  },
+  "storyboardBeats": [
+    {
+      "id": "auth-session-hook",
+      "startFrame": 0,
+      "endFrame": 28,
+      "objective": "Show why stateful sessions remain common in web apps."
+    },
+    {
+      "id": "auth-session-login-beat",
+      "startFrame": 18,
+      "endFrame": 72,
+      "objective": "User authenticates and receives a session identifier."
+    },
+    {
+      "id": "auth-session-cookie-beat",
+      "startFrame": 74,
+      "endFrame": 132,
+      "objective": "Browser stores HttpOnly session cookie for subsequent requests."
+    },
+    {
+      "id": "auth-session-validation-beat",
+      "startFrame": 134,
+      "endFrame": 188,
+      "objective": "Server validates session before granting protected resources."
+    },
+    {
+      "id": "auth-session-expiry-beat",
+      "startFrame": 190,
+      "endFrame": 228,
+      "objective": "Session expiry and logout invalidate active credentials."
+    }
+  ],
+  "narrationPlaceholders": [
+    {
+      "beatId": "auth-session-hook",
+      "analyticKey": "auth-session:auth-session-hook",
+      "scriptIntent": "Show why stateful sessions remain common in web apps.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "auth-session-login-beat",
+      "analyticKey": "auth-session:auth-session-login-beat",
+      "scriptIntent": "User authenticates and receives a session identifier.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "auth-session-cookie-beat",
+      "analyticKey": "auth-session:auth-session-cookie-beat",
+      "scriptIntent": "Browser stores HttpOnly session cookie for subsequent requests.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "auth-session-validation-beat",
+      "analyticKey": "auth-session:auth-session-validation-beat",
+      "scriptIntent": "Server validates session before granting protected resources.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "auth-session-expiry-beat",
+      "analyticKey": "auth-session:auth-session-expiry-beat",
+      "scriptIntent": "Session expiry and logout invalidate active credentials.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    }
+  ]
+}

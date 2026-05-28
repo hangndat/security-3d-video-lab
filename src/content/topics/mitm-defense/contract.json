@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "1.0.0",
+  "topic": "mitm-defense",
+  "slug": "mitm-defense-short-v1",
+  "hook": "Attackers can intercept traffic when trust or routing is misconfigured.",
+  "cta": "Combine certificate pinning awareness with network segmentation controls.",
+  "durationBudget": {
+    "minSeconds": 7,
+    "targetSeconds": 8,
+    "maxSeconds": 9
+  },
+  "storyboardBeats": [
+    {
+      "id": "mitm-defense-hook",
+      "startFrame": 0,
+      "endFrame": 24,
+      "objective": "Define man-in-the-middle risk on untrusted networks."
+    },
+    {
+      "id": "mitm-position-beat",
+      "startFrame": 14,
+      "endFrame": 64,
+      "objective": "Attacker positions between client and intended server."
+    },
+    {
+      "id": "mitm-intercept-beat",
+      "startFrame": 66,
+      "endFrame": 124,
+      "objective": "Traffic is decrypted or redirected through attacker-controlled proxy."
+    },
+    {
+      "id": "mitm-detection-beat",
+      "startFrame": 126,
+      "endFrame": 180,
+      "objective": "Certificate warnings and HSTS failures reveal suspicious paths."
+    },
+    {
+      "id": "mitm-mitigation-beat",
+      "startFrame": 182,
+      "endFrame": 228,
+      "objective": "Mutual TLS, pinning, and secure defaults reduce interception success."
+    }
+  ],
+  "narrationPlaceholders": [
+    {
+      "beatId": "mitm-defense-hook",
+      "analyticKey": "mitm-defense:mitm-defense-hook",
+      "scriptIntent": "Define man-in-the-middle risk on untrusted networks.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "mitm-position-beat",
+      "analyticKey": "mitm-defense:mitm-position-beat",
+      "scriptIntent": "Attacker positions between client and intended server.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "mitm-intercept-beat",
+      "analyticKey": "mitm-defense:mitm-intercept-beat",
+      "scriptIntent": "Traffic is decrypted or redirected through attacker-controlled proxy.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "mitm-detection-beat",
+      "analyticKey": "mitm-defense:mitm-detection-beat",
+      "scriptIntent": "Certificate warnings and HSTS failures reveal suspicious paths.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "mitm-mitigation-beat",
+      "analyticKey": "mitm-defense:mitm-mitigation-beat",
+      "scriptIntent": "Mutual TLS, pinning, and secure defaults reduce interception success.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    }
+  ]
+}

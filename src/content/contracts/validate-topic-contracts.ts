@@ -5,18 +5,19 @@ import {
   REQUIRED_TRANSITION_PRESET_IDS,
   validateTransitionPresetPair
 } from "./transition-presets.js";
-import {
-  TOPIC_SEQUENCE,
-  type LoadedTopicContract,
-  type TopicContractValidationResult,
-  type ValidationIssue
+import { loadTopicManifest } from "./load-topic-manifest.js";
+import type {
+  LoadedTopicContract,
+  TopicContractValidationResult,
+  ValidationIssue
 } from "./types.js";
 
 const FPS = 30;
 const SOFT_DRIFT_RATIO = 0.1;
 
 export function validateTopicContracts(
-  loadedContracts: LoadedTopicContract[]
+  loadedContracts: LoadedTopicContract[],
+  manifestOrder: readonly string[] = loadTopicManifest().order
 ): TopicContractValidationResult {
   const errors: ValidationIssue[] = [];
   const warnings: ValidationIssue[] = [];
@@ -43,8 +44,8 @@ export function validateTopicContracts(
     validateDurationPolicy(loaded.contractPath, loaded.contract, errors, warnings);
   }
 
-  for (let i = 0; i < TOPIC_SEQUENCE.length; i += 1) {
-    const expectedTopic = TOPIC_SEQUENCE[i];
+  for (let i = 0; i < manifestOrder.length; i += 1) {
+    const expectedTopic = manifestOrder[i];
     const current = loadedContracts[i];
     if (!current) {
       errors.push({

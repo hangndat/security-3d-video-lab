@@ -1,6 +1,12 @@
-export const TOPIC_SEQUENCE = ["tls", "ssh", "dns"] as const;
+export const FIRST_CONTENT_BATCH_TOPICS = ["tls", "ssh", "dns"] as const;
+export const DRAFT_TOPIC_IDS = ["auth-session", "pki-trust-chain", "mitm-defense"] as const;
 
-export type TopicId = (typeof TOPIC_SEQUENCE)[number];
+/** @deprecated Use loadTopicManifest().order for manifest-locked ordering. */
+export const TOPIC_SEQUENCE = FIRST_CONTENT_BATCH_TOPICS;
+
+export type FirstBatchTopicId = (typeof FIRST_CONTENT_BATCH_TOPICS)[number];
+export type DraftTopicId = (typeof DRAFT_TOPIC_IDS)[number];
+export type TopicId = FirstBatchTopicId | DraftTopicId;
 
 export interface StoryboardBeatContract {
   id: string;
