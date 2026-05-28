@@ -309,6 +309,30 @@ Build ecosystem around the platform.
 
 ---
 
+# Dependency Gates (Task 3)
+
+Progression is gated; a phase may start only after the required gate is passed.
+
+## Minimum Sequential Gates
+
+- **Gate G0->G1:** Phase 0 complete before Phase 1 starts.
+- **Gate G1->G2:** Phase 1 complete before Phase 2 starts.
+- **Gate G2->G3:** Phase 2 complete before Phase 3 starts.
+
+## Extended Gates
+
+- **Gate G3->G4:** Phase 3 complete before Phase 4 starts.
+- **Gate G4->G5:** Phase 4 complete before Phase 5 starts.
+- **Gate G5->G6:** Phase 5 complete before Phase 6 starts.
+
+## Gate Pass Conditions
+
+- Prior phase done criteria are satisfied.
+- Validation metric evidence is captured.
+- No unresolved blocker marked as critical for downstream phases.
+
+---
+
 # Recommended Initial Workflow
 
 ## Script
