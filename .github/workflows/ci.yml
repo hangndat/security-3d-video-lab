@@ -33,6 +33,8 @@ jobs:
         run: npm run test:e2e:all -- --smoke
       - name: Run deterministic render smoke gate
         run: npm run test:e2e:render-smoke
+      - name: Generate dual-format verification evidence
+        run: npm run verify:content-authoring
       - name: Run full baseline test suite
         run: npm test
       - name: Upload failure evidence bundle

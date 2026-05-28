@@ -13,6 +13,15 @@ import { validateTopicContracts } from "../src/content/contracts/validate-topic-
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const TOPICS_ROOT = resolve(REPO_ROOT, "src/content/topics");
 const SCAFFOLD_SCRIPT = resolve(REPO_ROOT, "scripts/scaffold-topic-contract.mjs");
+const VERIFY_SCRIPT = resolve(REPO_ROOT, "scripts/verify-content-authoring.mjs");
+const VERIFY_JSON = resolve(
+  REPO_ROOT,
+  ".artifacts/verification/phase05/content-authoring-foundation.json"
+);
+const VERIFY_MARKDOWN = resolve(
+  REPO_ROOT,
+  ".planning/phases/05-content-authoring-foundation/VERIFICATION.md"
+);
 
 function runScaffold(args: string[], cwd: string = REPO_ROOT) {
   return spawnSync("node", [SCAFFOLD_SCRIPT, ...args], {
@@ -139,5 +148,32 @@ describe("blocking validation gate and PR policy", () => {
     const contracts = loadTopicContracts(TOPICS_ROOT);
     const result = validateTopicContracts(contracts, manifest.order);
     expect(result.errors).toEqual([]);
+  });
+});
+
+describe("dual-format verification evidence", () => {
+  it("verification script emits consistent JSON and markdown outcomes", () => {
+    const result = spawnSync("node", [VERIFY_SCRIPT, "--quick"], {
+      cwd: REPO_ROOT,
+      encoding: "utf-8"
+    });
+    expect(result.status).toBe(0);
+
+    const jsonReport = JSON.parse(readFileSync(VERIFY_JSON, "utf-8")) as {
+      gateStatus: string;
+      modules: Array<{ id: string; draft: boolean }>;
+      draftModuleIds: string[];
+    };
+    const markdown = readFileSync(VERIFY_MARKDOWN, "utf-8");
+
+    expect(jsonReport.gateStatus).toBe("pass");
+    expect(jsonReport.draftModuleIds).toEqual(["auth-session", "pki-trust-chain", "mitm-defense"]);
+    expect(jsonReport.modules.filter((entry) => entry.draft)).toHaveLength(3);
+
+    for (const draftId of jsonReport.draftModuleIds) {
+      expect(markdown).toContain(draftId);
+    }
+    expect(markdown).toContain("Gate Status");
+    expect(markdown).toContain("PASS");
   });
 });
