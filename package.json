@@ -7,6 +7,10 @@
     "test:quick": "vitest run --passWithNoTests",
     "test": "vitest run",
     "test:e2e:render-smoke": "vitest run tests/render-repro-smoke.test.ts",
+    "test:e2e:tls": "vitest run tests/e2e-canonical-flows.test.ts --testNamePattern=\"TLS canonical flow\"",
+    "test:e2e:ssh": "vitest run tests/e2e-canonical-flows.test.ts --testNamePattern=\"SSH canonical flow\"",
+    "test:e2e:dns": "vitest run tests/e2e-canonical-flows.test.ts --testNamePattern=\"DNS canonical flow\"",
+    "test:e2e:all": "node scripts/run-e2e-all.mjs",
     "render:demo": "vitest run tests/render-composition.test.ts",
     "export:demo": "vitest run tests/render-export-demo.test.ts"
   },
