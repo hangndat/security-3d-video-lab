@@ -3,6 +3,7 @@
 ## Milestones
 
 - ✅ **v1.0 Milestone** — Phases 1-4 (shipped 2026-05-28)
+- 🚧 **v1.1 Content Expansion** — Phases 5-8 (planned)
 
 ## Phases
 
@@ -16,9 +17,53 @@
 
 </details>
 
+### 🚧 v1.1 Content Expansion (Planned)
+
+- [ ] **Phase 05: Content Authoring Foundation**
+  - **Goal:** Introduce data-first content authoring and validation contracts for new security modules.
+  - **Requirements:** `CONT-01`, `CONT-03`, `AUTHR-01`, `AUTHR-02`
+  - **Success Criteria:**
+    1. New topic packets can be declared via data files/contracts without core renderer edits.
+    2. Validation errors clearly identify missing beats, invalid windows, or ordering issues.
+    3. At least two new module drafts validate successfully in CI.
+
+- [ ] **Phase 06: Narrative and Cinematic Composition**
+  - **Goal:** Build reusable long-form composition and pacing presets for multi-module storytelling.
+  - **Requirements:** `CONT-02`, `AUTHR-03`, `CINE-01`, `CINE-03`
+  - **Success Criteria:**
+    1. Long-form assembly supports configurable sequence of expanded modules.
+    2. Transition/pacing presets are reusable and validated against deterministic replay checks.
+    3. Subtitle/caption timing maps are generated per beat for long-form output.
+
+- [ ] **Phase 07: Batch Quality and Verification Expansion**
+  - **Goal:** Add robust quality gates and measurable verification for expanded module batches.
+  - **Requirements:** `CINE-02`, `VER-01`, `VER-03`
+  - **Success Criteria:**
+    1. Each new module has automated packet/export/long-form linkage tests.
+    2. Export quality assertions pass for all new short and long-form artifacts.
+    3. Verification reports include KPI acceptance signals per module.
+
+- [ ] **Phase 08: Governance and Milestone Hardening**
+  - **Goal:** Restore and enforce requirements/audit governance for clean milestone completion.
+  - **Requirements:** `VER-02`
+  - **Success Criteria:**
+    1. Requirement traceability remains complete and updated through all phase transitions.
+    2. Milestone audit artifact is generated and passes before close.
+    3. Completion workflow no longer relies on deferred governance exceptions.
+
 ## Current Status
 
-All phases in v1.0 are complete and archived in milestone records.
+v1.1 initialized and ready for discuss/plan on Phase 05.
+
+## Progress
+
+| Phase | Milestone | Requirements | Status |
+|------|-----------|--------------|--------|
+| 01-04 | v1.0 | Archived | Complete |
+| 05 | v1.1 | CONT-01, CONT-03, AUTHR-01, AUTHR-02 | Planned |
+| 06 | v1.1 | CONT-02, AUTHR-03, CINE-01, CINE-03 | Planned |
+| 07 | v1.1 | CINE-02, VER-01, VER-03 | Planned |
+| 08 | v1.1 | VER-02 | Planned |
 
 ## Status Rules
 

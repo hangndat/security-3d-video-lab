@@ -1,15 +1,15 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-status: Milestone archived — planning next milestone
-last_updated: "2026-05-28T12:20:00.000Z"
+milestone: v1.1
+milestone_name: content-expansion
+status: Defining requirements and roadmap
+last_updated: "2026-05-28T12:35:00.000Z"
 progress:
   total_phases: 4
-  completed_phases: 3
-  total_plans: 6
-  completed_plans: 6
-  percent: 100
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -19,17 +19,17 @@ progress:
 See `.planning/PROJECT.md` (updated 2026-05-28)
 
 Core value: cinematic, deterministic security/infrastructure visualization.
-Current focus: plan next milestone scope and requirements.
+Current focus: phase 05 content authoring foundation planning.
 
 ## Current Position
 
-Phase: v1.0 — COMPLETE
-Plan: Completed
+Phase: 05
+Plan: Not started
 
-- Phase: milestone close
-- Plan: all v1.0 plans complete
-- Status: v1.0 archived and tagged
-- Last activity: 2026-05-28 - Completed v1.0 milestone archival
+- Phase: 05 of 08 (content-authoring-foundation)
+- Plan: defining requirements and planning inputs
+- Status: v1.1 Content Expansion initialized
+- Last activity: 2026-05-28 - Started v1.1 milestone
 
 ## Accumulated Context
 
@@ -65,7 +65,7 @@ Plan: Completed
 
 ### Blockers/Concerns
 
-- None active for phase 04.
+- Governance debt from v1.0 close (missing audit/requirements baseline) must be resolved in phase 08.
 
 ## Deferred Items
 
@@ -75,6 +75,17 @@ Items acknowledged and deferred at milestone close on 2026-05-28:
 |----------|------|--------|
 | audit | v1.0-MILESTONE-AUDIT.md missing | deferred |
 | requirements | .planning/REQUIREMENTS.md missing at close | deferred |
+
+## Current Milestone
+
+**v1.1 Content Expansion**
+
+Goal: Scale from one initial content batch to a repeatable cinematic content pipeline with stronger authoring, composition, and verification governance.
+
+Target features:
+- Expand security topic coverage beyond TLS/SSH/DNS
+- Data-first authoring + validation contracts
+- Cinematic composition and quality/publish gates
 
 ## Session Continuity
 
