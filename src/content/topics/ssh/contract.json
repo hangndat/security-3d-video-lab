@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "1.0.0",
+  "topic": "ssh",
+  "slug": "ssh-short-v1",
+  "hook": "Remote shell needs both confidentiality and server authenticity.",
+  "cta": "Recommend host key verification and key-based auth.",
+  "durationBudget": {
+    "minSeconds": 7,
+    "targetSeconds": 8,
+    "maxSeconds": 9
+  },
+  "storyboardBeats": [
+    { "id": "ssh-hook", "startFrame": 0, "endFrame": 28, "objective": "Set remote admin threat context." },
+    {
+      "id": "ssh-kexinit-beat",
+      "startFrame": 14,
+      "endFrame": 50,
+      "objective": "Negotiate key exchange and algorithms."
+    },
+    {
+      "id": "ssh-kex-reply-beat",
+      "startFrame": 52,
+      "endFrame": 104,
+      "objective": "Host key proof and key exchange reply."
+    },
+    {
+      "id": "ssh-userauth-beat",
+      "startFrame": 108,
+      "endFrame": 164,
+      "objective": "Authenticate user over encrypted channel."
+    },
+    {
+      "id": "ssh-session-beat",
+      "startFrame": 166,
+      "endFrame": 216,
+      "objective": "Open secure command session."
+    }
+  ],
+  "narrationPlaceholders": [
+    {
+      "beatId": "ssh-hook",
+      "analyticKey": "ssh:ssh-hook",
+      "scriptIntent": "Set remote admin threat context.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "ssh-kexinit-beat",
+      "analyticKey": "ssh:ssh-kexinit-beat",
+      "scriptIntent": "Negotiate key exchange and algorithms.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "ssh-kex-reply-beat",
+      "analyticKey": "ssh:ssh-kex-reply-beat",
+      "scriptIntent": "Host key proof and key exchange reply.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "ssh-userauth-beat",
+      "analyticKey": "ssh:ssh-userauth-beat",
+      "scriptIntent": "Authenticate user over encrypted channel.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "ssh-session-beat",
+      "analyticKey": "ssh:ssh-session-beat",
+      "scriptIntent": "Open secure command session.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    }
+  ],
+  "transitionToNext": {
+    "toTopic": "dns",
+    "presetId": "remote-shell-to-name-resolution",
+    "rationale": "Secure sessions still depend on reliable name resolution."
+  }
+}

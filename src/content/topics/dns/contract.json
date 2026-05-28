@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "1.0.0",
+  "topic": "dns",
+  "slug": "dns-short-v1",
+  "hook": "Browsers need IP addresses, not domain names.",
+  "cta": "Understand resolver caching and latency impact.",
+  "durationBudget": {
+    "minSeconds": 7,
+    "targetSeconds": 8,
+    "maxSeconds": 9
+  },
+  "storyboardBeats": [
+    { "id": "dns-hook", "startFrame": 0, "endFrame": 24, "objective": "Explain why translation is required." },
+    {
+      "id": "dns-query-beat",
+      "startFrame": 16,
+      "endFrame": 56,
+      "objective": "Client queries recursive resolver."
+    },
+    {
+      "id": "dns-recursive-beat",
+      "startFrame": 58,
+      "endFrame": 118,
+      "objective": "Resolver traverses root and TLD hierarchy."
+    },
+    {
+      "id": "dns-authoritative-beat",
+      "startFrame": 120,
+      "endFrame": 172,
+      "objective": "Authoritative answer is returned."
+    },
+    {
+      "id": "dns-response-beat",
+      "startFrame": 174,
+      "endFrame": 226,
+      "objective": "Resolver responds and caches result."
+    }
+  ],
+  "narrationPlaceholders": [
+    {
+      "beatId": "dns-hook",
+      "analyticKey": "dns:dns-hook",
+      "scriptIntent": "Explain why translation is required.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "dns-query-beat",
+      "analyticKey": "dns:dns-query-beat",
+      "scriptIntent": "Client queries recursive resolver.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "dns-recursive-beat",
+      "analyticKey": "dns:dns-recursive-beat",
+      "scriptIntent": "Resolver traverses root and TLD hierarchy.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "dns-authoritative-beat",
+      "analyticKey": "dns:dns-authoritative-beat",
+      "scriptIntent": "Authoritative answer is returned.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "dns-response-beat",
+      "analyticKey": "dns:dns-response-beat",
+      "scriptIntent": "Resolver responds and caches result.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    }
+  ]
+}
