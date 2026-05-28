@@ -60,6 +60,13 @@ export interface KpiCapture {
   notes: string;
 }
 
+export interface KpiCaptureUpdate {
+  retentionCheckpoints?: Partial<KpiCapture["retentionCheckpoints"]>;
+  feedbackTags?: string[];
+  pacingVerdict?: PacingVerdict;
+  notes?: string;
+}
+
 function normalizeBeats(beats: StoryboardBeat[]): StoryboardBeat[] {
   return [...beats].sort((left, right) => left.startFrame - right.startFrame);
 }
@@ -218,6 +225,38 @@ export function createKpiCaptureSkeleton(assetId: string): KpiCapture {
   };
 }
 
+export function populateKpiCapture(kpi: KpiCapture, update: KpiCaptureUpdate): KpiCapture {
+  return {
+    ...kpi,
+    retentionCheckpoints: {
+      ...kpi.retentionCheckpoints,
+      ...(update.retentionCheckpoints ?? {})
+    },
+    feedbackTags: update.feedbackTags ? [...update.feedbackTags] : kpi.feedbackTags,
+    pacingVerdict: update.pacingVerdict ?? kpi.pacingVerdict,
+    notes: update.notes ?? kpi.notes
+  };
+}
+
+export function validateKpiCaptureCompleteness(kpi: KpiCapture): void {
+  const retention = kpi.retentionCheckpoints;
+  if (retention.p25 === null) {
+    throw new Error("KPI retention checkpoint p25 must be non-null.");
+  }
+  if (retention.p50 === null) {
+    throw new Error("KPI retention checkpoint p50 must be non-null.");
+  }
+  if (retention.p75 === null) {
+    throw new Error("KPI retention checkpoint p75 must be non-null.");
+  }
+  if (retention.completion === null) {
+    throw new Error("KPI retention checkpoint completion must be non-null.");
+  }
+  if (!kpi.pacingVerdict || !["too_fast", "balanced", "too_slow"].includes(kpi.pacingVerdict)) {
+    throw new Error("KPI pacing verdict must be one of: too_fast, balanced, too_slow.");
+  }
+}
+
 function assertValidTopicSequence(sequence: TopicId[]): void {
   if (sequence.join(",") !== "tls,ssh,dns") {
     throw new Error("Long-form sequence must be TLS -> SSH -> DNS.");
@@ -249,7 +288,7 @@ export function buildLongFormSceneSpec(topicScenes: Record<TopicId, SceneSpec>):
   return stitchSceneSpecsInOrder(orderedScenes, longFormAssembly.slug);
 }
 
-export function validateBatchCompleteness(): string[] {
+export function validateBatchCompleteness(kpiCaptures: KpiCapture[] = []): string[] {
   const errors: string[] = [];
   const topics = firstContentBatchPackets.map((packet) => packet.topic);
   if (topics.join(",") !== "tls,ssh,dns") {
@@ -281,6 +320,15 @@ export function validateBatchCompleteness(): string[] {
   }
   if (longFormAssembly.targetWindowMinutes.min < 4 || longFormAssembly.targetWindowMinutes.max > 6) {
     errors.push("Long-form duration window must stay within 4-6 minutes.");
+  }
+
+  for (const capture of kpiCaptures) {
+    try {
+      validateKpiCaptureCompleteness(capture);
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : "Unknown KPI completeness failure.";
+      errors.push(`Asset ${capture.assetId} failed KPI acceptance: ${detail}`);
+    }
   }
 
   return errors;
