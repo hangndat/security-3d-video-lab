@@ -3,10 +3,10 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Phase complete — ready for verification
-last_updated: "2026-05-28T09:01:00.000Z"
+last_updated: "2026-05-28T09:05:23.366Z"
 progress:
   total_phases: 4
-  completed_phases: 4
+  completed_phases: 3
   total_plans: 6
   completed_plans: 6
   percent: 100
@@ -56,6 +56,8 @@ Plan: 1 of 1 complete
 - [Phase 03]: Gate phase acceptance with automated tests covering packet completeness and four-asset export output generation.
 - [Phase 04]: Use one canonical E2E test file with scenario-specific command filters instead of duplicating suite files.
 - [Phase 04]: Support CI smoke invocation via a Node runner so test:e2e:all -- --smoke remains stable.
+- [Phase 03]: Long-form export now stitches TLS->SSH->DNS via sequence-driven assembly and transition coherence checks.
+- [Phase 03]: KPI acceptance now enforces non-null retention checkpoints and valid pacing verdict before batch completeness passes.
 
 ### Pending Todos
 
