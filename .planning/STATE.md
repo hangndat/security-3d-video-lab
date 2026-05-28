@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Ready to execute
-last_updated: "2026-05-28T08:09:00.305Z"
+status: Phase complete — ready for verification
+last_updated: "2026-05-28T08:13:32.154Z"
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 5
-  completed_plans: 4
-  percent: 80
+  completed_plans: 5
+  percent: 100
 ---
 
 # Project State
@@ -23,13 +23,13 @@ Current focus: phase 02 mvp-engine.
 
 ## Current Position
 
-Phase: 02 (mvp-engine) — EXECUTING
-Plan: 3 of 3
+Phase: 02 (mvp-engine) — READY_FOR_VERIFICATION
+Plan: 1 of 1
 
 - Phase: 02 of 04 (mvp-engine)
-- Plan: 3 of 3 in current phase
-- Status: Plan 02-02 complete, continuing phase execution
-- Last activity: 2026-05-28 - Completed 02-02 deterministic engine behavior execution
+- Plan: 4 of 4 in current phase
+- Status: Plan 02-04 complete, phase work ready for verification
+- Last activity: 2026-05-28 - Completed 02-04 gap-closure export/fingerprint wiring
 
 ## Accumulated Context
 
@@ -50,6 +50,8 @@ Plan: 3 of 3
 - [Phase 02]: Render composition state derivation is pure: validate SceneSpec then consume scheduler output by frame index only.
 - [Phase 02]: Reproducibility gate compares both provenance and output fingerprints and writes diff bundles before failing.
 - [Phase 02]: CI uses PR smoke matrix plus nightly matrix with fixed retention windows to preserve forensic evidence.
+- [Phase 02]: Export demo command executes composition-derived frame path, not synthetic FFmpeg sources
+- [Phase 02]: Fingerprint inputs derive from composition trace inputs to match exported output path
 
 ### Pending Todos
 
@@ -62,5 +64,5 @@ Plan: 3 of 3
 ## Session Continuity
 
 - Last session: 2026-05-28
-- Stopped at: Completed 02-02-PLAN.md
+- Stopped at: Completed 02-04-PLAN.md
 - Resume file: None
