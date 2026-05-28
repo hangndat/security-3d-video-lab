@@ -6,7 +6,10 @@
 - MVP boundaries are documented.
 
 ## Current Evidence
-- Pending execution.
+- `docs/roadmap.md` now includes per-phase `Goal`, `Deliverables`, `Done Criteria`, `Validation Metric`, and `Depends On` sections.
+- BRD-to-roadmap traceability and identified gaps are documented.
+- Dependency gates and MVP anti-scope-creep checks are explicitly defined.
+- Structural consistency check passed via heading verification queries.
 
 ## Historical Evidence
 - None.
