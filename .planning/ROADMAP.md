@@ -24,7 +24,7 @@
   - **Requirements:** `CONT-01`, `CONT-03`, `AUTHR-01`, `AUTHR-02`
   - **Plans:** 2 plans
   - **Plan List:**
-    - [ ] `05-01-PLAN.md` — Build JSON contract schema, loader/validator pipeline, and deterministic contract tests.
+    - [x] `05-01-PLAN.md` — Build JSON contract schema, loader/validator pipeline, and deterministic contract tests.
     - [ ] `05-02-PLAN.md` — Add scaffold workflow, three new topic drafts, and blocking CI/evidence gates.
   - **Success Criteria:**
     1. New topic packets can be declared via data files/contracts without core renderer edits.
@@ -57,14 +57,14 @@
 
 ## Current Status
 
-v1.1 initialized and ready for discuss/plan on Phase 05.
+Phase 05 is in progress (1 of 2 plans complete).
 
 ## Progress
 
 | Phase | Milestone | Requirements | Status |
 |------|-----------|--------------|--------|
 | 01-04 | v1.0 | Archived | Complete |
-| 05 | v1.1 | CONT-01, CONT-03, AUTHR-01, AUTHR-02 | Planned |
+| 05 | v1.1 | CONT-01, CONT-03, AUTHR-01, AUTHR-02 | In Progress (1/2 plans) |
 | 06 | v1.1 | CONT-02, AUTHR-03, CINE-01, CINE-03 | Planned |
 | 07 | v1.1 | CINE-02, VER-01, VER-03 | Planned |
 | 08 | v1.1 | VER-02 | Planned |

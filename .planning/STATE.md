@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Content Expansion
-status: Ready to execute
-last_updated: "2026-05-28T12:34:17.685Z"
+status: Executing Phase 05
+last_updated: "2026-05-28T12:44:12.213Z"
 progress:
   total_phases: 1
   completed_phases: 0
   total_plans: 2
-  completed_plans: 0
-  percent: 0
+  completed_plans: 1
+  percent: 50
 ---
 
 # Project State
@@ -19,17 +19,17 @@ progress:
 See `.planning/PROJECT.md` (updated 2026-05-28)
 
 Core value: cinematic, deterministic security/infrastructure visualization.
-Current focus: phase 05 content authoring foundation planning.
+Current focus: phase 05 content authoring foundation execution.
 
 ## Current Position
 
-Phase: 05
-Plan: Not started
+Phase: 05 (content-authoring-foundation) — EXECUTING
+Plan: 2 of 2
 
 - Phase: 05 of 08 (content-authoring-foundation)
-- Plan: defining requirements and planning inputs
-- Status: v1.1 Content Expansion initialized
-- Last activity: 2026-05-28 - Started v1.1 milestone
+- Plan: contract engine wave-1 completed; moving to plan 2
+- Status: v1.1 Content Expansion in progress
+- Last activity: 2026-05-28 - Completed 05-01-PLAN.md
 
 ## Accumulated Context
 
@@ -58,6 +58,9 @@ Plan: Not started
 - [Phase 04]: Support CI smoke invocation via a Node runner so test:e2e:all -- --smoke remains stable.
 - [Phase 03]: Long-form export now stitches TLS->SSH->DNS via sequence-driven assembly and transition coherence checks.
 - [Phase 03]: KPI acceptance now enforces non-null retention checkpoints and valid pacing verdict before batch completeness passes.
+- [Phase 05]: Use AJV allErrors and deterministic errors/warnings arrays for contract validation.
+- [Phase 05]: Enforce transition behavior with required preset whitelist and compatibility pairs.
+- [Phase 05]: Load topic contracts from src/content/topics/<topic>/contract.json and block invalid contracts before batch assembly.
 
 ### Pending Todos
 
@@ -91,5 +94,5 @@ Target features:
 ## Session Continuity
 
 - Last session: 2026-05-28
-- Stopped at: Completed 04-01-PLAN.md
+- Stopped at: Completed 05-01-PLAN.md
 - Resume file: None

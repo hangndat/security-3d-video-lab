@@ -11,12 +11,12 @@ Requirements for the Content Expansion milestone.
 
 - [ ] **CONT-01**: User can generate at least three new security explainer modules beyond TLS/SSH/DNS from structured content packets.
 - [ ] **CONT-02**: User can stitch new modules into one long-form narrative sequence with explicit transition rationale.
-- [ ] **CONT-03**: User can enforce beat-level narration placeholder coverage for every module in a batch.
+- [x] **CONT-03**: User can enforce beat-level narration placeholder coverage for every module in a batch.
 
 ### Authoring Workflow
 
-- [ ] **AUTHR-01**: Creator can define topic packets in data-first format without editing core render logic.
-- [ ] **AUTHR-02**: Content contracts fail fast with clear validation errors for missing beats, invalid duration windows, or invalid topic ordering.
+- [x] **AUTHR-01**: Creator can define topic packets in data-first format without editing core render logic.
+- [x] **AUTHR-02**: Content contracts fail fast with clear validation errors for missing beats, invalid duration windows, or invalid topic ordering.
 - [ ] **AUTHR-03**: Authoring format supports reusable transition and pacing presets across modules.
 
 ### Cinematic Quality
@@ -54,9 +54,9 @@ Deferred to future release.
 |-------------|-------|--------|
 | CONT-01 | Phase 05 | Pending |
 | CONT-02 | Phase 06 | Pending |
-| CONT-03 | Phase 05 | Pending |
-| AUTHR-01 | Phase 05 | Pending |
-| AUTHR-02 | Phase 05 | Pending |
+| CONT-03 | Phase 05 | Complete |
+| AUTHR-01 | Phase 05 | Complete |
+| AUTHR-02 | Phase 05 | Complete |
 | AUTHR-03 | Phase 06 | Pending |
 | CINE-01 | Phase 06 | Pending |
 | CINE-02 | Phase 07 | Pending |
