@@ -284,17 +284,17 @@ StrictDog.parse({ name: "Yeller", extraKey: true }); // throws
 | A1 | `ajv` will be needed if external JSON Schema interoperability is required in this phase. [ASSUMED] | Standard Stack | Could add unnecessary dependency scope if interop is not actually required. |
 | A2 | Frame-sample hashing strategy can be implemented without unacceptable render-time overhead for MVP CI budgets. [ASSUMED] | Common Pitfalls / Reproducibility | CI duration may exceed acceptable PR gate times, requiring alternative sampling strategy. |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **What exact `SceneSpec.schemaVersion` policy should be used in MVP (fixed literal vs semver range)?**
-   - What we know: Hard-fail unsupported versions is locked.
-   - What's unclear: Whether MVP should allow patch-level compatibility.
-   - Recommendation: Start with fixed literal (`1.0.0`) for deterministic simplicity, revisit after first content batch.
+1. **`SceneSpec.schemaVersion` policy for MVP**
+   - **Resolution:** MVP uses a fixed literal `schemaVersion: "1.0.0"` only.
+   - **Execution rule:** Validator hard-fails any non-`1.0.0` value with structured error + hint to migrate or pin the spec.
+   - **Why this resolves risk:** Removes patch-range ambiguity and keeps deterministic compatibility behavior explicit (D-02, D-06).
 
-2. **What frame-sample set defines output fingerprinting for D-31?**
-   - What we know: Must include frame-sample hashes + normalized metadata.
-   - What's unclear: Number and location of sample frames per scenario.
-   - Recommendation: Define deterministic sample set per canonical scenario in fixture manifest.
+2. **Frame-sample set for D-31 output fingerprinting**
+   - **Resolution:** Use a deterministic 7-frame sample set per render scenario: `0`, `floor(totalFrames*0.1)`, `floor(totalFrames*0.25)`, `floor(totalFrames*0.5)`, `floor(totalFrames*0.75)`, `floor(totalFrames*0.9)`, `totalFrames-1`.
+   - **Execution rule:** Persist sampled frame indexes and hashes inside the deterministic manifest and compare strict equality on reruns.
+   - **Why this resolves risk:** Captures start/early/mid/late/end drift while keeping PR smoke runtime bounded (D-31, D-32).
 
 ## Environment Availability
 
