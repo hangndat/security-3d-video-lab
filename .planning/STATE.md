@@ -2,8 +2,8 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Phase complete — ready for verification
-last_updated: "2026-05-28T09:05:23.366Z"
+status: Milestone archived — planning next milestone
+last_updated: "2026-05-28T12:20:00.000Z"
 progress:
   total_phases: 4
   completed_phases: 3
@@ -19,17 +19,17 @@ progress:
 See `.planning/PROJECT.md` (updated 2026-05-28)
 
 Core value: cinematic, deterministic security/infrastructure visualization.
-Current focus: post-phase verification and CI hardening.
+Current focus: plan next milestone scope and requirements.
 
 ## Current Position
 
-Phase: 04 (e2e-testing) — COMPLETE
-Plan: 1 of 1 complete
+Phase: v1.0 — COMPLETE
+Plan: Completed
 
-- Phase: 04 of 04 (e2e-testing)
-- Plan: 1 of 1 in current phase
-- Status: PLAN.md executed with canonical TLS/SSH/DNS E2E determinism and artifact gates
-- Last activity: 2026-05-28 - Completed 04-01 e2e-testing execution
+- Phase: milestone close
+- Plan: all v1.0 plans complete
+- Status: v1.0 archived and tagged
+- Last activity: 2026-05-28 - Completed v1.0 milestone archival
 
 ## Accumulated Context
 
@@ -66,6 +66,15 @@ Plan: 1 of 1 complete
 ### Blockers/Concerns
 
 - None active for phase 04.
+
+## Deferred Items
+
+Items acknowledged and deferred at milestone close on 2026-05-28:
+
+| Category | Item | Status |
+|----------|------|--------|
+| audit | v1.0-MILESTONE-AUDIT.md missing | deferred |
+| requirements | .planning/REQUIREMENTS.md missing at close | deferred |
 
 ## Session Continuity
 
