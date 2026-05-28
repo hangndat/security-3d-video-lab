@@ -20,7 +20,7 @@ This section maps the BRD scope to delivery phases and highlights current gaps.
 
 # Phase 0 — Research & Style Exploration (Week 1–2)
 
-## Goals
+## Goal
 
 Define:
 
@@ -43,11 +43,25 @@ Define:
 * test renders
 * intro animation prototype
 
+## Done Criteria
+
+- Style guide includes color, typography, shot language, and camera movement rules.
+- At least 10 concept shots are archived and reviewable.
+- Intro animation prototype renders successfully end-to-end.
+
+## Validation Metric
+
+- Internal review confirms style package is usable as a production reference.
+
+## Depends On
+
+- None.
+
 ---
 
 # Phase 1 — MVP Engine (Month 1)
 
-## Goals
+## Goal
 
 Build reusable core rendering system.
 
@@ -88,11 +102,25 @@ Build reusable core rendering system.
 * reusable packet animation
 * first cinematic demo
 
+## Done Criteria
+
+- Scene engine can render at least one deterministic scripted sequence.
+- Packet animation module supports reusable flows and trails.
+- Demo render is exported and reviewable as MP4.
+
+## Validation Metric
+
+- A reproducible render command produces the same output artifact shape across runs.
+
+## Depends On
+
+- Phase 0 style references and production conventions.
+
 ---
 
 # Phase 2 — First Content Batch (Month 2)
 
-## Goals
+## Goal
 
 Validate audience interest.
 
@@ -113,11 +141,25 @@ Validate audience interest.
 * audience feedback
 * pacing optimization
 
+## Done Criteria
+
+- Three short videos and one long-form video are storyboarded, animated, and rendered.
+- Each video passes internal technical and narrative review.
+- KPI capture process is documented for each publication.
+
+## Validation Metric
+
+- Initial release data is collected for retention, watch time, and qualitative feedback.
+
+## Depends On
+
+- Phase 1 reusable engine and render workflow.
+
 ---
 
 # Phase 3 — Visual System Expansion (Month 3)
 
-## Goals
+## Goal
 
 Build reusable cinematic modules.
 
@@ -140,11 +182,25 @@ Build reusable cinematic modules.
 * reusable visual library
 * advanced cinematic transitions
 
+## Done Criteria
+
+- New modules (tunnel, certificate chain, attacker, datacenter, cloud topology) are reusable across scenes.
+- Lighting and shader improvements are documented and integrated in sample scenes.
+- Transition pack is validated against at least two content scenarios.
+
+## Validation Metric
+
+- Visual modules are imported and used without custom per-scene rewrites.
+
+## Depends On
+
+- Phase 1 engine baseline and Phase 2 content feedback.
+
 ---
 
 # Phase 4 — Advanced Infrastructure Simulation (Month 4–5)
 
-## Goals
+## Goal
 
 Move beyond protocol explanation.
 
@@ -164,11 +220,25 @@ Move beyond protocol explanation.
 * multi-node simulations
 * chaos engineering visuals
 
+## Done Criteria
+
+- At least one multi-node simulation per selected topic is renderable.
+- Attack/defense and resilience behaviors are visually understandable in final cuts.
+- Series structure is defined with reusable simulation templates.
+
+## Validation Metric
+
+- Subject-matter review confirms technical correctness and explanatory clarity.
+
+## Depends On
+
+- Phase 1 engine, Phase 2 content foundation, and Phase 3 reusable visual modules.
+
 ---
 
 # Phase 5 — Production Pipeline Automation (Month 5–6)
 
-## Goals
+## Goal
 
 Scale production efficiently.
 
@@ -185,11 +255,25 @@ Scale production efficiently.
 * semi-automated production workflow
 * reusable content templates
 
+## Done Criteria
+
+- Scene JSON generation, subtitle flow, narration, and render queue run through a documented pipeline.
+- Batch export supports repeated runs with predictable outputs.
+- Template catalog reduces setup effort for new episodes.
+
+## Validation Metric
+
+- Average production effort per video is lower than pre-automation baseline.
+
+## Depends On
+
+- Phase 1 engine stability and Phase 2/4 production usage patterns.
+
 ---
 
 # Phase 6 — Brand Expansion (Month 6+)
 
-## Goals
+## Goal
 
 Build ecosystem around the platform.
 
@@ -208,6 +292,20 @@ Build ecosystem around the platform.
 * Patreon
 * asset packs
 * enterprise visualization
+
+## Done Criteria
+
+- Distribution channels are active with a repeatable publishing cadence.
+- At least one monetization path is validated with real audience demand.
+- Interactive/public artifacts are published with clear conversion pathways.
+
+## Validation Metric
+
+- Channel growth and monetization metrics trend positively across a defined reporting window.
+
+## Depends On
+
+- Delivery quality and credibility established in Phases 2 through 5.
 
 ---
 
