@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Ready to execute
-last_updated: "2026-05-28T07:50:46.336Z"
+status: Phase complete — ready for verification
+last_updated: "2026-05-28T07:58:56.086Z"
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 4
-  completed_plans: 3
-  percent: 75
+  completed_plans: 4
+  percent: 100
 ---
 
 # Project State
@@ -47,6 +47,9 @@ Plan: 3 of 3
 - [Phase 02]: Scheduler compares by startFrame/track/id with stable tie-break.
 - [Phase 02]: Camera cues require explicit transitions for deterministic shot changes.
 - [Phase 02]: Packet lifecycle state remains engine-side while interpolation remains client-side pure math.
+- [Phase 02]: Render composition state derivation is pure: validate SceneSpec then consume scheduler output by frame index only.
+- [Phase 02]: Reproducibility gate compares both provenance and output fingerprints and writes diff bundles before failing.
+- [Phase 02]: CI uses PR smoke matrix plus nightly matrix with fixed retention windows to preserve forensic evidence.
 
 ### Pending Todos
 
