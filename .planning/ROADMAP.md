@@ -64,7 +64,7 @@ Phase 05 is in progress (1 of 2 plans complete).
 | Phase | Milestone | Requirements | Status |
 |------|-----------|--------------|--------|
 | 01-04 | v1.0 | Archived | Complete |
-| 05 | 2/2 | Complete   | 2026-05-28 |
+| 05 | 2/2 | Complete    | 2026-05-28 |
 | 06 | v1.1 | CONT-02, AUTHR-03, CINE-01, CINE-03 | Planned |
 | 07 | v1.1 | CINE-02, VER-01, VER-03 | Planned |
 | 08 | v1.1 | VER-02 | Planned |
