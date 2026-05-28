@@ -6,6 +6,7 @@
   "scripts": {
     "test:quick": "vitest run --passWithNoTests",
     "test": "vitest run",
+    "test:e2e:render-smoke": "vitest run tests/render-repro-smoke.test.ts",
     "render:demo": "vitest run tests/render-composition.test.ts",
     "export:demo": "node -e \"console.log('export demo placeholder')\""
   },
