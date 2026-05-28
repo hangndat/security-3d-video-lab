@@ -7,6 +7,47 @@ on:
     - cron: "0 2 * * *"
 
 jobs:
+  pr-full-validation:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    env:
+      RENDER_PROFILE: reduced
+      NODE_VERSION: "25.6.0"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - name: Install FFmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Verify pinned runtime and toolchain
+        run: |
+          node --version
+          ffmpeg -version
+      - name: Install dependencies
+        run: npm ci
+      - name: Run content contract validation gate
+        run: npm run test -- tests/content-authoring-foundation.test.ts tests/content-contracts.test.ts tests/first-content-batch.test.ts
+      - name: Run canonical E2E smoke gate
+        run: npm run test:e2e:all -- --smoke
+      - name: Run deterministic render smoke gate
+        run: npm run test:e2e:render-smoke
+      - name: Run full baseline test suite
+        run: npm test
+      - name: Upload failure evidence bundle
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-full-validation-evidence
+          path: |
+            .artifacts/repro/**
+            .artifacts/logs/**
+            .artifacts/trace/**
+            .artifacts/verification/**
+          if-no-files-found: warn
+          retention-days: 7
+
   pr-render-smoke:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
@@ -34,8 +75,8 @@ jobs:
         run: npm ci
       - name: Run deterministic smoke gate
         run: npm run test:e2e:render-smoke
-      - name: Run baseline test suite
-        run: npm test
+      - name: Run scenario-scoped canonical flow
+        run: npm run test -- tests/e2e-canonical-flows.test.ts --testNamePattern="${{ matrix.scenario }} canonical flow"
       - name: Upload failure evidence bundle
         if: failure()
         uses: actions/upload-artifact@v4

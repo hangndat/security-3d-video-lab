@@ -99,7 +99,7 @@ describe("scaffold CLI and manifest-locked drafts", () => {
   });
 });
 
-describe("blocking validation gate policy", () => {
+describe("blocking validation gate and PR policy", () => {
   it("contract suite fails when any blocking validation error exists", () => {
     const manifest = loadTopicManifest(TOPICS_ROOT);
     const contracts = loadTopicContracts(TOPICS_ROOT);
@@ -117,5 +117,27 @@ describe("blocking validation gate policy", () => {
     const result = validateTopicContracts(contracts, manifest.order);
     expect(result.warnings.length).toBeGreaterThan(0);
     expect(result.errors.some((item) => item.reason.includes("drifts more than 10%"))).toBe(false);
+  });
+
+  it("CI PR workflow runs full validation every time", () => {
+    const ci = readFileSync(resolve(REPO_ROOT, ".github/workflows/ci.yml"), "utf-8");
+    expect(ci).toMatch(/pull_request/);
+    expect(ci).toMatch(/content-authoring-foundation\.test\.ts/);
+    expect(ci).toMatch(/content-contracts\.test\.ts/);
+    expect(ci).toMatch(/test:e2e:all/);
+    expect(ci).not.toMatch(/continue-on-error:\s*true/);
+  });
+
+  it("E2E smoke remains part of required pass criteria", () => {
+    const ci = readFileSync(resolve(REPO_ROOT, ".github/workflows/ci.yml"), "utf-8");
+    expect(ci).toMatch(/e2e-canonical-flows\.test\.ts/);
+    expect(ci).toMatch(/Run canonical E2E smoke gate/);
+  });
+
+  it("repository authoring gate passes with zero blocking errors", () => {
+    const manifest = loadTopicManifest(TOPICS_ROOT);
+    const contracts = loadTopicContracts(TOPICS_ROOT);
+    const result = validateTopicContracts(contracts, manifest.order);
+    expect(result.errors).toEqual([]);
   });
 });
