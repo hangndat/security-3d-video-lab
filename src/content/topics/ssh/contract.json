@@ -68,6 +68,7 @@
       "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
     }
   ],
+  "pacingPresetId": "documentary-standard",
   "transitionToNext": {
     "toTopic": "dns",
     "presetId": "remote-shell-to-name-resolution",

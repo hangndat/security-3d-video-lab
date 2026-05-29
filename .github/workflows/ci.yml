@@ -29,12 +29,24 @@ jobs:
         run: npm ci
       - name: Run content contract validation gate
         run: npm run test -- tests/content-authoring-foundation.test.ts tests/content-contracts.test.ts tests/first-content-batch.test.ts
+      - name: Run narrative composition gate
+        run: npm run test -- tests/long-form-assembly.test.ts tests/caption-timing-map.test.ts tests/narrative-composition-replay.test.ts
+      - name: Run batch quality and expansion module gate
+        run: npm run test -- tests/expansion-module-e2e.test.ts tests/expansion-batch-export.test.ts tests/batch-kpi-acceptance.test.ts
+      - name: Run requirement traceability gate
+        run: npm run validate:requirements
+      - name: Run governance and milestone audit tests
+        run: npm run test -- tests/requirement-traceability.test.ts tests/milestone-governance.test.ts
       - name: Run canonical E2E smoke gate
         run: npm run test:e2e:all -- --smoke
       - name: Run deterministic render smoke gate
         run: npm run test:e2e:render-smoke
       - name: Generate dual-format verification evidence
-        run: npm run verify:content-authoring
+        run: |
+          npm run verify:content-authoring
+          npm run verify:narrative-composition
+          npm run verify:batch-quality
+          npm run verify:milestone-governance -- --quick
       - name: Run full baseline test suite
         run: npm test
       - name: Upload failure evidence bundle

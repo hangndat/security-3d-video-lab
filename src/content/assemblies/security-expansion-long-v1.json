@@ -1,0 +1,7 @@
+{
+  "schemaVersion": "1.0.0",
+  "slug": "security-expansion-long-v1",
+  "sequence": ["tls", "ssh", "dns", "auth-session", "pki-trust-chain", "mitm-defense"],
+  "targetWindowMinutes": { "min": 8, "max": 12 },
+  "defaultPacingPresetId": "documentary-standard"
+}

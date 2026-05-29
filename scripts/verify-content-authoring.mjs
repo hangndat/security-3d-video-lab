@@ -21,6 +21,8 @@ const MARKDOWN_OUT = resolve(
 );
 
 const DRAFT_MODULE_IDS = ["auth-session", "pki-trust-chain", "mitm-defense"];
+const FPS = 30;
+const SOFT_DRIFT_RATIO = 0.1;
 const quickMode = process.argv.includes("--quick");
 
 function runSuite(label, command, args) {
@@ -56,6 +58,32 @@ function loadContract(topic) {
     contractPath,
     contract: JSON.parse(readFileSync(contractPath, "utf-8"))
   };
+}
+
+function countDurationDriftWarnings(manifestOrder) {
+  let warningCount = 0;
+
+  for (const topicId of manifestOrder) {
+    const { contract } = loadContract(topicId);
+    if (!Array.isArray(contract.storyboardBeats) || contract.storyboardBeats.length === 0) {
+      continue;
+    }
+
+    const beatStart = Math.min(...contract.storyboardBeats.map((beat) => beat.startFrame));
+    const beatEnd = Math.max(...contract.storyboardBeats.map((beat) => beat.endFrame));
+    const estimatedSeconds = (beatEnd - beatStart) / FPS;
+    const targetSeconds = contract.durationBudget?.targetSeconds;
+    if (typeof targetSeconds !== "number" || targetSeconds <= 0) {
+      continue;
+    }
+
+    const driftRatio = Math.abs(estimatedSeconds - targetSeconds) / targetSeconds;
+    if (driftRatio > SOFT_DRIFT_RATIO) {
+      warningCount += 1;
+    }
+  }
+
+  return warningCount;
 }
 
 function summarizeModules(manifestOrder) {
@@ -107,7 +135,8 @@ function buildMarkdown(report) {
   ];
 
   for (const suite of report.suites) {
-    lines.push(`| ${suite.label} | \`${suite.command}\` | ${suite.exitCode} | ${suite.passed ? "PASS" : "FAIL"} |`);
+    const status = suite.skipped ? "SKIP" : suite.passed ? "PASS" : "FAIL";
+    lines.push(`| ${suite.label} | \`${suite.command}\` | ${suite.exitCode} | ${status} |`);
   }
 
   lines.push(
@@ -182,7 +211,8 @@ function main() {
       startedAt: new Date().toISOString(),
       completedAt: new Date().toISOString(),
       exitCode: 0,
-      passed: true,
+      passed: false,
+      skipped: true,
       stdout: "Skipped in --quick mode; enforced by CI pr-full-validation job.",
       stderr: ""
     });
@@ -195,9 +225,12 @@ function main() {
   );
 
   const contractErrors = schemaErrors.length;
-  const e2eSmokePassed = suites.find((suite) => suite.label === "e2e-canonical-smoke")?.passed ?? false;
-  const suitesPassed = suites.every((suite) => suite.passed);
-  const gateStatus = contractErrors === 0 && e2eSmokePassed && suitesPassed ? "pass" : "fail";
+  const e2eSuite = suites.find((suite) => suite.label === "e2e-canonical-smoke");
+  const e2eSmokePassed = e2eSuite?.skipped ? false : (e2eSuite?.passed ?? false);
+  const suitesPassed = suites.every((suite) => suite.skipped || suite.passed);
+  const warningCount = countDurationDriftWarnings(manifest.order);
+  const gateStatus =
+    contractErrors === 0 && (quickMode || e2eSmokePassed) && suitesPassed ? "pass" : "fail";
 
   const report = {
     phase: "05-content-authoring-foundation",
@@ -208,7 +241,8 @@ function main() {
       e2eSmokePassed,
       suitesPassed
     },
-    warningCount: 0,
+    warningCount,
+    quickMode,
     errors: [
       ...schemaErrors,
       ...suites.filter((suite) => !suite.passed).map((suite) => `${suite.label} failed (${suite.command})`)

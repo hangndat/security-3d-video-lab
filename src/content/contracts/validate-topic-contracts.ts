@@ -1,11 +1,9 @@
 import Ajv from "ajv";
 
 import schema from "./topic-contract.schema.json";
-import {
-  REQUIRED_TRANSITION_PRESET_IDS,
-  validateTransitionPresetPair
-} from "./transition-presets.js";
+import { isKnownTransitionPreset, validateTransitionPresetPair } from "./transition-presets.js";
 import { loadTopicManifest } from "./load-topic-manifest.js";
+import { TOPICS_ROOT } from "./load-topic-contracts.js";
 import type {
   LoadedTopicContract,
   TopicContractValidationResult,
@@ -17,8 +15,10 @@ const SOFT_DRIFT_RATIO = 0.1;
 
 export function validateTopicContracts(
   loadedContracts: LoadedTopicContract[],
-  manifestOrder: readonly string[] = loadTopicManifest().order
+  manifestOrder?: readonly string[],
+  topicsRoot: string = TOPICS_ROOT
 ): TopicContractValidationResult {
+  const order = manifestOrder ?? loadTopicManifest(topicsRoot).order;
   const errors: ValidationIssue[] = [];
   const warnings: ValidationIssue[] = [];
   const ajv = new Ajv({ allErrors: true, strict: false });
@@ -44,8 +44,8 @@ export function validateTopicContracts(
     validateDurationPolicy(loaded.contractPath, loaded.contract, errors, warnings);
   }
 
-  for (let i = 0; i < manifestOrder.length; i += 1) {
-    const expectedTopic = manifestOrder[i];
+  for (let i = 0; i < order.length; i += 1) {
+    const expectedTopic = order[i];
     const current = loadedContracts[i];
     if (!current) {
       errors.push({
@@ -62,22 +62,17 @@ export function validateTopicContracts(
     }
   }
 
-  for (const requiredPresetId of REQUIRED_TRANSITION_PRESET_IDS) {
-    const hasPreset = loadedContracts.some(
-      (loaded) => loaded.contract.transitionToNext?.presetId === requiredPresetId
-    );
-    if (!hasPreset) {
-      errors.push({
-        path: "manifest.transitions",
-        reason: `Missing required transition preset '${requiredPresetId}'.`
-      });
-    }
-  }
-
   for (const loaded of loadedContracts) {
     const transition = loaded.contract.transitionToNext;
     if (!transition) {
       continue;
+    }
+
+    if (!isKnownTransitionPreset(transition.presetId)) {
+      errors.push({
+        path: `${loaded.contractPath}/transitionToNext/presetId`,
+        reason: `Unknown transition preset '${transition.presetId}'.`
+      });
     }
 
     const presetError = validateTransitionPresetPair(
@@ -92,6 +87,10 @@ export function validateTopicContracts(
       });
     }
 
+    const loadedTopicIds = new Set(loadedContracts.map((entry) => entry.contract.topic));
+    if (!loadedTopicIds.has(transition.toTopic)) {
+      continue;
+    }
     if (!byTopic.has(transition.toTopic)) {
       errors.push({
         path: `${loaded.contractPath}/transitionToNext/toTopic`,

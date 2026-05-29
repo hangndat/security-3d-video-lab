@@ -68,6 +68,7 @@
       "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
     }
   ],
+  "pacingPresetId": "documentary-standard",
   "transitionToNext": {
     "toTopic": "ssh",
     "presetId": "secure-channel-to-remote-shell",

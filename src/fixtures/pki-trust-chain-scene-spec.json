@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0.0",
+  "seed": "pki-trust-chain-seed-001",
+  "sceneId": "pki-trust-chain-scene",
+  "actors": [{ "id": "actor-ca", "label": "certificate-authority" }],
+  "packets": [
+    {
+      "id": "packet-cert-chain",
+      "route": [
+        { "x": 0, "y": 0, "z": 0 },
+        { "x": 2, "y": 1, "z": 0 }
+      ]
+    }
+  ],
+  "timeline": [
+    {
+      "id": "pki-main-chain",
+      "track": "packet",
+      "startFrame": 0,
+      "duration": 120,
+      "easing": "linear",
+      "payload": { "packetId": "packet-cert-chain" }
+    }
+  ],
+  "totalFrames": 300,
+  "capabilities": {
+    "postMvpCameraOverrides": false,
+    "postMvpPacketPhysics": false
+  }
+}

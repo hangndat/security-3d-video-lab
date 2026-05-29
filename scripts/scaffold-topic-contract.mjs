@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { mkdirSync, writeFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const DEFAULT_TOPICS_ROOT = resolve(
@@ -12,7 +12,8 @@ function parseArgs(argv) {
     topic: "",
     major: 1,
     topicsRoot: DEFAULT_TOPICS_ROOT,
-    dryRun: false
+    dryRun: false,
+    force: false
   };
 
   for (let index = 0; index < argv.length; index += 1) {
@@ -35,6 +36,9 @@ function parseArgs(argv) {
     if (token === "--dry-run") {
       options.dryRun = true;
     }
+    if (token === "--force") {
+      options.force = true;
+    }
   }
 
   return options;
@@ -51,10 +55,23 @@ function sanitizeTopicSlug(rawTopic) {
   return topic;
 }
 
-function assertTopicsRootConfinement(topicsRoot, topic) {
+function isPathInside(parent, child) {
+  const rel = relative(resolve(parent), resolve(child));
+  return rel === "" || (!rel.startsWith("..") && !rel.startsWith(`..${"/"}`));
+}
+
+function assertTopicsRootWithinRepo(topicsRoot) {
   const resolvedRoot = resolve(topicsRoot);
+  if (!isPathInside(DEFAULT_TOPICS_ROOT, resolvedRoot)) {
+    throw new Error("--topics-root must stay within the repository topics directory.");
+  }
+  return resolvedRoot;
+}
+
+function assertTopicsRootConfinement(topicsRoot, topic) {
+  const resolvedRoot = assertTopicsRootWithinRepo(topicsRoot);
   const topicDir = resolve(resolvedRoot, topic);
-  if (!topicDir.startsWith(`${resolvedRoot}/`) && topicDir !== resolvedRoot) {
+  if (!isPathInside(resolvedRoot, topicDir)) {
     throw new Error("Topic output path escapes topics root.");
   }
   return topicDir;
@@ -121,6 +138,10 @@ function main() {
   if (options.dryRun) {
     process.stdout.write(payload);
     return;
+  }
+
+  if (existsSync(contractPath) && !options.force) {
+    throw new Error(`Contract already exists at ${contractPath}. Use --force to overwrite.`);
   }
 
   mkdirSync(topicDir, { recursive: true });

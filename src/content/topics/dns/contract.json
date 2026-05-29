@@ -67,5 +67,11 @@
       "scriptIntent": "Resolver responds and caches result.",
       "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
     }
-  ]
+  ],
+  "pacingPresetId": "documentary-standard",
+  "transitionToNext": {
+    "toTopic": "auth-session",
+    "presetId": "dns-to-auth-boundary",
+    "rationale": "Name resolution enables clients to reach authentication endpoints."
+  }
 }

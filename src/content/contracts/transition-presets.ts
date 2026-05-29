@@ -11,7 +11,10 @@ export interface TransitionPreset {
 
 export const REQUIRED_TRANSITION_PRESET_IDS = [
   "secure-channel-to-remote-shell",
-  "remote-shell-to-name-resolution"
+  "remote-shell-to-name-resolution",
+  "dns-to-auth-boundary",
+  "auth-session-to-pki-trust-chain",
+  "pki-trust-chain-to-mitm-defense"
 ] as const;
 
 export const TRANSITION_PRESETS: Record<string, TransitionPreset> = {
@@ -24,6 +27,21 @@ export const TRANSITION_PRESETS: Record<string, TransitionPreset> = {
     id: "remote-shell-to-name-resolution",
     label: "Remote shell to DNS foundations",
     allowedPairs: [{ fromTopic: "ssh", toTopic: "dns" }]
+  },
+  "dns-to-auth-boundary": {
+    id: "dns-to-auth-boundary",
+    label: "DNS foundations to authentication boundary",
+    allowedPairs: [{ fromTopic: "dns", toTopic: "auth-session" }]
+  },
+  "auth-session-to-pki-trust-chain": {
+    id: "auth-session-to-pki-trust-chain",
+    label: "Authentication session to PKI trust chain",
+    allowedPairs: [{ fromTopic: "auth-session", toTopic: "pki-trust-chain" }]
+  },
+  "pki-trust-chain-to-mitm-defense": {
+    id: "pki-trust-chain-to-mitm-defense",
+    label: "PKI trust chain to MITM defense narrative",
+    allowedPairs: [{ fromTopic: "pki-trust-chain", toTopic: "mitm-defense" }]
   }
 };
 

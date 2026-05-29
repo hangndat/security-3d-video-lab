@@ -94,6 +94,16 @@ describe("content contracts collect-all validation", () => {
   });
 });
 
+describe("validateTopicContracts manifest root alignment", () => {
+  it("uses manifest from the same topics root as loaded contracts", () => {
+    const contracts = loadFixtureContracts();
+    const manifest = loadFixtureManifest();
+    const result = validateTopicContracts(contracts, undefined, TEST_TOPICS_ROOT);
+    expect(result.errors).toEqual([]);
+    expect(manifest.order).toEqual(contracts.map((entry) => entry.contract.topic));
+  });
+});
+
 describe("loader coverage", () => {
   it("loads topic contracts from topic folders", () => {
     const contracts = loadTopicContracts(TEST_TOPICS_ROOT);

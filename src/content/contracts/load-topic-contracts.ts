@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { loadTopicManifest } from "./load-topic-manifest.js";
 import type { LoadedTopicContract, TopicContract } from "./types.js";
 
-const TOPICS_ROOT = resolve(
+export const TOPICS_ROOT = resolve(
   dirname(fileURLToPath(import.meta.url)),
   "../topics"
 );

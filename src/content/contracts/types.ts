@@ -43,6 +43,7 @@ export interface TopicContract {
   durationBudget: DurationBudgetContract;
   storyboardBeats: StoryboardBeatContract[];
   narrationPlaceholders: NarrationPlaceholderContract[];
+  pacingPresetId?: string;
   transitionToNext?: TopicTransitionContract;
 }
 

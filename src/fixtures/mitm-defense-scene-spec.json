@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0.0",
+  "seed": "mitm-defense-seed-001",
+  "sceneId": "mitm-defense-scene",
+  "actors": [{ "id": "actor-attacker", "label": "attacker" }],
+  "packets": [
+    {
+      "id": "packet-intercept",
+      "route": [
+        { "x": 0, "y": 0, "z": 0 },
+        { "x": 2, "y": 1, "z": 0 }
+      ]
+    }
+  ],
+  "timeline": [
+    {
+      "id": "mitm-main-attack",
+      "track": "packet",
+      "startFrame": 0,
+      "duration": 120,
+      "easing": "linear",
+      "payload": { "packetId": "packet-intercept" }
+    }
+  ],
+  "totalFrames": 300,
+  "capabilities": {
+    "postMvpCameraOverrides": false,
+    "postMvpPacketPhysics": false
+  }
+}

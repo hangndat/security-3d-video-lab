@@ -1,9 +1,15 @@
 import type { SceneSpec } from "../../engine/contracts/scene-spec.js";
-import { stitchSceneSpecsInOrder } from "../../render/remotion/render-composition.js";
 import { loadTopicContracts } from "../contracts/load-topic-contracts.js";
 import { validateTopicContracts } from "../contracts/validate-topic-contracts.js";
 import {
+  buildLongFormSceneSpec as buildAssemblyLongFormSceneSpec,
+  loadLongFormAssembly,
+  validateLongFormTransitionCoherence,
+  type LongFormAssembly
+} from "../composition/build-long-form-scene-spec.js";
+import {
   FIRST_CONTENT_BATCH_TOPICS,
+  type LoadedTopicContract,
   type DurationBudgetContract,
   type NarrationPlaceholderContract,
   type StoryboardBeatContract,
@@ -15,21 +21,7 @@ export type TopicPacket = TopicContract;
 export type StoryboardBeat = StoryboardBeatContract;
 export type DurationBudget = DurationBudgetContract;
 export type NarrationPlaceholder = NarrationPlaceholderContract;
-
-export interface LongFormAssembly {
-  slug: "network-foundations-long-v1";
-  sequence: TopicId[];
-  transitions: Array<{
-    fromTopic: TopicId;
-    toTopic: TopicId;
-    rationale: string;
-    presetId: string;
-  }>;
-  targetWindowMinutes: {
-    min: number;
-    max: number;
-  };
-}
+export type { LongFormAssembly };
 
 export type PacingVerdict = "too_fast" | "balanced" | "too_slow";
 
@@ -58,12 +50,24 @@ function normalizeBeats(beats: StoryboardBeat[]): StoryboardBeat[] {
 }
 
 const loadedContracts = loadTopicContracts();
-const contractValidation = validateTopicContracts(loadedContracts);
-if (contractValidation.errors.length > 0) {
-  const detail = contractValidation.errors
+
+function selectBatchContracts(contracts: LoadedTopicContract[]): LoadedTopicContract[] {
+  return contracts.filter(({ contract }) =>
+    (FIRST_CONTENT_BATCH_TOPICS as readonly string[]).includes(contract.topic)
+  );
+}
+
+function validateBatchContracts(contracts: LoadedTopicContract[] = loadedContracts) {
+  const batchContracts = selectBatchContracts(contracts);
+  return validateTopicContracts(batchContracts, [...FIRST_CONTENT_BATCH_TOPICS]);
+}
+
+const batchContractValidation = validateBatchContracts();
+if (batchContractValidation.errors.length > 0) {
+  const detail = batchContractValidation.errors
     .map((issue) => `${issue.path}: ${issue.reason}`)
     .join("\n");
-  throw new Error(`Topic contracts are invalid:\n${detail}`);
+  throw new Error(`First content batch topic contracts are invalid:\n${detail}`);
 }
 
 export const firstContentBatchPackets: TopicPacket[] = loadedContracts
@@ -75,22 +79,7 @@ export const firstContentBatchPackets: TopicPacket[] = loadedContracts
     storyboardBeats: normalizeBeats(contract.storyboardBeats)
   })) as TopicPacket[];
 
-export const longFormAssembly: LongFormAssembly = {
-  slug: "network-foundations-long-v1",
-  sequence: firstContentBatchPackets.map((packet) => packet.topic),
-  transitions: firstContentBatchPackets
-    .filter((packet) => packet.transitionToNext)
-    .map((packet) => ({
-      fromTopic: packet.topic,
-      toTopic: packet.transitionToNext!.toTopic,
-      rationale: packet.transitionToNext!.rationale,
-      presetId: packet.transitionToNext!.presetId
-    })),
-  targetWindowMinutes: {
-    min: 4,
-    max: 6
-  }
-};
+export const longFormAssembly: LongFormAssembly = loadLongFormAssembly("network-foundations-long-v1");
 
 export const narrationPlaceholders: NarrationPlaceholder[] = firstContentBatchPackets.flatMap(
   (packet) => packet.narrationPlaceholders
@@ -143,41 +132,16 @@ export function validateKpiCaptureCompleteness(kpi: KpiCapture): void {
   }
 }
 
-function assertValidTopicSequence(sequence: TopicId[]): void {
-  if (sequence.join(",") !== "tls,ssh,dns") {
-    throw new Error("Long-form sequence must be TLS -> SSH -> DNS.");
-  }
-}
-
-export function validateLongFormTransitionCoherence(assembly: LongFormAssembly = longFormAssembly): void {
-  assertValidTopicSequence(assembly.sequence);
-  const expectedPairs = assembly.sequence
-    .slice(0, -1)
-    .map((fromTopic, index) => `${fromTopic}->${assembly.sequence[index + 1]}`);
-  const actualPairs = assembly.transitions.map(
-    (transition) => `${transition.fromTopic}->${transition.toTopic}`
-  );
-
-  for (const pair of expectedPairs) {
-    if (!actualPairs.includes(pair)) {
-      throw new Error(`Missing long-form transition coherence link: ${pair}.`);
-    }
-  }
-}
+export { validateLongFormTransitionCoherence };
 
 export function buildLongFormSceneSpec(topicScenes: Record<TopicId, SceneSpec>): SceneSpec {
-  validateLongFormTransitionCoherence(longFormAssembly);
-  const orderedScenes = longFormAssembly.sequence.map((topic) => ({
-    topic,
-    scene: topicScenes[topic]
-  }));
-  return stitchSceneSpecsInOrder(orderedScenes, longFormAssembly.slug);
+  return buildAssemblyLongFormSceneSpec("network-foundations-long-v1", topicScenes);
 }
 
 export function validateBatchCompleteness(kpiCaptures: KpiCapture[] = []): string[] {
   const errors: string[] = [];
 
-  for (const issue of contractValidation.errors) {
+  for (const issue of validateBatchContracts().errors) {
     errors.push(`${issue.path}: ${issue.reason}`);
   }
 

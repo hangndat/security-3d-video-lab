@@ -72,5 +72,11 @@
       "scriptIntent": "Session expiry and logout invalidate active credentials.",
       "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
     }
-  ]
+  ],
+  "pacingPresetId": "documentary-standard",
+  "transitionToNext": {
+    "toTopic": "pki-trust-chain",
+    "presetId": "auth-session-to-pki-trust-chain",
+    "rationale": "Authenticated sessions rely on certificate trust for transport security."
+  }
 }

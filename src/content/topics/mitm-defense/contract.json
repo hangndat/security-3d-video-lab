@@ -72,5 +72,6 @@
       "scriptIntent": "Mutual TLS, pinning, and secure defaults reduce interception success.",
       "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
     }
-  ]
+  ],
+  "pacingPresetId": "documentary-standard"
 }

@@ -13,7 +13,11 @@
     "test:e2e:all": "node scripts/run-e2e-all.mjs",
     "render:demo": "vitest run tests/render-composition.test.ts",
     "export:demo": "vitest run tests/render-export-demo.test.ts",
-    "verify:content-authoring": "node scripts/verify-content-authoring.mjs"
+    "verify:content-authoring": "node scripts/verify-content-authoring.mjs",
+    "verify:narrative-composition": "node scripts/verify-narrative-composition.mjs",
+    "verify:batch-quality": "node scripts/verify-batch-quality.mjs",
+    "validate:requirements": "node scripts/validate-requirement-traceability.mjs",
+    "verify:milestone-governance": "node scripts/verify-milestone-governance.mjs"
   },
   "dependencies": {
     "@react-three/drei": "10.7.7",

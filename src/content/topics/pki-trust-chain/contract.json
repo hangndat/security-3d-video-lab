@@ -72,5 +72,11 @@
       "scriptIntent": "Chain validation checks signatures, expiry, and hostname policy.",
       "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
     }
-  ]
+  ],
+  "pacingPresetId": "documentary-standard",
+  "transitionToNext": {
+    "toTopic": "mitm-defense",
+    "presetId": "pki-trust-chain-to-mitm-defense",
+    "rationale": "Broken trust chains enable person-in-the-middle attacks."
+  }
 }

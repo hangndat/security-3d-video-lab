@@ -1,0 +1,7 @@
+{
+  "schemaVersion": "1.0.0",
+  "slug": "network-foundations-long-v1",
+  "sequence": ["tls", "ssh", "dns"],
+  "targetWindowMinutes": { "min": 4, "max": 6 },
+  "defaultPacingPresetId": "documentary-standard"
+}

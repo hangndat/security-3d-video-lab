@@ -105,6 +105,10 @@
         }
       }
     },
+    "pacingPresetId": {
+      "type": "string",
+      "minLength": 1
+    },
     "transitionToNext": {
       "type": "object",
       "additionalProperties": false,
