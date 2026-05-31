@@ -112,11 +112,11 @@
 
 ### Phase 24: Render CI & Milestone Close
 
-- [ ] **Phase 24: Render CI & Milestone Close** (0/2 plans — planned)
+- [ ] **Phase 24: Render CI & Milestone Close** (0/2 plans — ready to execute)
   - **Goal:** CI/nightly render strategy, v1.5 verification gates, and milestone audit close.
   - **Requirements:** `RENDER-04`, `VER-08`
   - **Depends on:** Phase 23 TLS 3D export
-  - **Plans:** 2 plans, 1 wave
+  - **Plans:** 2 plans, 1 wave — PLAN-CHECK PASS
   - **Plan List:**
     - [ ] `24-01-PLAN.md` — CI backend policy, nightly 3D matrix, verify:3d-render script (RENDER-04).
     - [ ] `24-02-PLAN.md` — V15 audit, traceability close, milestone archive (VER-08).
@@ -127,9 +127,9 @@
 
 ## Current Status
 
-**Active milestone:** v1.5 Real 3D Render — Phase 24 next.
+**Active milestone:** v1.5 Real 3D Render — Phase 24 ready to execute.
 
-Run `/gsd-plan-phase 24` to begin render CI and milestone close.
+Run `/gsd-execute-phase 24` to close the v1.5 milestone.
 
 ## Status Rules
 
