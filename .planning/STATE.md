@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: Real 3D Render
 status: in_progress
-last_updated: "2026-05-31T15:45:00.000Z"
-last_activity: 2026-05-31 — Phase 22 Scene Builder Parity planned (RENDER-02)
+last_updated: "2026-05-31T15:47:00.000Z"
+last_activity: 2026-05-31 — Phase 22 Scene Builder Parity executed (RENDER-02)
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 8
-  completed_plans: 2
-  percent: 25
+  completed_plans: 4
+  percent: 50
 ---
 
 # Project State
@@ -20,42 +20,41 @@ progress:
 See `.planning/PROJECT.md` (updated 2026-05-31)
 
 **Core value:** cinematic, deterministic security/infrastructure visualization.
-**Current focus:** v1.5 Phase 22 — Scene Builder Parity (planned, ready to execute).
+**Current focus:** v1.5 Phase 23 — TLS 3D Production Export (planned).
 
 ## Current Position
 
-Phase: 22 — Scene Builder Parity (planned)
-Plan: 22-01, 22-02 ready — PLAN-CHECK PASS
-Status: Ready to execute — `/gsd-execute-phase 22`
-Last activity: 2026-05-31 — Phase 22 planned (RENDER-02)
+Phase: 23 — TLS 3D Production Export (planned)
+Plan: Not yet planned
+Status: Phase 22 complete — `/gsd-plan-phase 23`
+Last activity: 2026-05-31 — Phase 22 executed (RENDER-02)
 
 ## Accumulated Context
 
 ### Decisions
 
-**v1.5 scope:** Headless Three.js MP4 from R3F catalog; TLS canonical; **no TTS/audio** in this milestone.
+**Mesh SOT:** `src/client/viz/viz-mesh-spec.ts` shared by R3F catalog and headless builder.
 
-**Render backend policy (implemented):** `SECURITY_LAB_RENDER_BACKEND=r3f-headless` local default; `trace-hash` for CI PR smoke on GL-less runners.
+**HUD headless:** Placeholder planes + userData only — no text rendering in GL capture.
 
-**Phase 21 scope:** Packet/tunnel meshes only in headless builder; cert/HUD deferred to Phase 22.
+**Lighting/camera:** Tokenized via extended `STYLE_TOKENS` aligned with style bible.
 
 ### Pending Todos
 
-- Plan Phase 22 scene builder parity (RENDER-02): cert, HUD, shared mesh factory.
+- Plan Phase 23 TLS 3D production export (RENDER-03).
 
 ### Blockers/Concerns
 
-- None for Phase 22 planning.
+- None for Phase 23 planning.
 
 ## Deferred Items
 
 - TTS / narration audio mux on 3D exports (PROD-04, v6)
+- Pixel golden PNG regression suite
 - `@remotion/three` full React composition capture
-- Second topic publish-ready (PROD-03)
-- Headless WebGL pixel regression suite (stretch after Phase 22)
 
 ## Session Continuity
 
 - Last session: 2026-05-31
-- Stopped at: Phase 21 complete
+- Stopped at: Phase 22 complete
 - Resume file: None

@@ -10,7 +10,7 @@ Requirements for the Real 3D Render milestone — export TLS cinematic video fro
 ### Headless 3D Capture
 
 - [x] **RENDER-01**: Headless Three.js frame capture produces deterministic PNG bytes per frame from SceneSpec + compose plan via `@headless-three/renderer` (or equivalent), with resolution and camera from style bible tokens.
-- [ ] **RENDER-02**: Scene builder maps all eleven `viz-*` catalog modules to Three.js meshes from a single source of truth shared with R3F components (style bible tokens; no divergent duplicate geometry logic).
+- [x] **RENDER-02**: Scene builder maps all eleven `viz-*` catalog modules to Three.js meshes from a single source of truth shared with R3F components (style bible tokens; no divergent duplicate geometry logic).
 
 ### Production Video Export
 
@@ -56,7 +56,7 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | RENDER-01 | Phase 21 | Complete |
-| RENDER-02 | Phase 22 | Pending |
+| RENDER-02 | Phase 22 | Complete |
 | RENDER-03 | Phase 23 | Pending |
 | RENDER-04 | Phase 24 | Pending |
 | VER-08 | Phase 24 | Pending |
@@ -68,4 +68,4 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 
 ---
 *Requirements defined: 2026-05-31*
-*Last updated: 2026-05-31 — Phase 21 complete (RENDER-01)*
+*Last updated: 2026-05-31 — Phase 22 complete (RENDER-02)*
