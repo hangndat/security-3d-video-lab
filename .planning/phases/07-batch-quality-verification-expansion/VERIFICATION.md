@@ -1,6 +1,6 @@
 # Phase 07 Batch Quality Verification
 
-Generated: 2026-05-29T02:47:51.347Z
+Generated: 2026-05-31T07:49:34.966Z
 
 ## Gate Status
 
@@ -30,6 +30,9 @@ Generated: 2026-05-29T02:47:51.347Z
 | auth-session | auth-session-short-v1 | ok | ok | no | 5 |
 | pki-trust-chain | pki-trust-chain-short-v1 | ok | ok | no | 5 |
 | mitm-defense | mitm-defense-short-v1 | ok | ok | no | 5 |
+| zero-trust-access | zero-trust-access-short-v1 | ok | ok | no | 5 |
+| oauth-jwt-session | oauth-jwt-session-short-v1 | ok | ok | no | 5 |
+| api-gateway-waf | api-gateway-waf-short-v1 | ok | ok | no | 5 |
 
 ## KPI Acceptance Signals
 
