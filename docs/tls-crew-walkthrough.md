@@ -38,7 +38,7 @@ End-to-end proof of the cinematic crew skill chain on the **TLS** topic module (
 
 1. Build shot list → `.cursor/skills/cinematic-storyboard-artist/templates/shot-list.md` (TLS rows included).
 2. Map to SceneSpec fields per `scenespec-handoff.md`.
-3. Validate against `src/fixtures/golden-scene-spec.json` structure.
+3. Validate against `src/fixtures/tls-production-scene-spec.json` (publish canonical) or `src/fixtures/golden-scene-spec.json` (CI short export).
 4. Run `validateSceneSpec` from `src/engine/contracts/validate-scene-spec.ts`.
 
 **Gate:** SceneSpec validation passes.
@@ -65,13 +65,14 @@ End-to-end proof of the cinematic crew skill chain on the **TLS** topic module (
 
 **Skill:** `.cursor/skills/cinematic-creative-technologist/SKILL.md`
 
-1. Input: validated SceneSpec (golden fixture or topic-specific).
-2. Render: `deriveRenderFrameState` → `renderCompositionDemoMp4`.
-3. Quality: `assertExportQuality` per `src/verification/export-quality.ts`.
-4. Optional long-form: `buildLongFormExportBundle` for assemblies including `tls`.
-5. Document paths in `render-handoff.md`.
+1. Input: validated SceneSpec — **`src/fixtures/tls-production-scene-spec.json`** for publish-ready TLS.
+2. Render: `deriveRenderFrameState` (viz-aware trace) → `renderCompositionProductionMp4` (640×360, full `totalFrames`).
+3. Quality: `assertExportQuality` with `productionPolicyForScene` per `src/verification/export-quality.ts`.
+4. Short CI export: `renderCompositionDemoMp4` + `golden-scene-spec.json` (unchanged).
+5. Production artifacts: `generateTlsProductionArtifacts` → `.artifacts/production/tls/`.
+6. Verify: `npm run verify:tls-production`.
 
-**Gate:** MP4 under `.artifacts/export/`; quality assertions pass.
+**Gate:** MP4 under `.artifacts/production/tls/`; production quality + security sign-off pass.
 
 ---
 
@@ -81,9 +82,9 @@ End-to-end proof of the cinematic crew skill chain on the **TLS** topic module (
 
 1. Walk `docs/security-accuracy-checklist.md` TLS per-beat table.
 2. Verify `narrationPlaceholders` in contract match spoken intent.
-3. Generate/verify caption map + narration track (stub provider in CI).
+3. Generate/verify caption map + narration track via `resolveNarrationProvider()` (ElevenLabs when `ELEVENLABS_API_KEY` set; `deterministic-stub` dummy audio in CI).
 4. Run `validateNarrationAlignment` from `src/content/narration/validate-narration-alignment.ts`.
-5. Fill `audio-layer-handoff.md`.
+5. Fill `audio-layer-handoff.md` with provider id and narration track path.
 
 **Gate:** Accuracy sign-off + alignment valid.
 
@@ -104,13 +105,16 @@ End-to-end proof of the cinematic crew skill chain on the **TLS** topic module (
 ## Verification Commands
 
 ```bash
+npm run test -- tests/tls-production-export.test.ts
+npm run verify:tls-production
+npm run verify:tts-integration -- --quick
 npm run test -- tests/cinematic-crew-skills.test.ts
 node scripts/verify-crew-skills.mjs --quick
 npm run test -- tests/render-composition.test.ts
 node scripts/verify-narration-pipeline.mjs --quick
 node scripts/validate-requirement-traceability.mjs --milestone-close
-node scripts/audit-milestone-v1.3.mjs
 ```
 
 **Canonical TLS contract:** `src/content/topics/tls/contract.json`  
-**Canonical SceneSpec:** `src/fixtures/golden-scene-spec.json`
+**Publish SceneSpec:** `src/fixtures/tls-production-scene-spec.json`  
+**CI short SceneSpec:** `src/fixtures/golden-scene-spec.json`

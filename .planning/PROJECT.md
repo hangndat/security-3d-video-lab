@@ -9,17 +9,19 @@ Build a code-driven cinematic visualization platform that explains security and 
 ## Problem
 Most technical education is slide-heavy and weakly visual, while modern systems (TLS, SSH, DNS, cloud infrastructure, AI agents) are dynamic and better explained through animated flows.
 
-## Current Milestone: v1.4 Production Content
+## Current Milestone: v1.4 Production Content (Shipped 2026-05-31)
 
-**Goal:** Upgrade the canonical TLS module from export-gate fixtures to publish-ready cinematic production using implemented R3F visual modules and real TTS integration.
+**Goal:** Upgrade the canonical TLS module from export-gate fixtures to publish-ready cinematic production using implemented R3F visual modules and TTS integration.
 
-**Target features:**
+**Delivered:**
 - R3F components for all four catalog families (packet, tunnel, cert, HUD) bound to engine frame state
 - TLS publish-ready scene exceeding export-gate quality rubric with crew pipeline artifacts
 - ElevenLabs TTS provider with deterministic stub fallback for CI
 - v1.4 milestone verification and governance close
 
 **Strategic choice:** TLS-first canonical module — proves the v1.3 crew pipeline end-to-end before scaling to other nine topics. Platform UI (PLAT-01/02) still deferred.
+
+**What's next:** Plan next milestone via `/gsd-new-milestone`.
 
 ## Success Signals
 - Deterministic scene/timeline architecture is defined and followed.
@@ -34,8 +36,8 @@ Most technical education is slide-heavy and weakly visual, while modern systems 
 - **v1.1** shipped 2026-05-29: six-topic manifest, JSON authoring contracts, long-form composition, batch quality gates.
 - **v1.2** shipped 2026-05-31: nine topics, branch variants, narration pipeline, export verification, CI governance.
 - **v1.3** shipped 2026-05-31: seven cinematic crew skills, style bible, R3F catalog, TLS walkthrough, orchestrator.
-- **192+ tests** passing; R3F `.tsx` components not yet implemented — catalog and skills only.
-- **Narration** uses deterministic stub provider; ElevenLabs deferred to v1.4.
+- **v1.4** shipped 2026-05-31: eleven R3F modules, TLS publish-ready production, ElevenLabs TTS with stub CI fallback.
+- **235 tests** passing at v1.4 close.
 
 ## Validated Requirements
 
@@ -60,6 +62,11 @@ Most technical education is slide-heavy and weakly visual, while modern systems 
 - ✓ CREW-01 through CREW-07 — cinematic crew skills and orchestrator pipeline
 - ✓ VER-06 — skills indexed and TLS walkthrough verification
 
+### v1.4
+- ✓ VIZ-01 through VIZ-04 — R3F packet, tunnel, certificate, and HUD modules
+- ✓ PROD-01, PROD-02 — TLS publish-ready production and TTS integration
+- ✓ VER-07 — v1.4 milestone audit and governance close
+
 ## Out of Scope
 
 | Feature | Reason |
@@ -81,4 +88,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-31 — v1.4 Production Content milestone started*
+*Last updated: 2026-05-31 — v1.4 Production Content milestone shipped*

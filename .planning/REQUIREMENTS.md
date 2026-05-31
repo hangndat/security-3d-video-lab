@@ -11,17 +11,17 @@ Requirements for the Production Content milestone — implement R3F visual modul
 
 - [x] **VIZ-01**: R3F packet modules (`viz-packet-flow`, `viz-packet-encrypted`, `viz-packet-threat`) render deterministically from SceneSpec packet-state and style bible tokens.
 - [x] **VIZ-02**: R3F tunnel modules (`viz-tunnel-secure`, `viz-tunnel-handshake`) compose with active timeline windows and packet routes.
-- [ ] **VIZ-03**: R3F certificate modules (`viz-cert-single`, `viz-cert-chain`) render beat-aligned trust visuals for TLS handshake scenes.
-- [ ] **VIZ-04**: R3F HUD modules (`viz-hud-actor-label`, `viz-hud-beat-caption`) overlay actor labels and beat captions per style bible typography.
+- [x] **VIZ-03**: R3F certificate modules (`viz-cert-single`, `viz-cert-chain`) render beat-aligned trust visuals for TLS handshake scenes.
+- [x] **VIZ-04**: R3F HUD modules (`viz-hud-actor-label`, `viz-hud-beat-caption`) overlay actor labels and beat captions per style bible typography.
 
 ### Publish-Ready Production
 
-- [ ] **PROD-01**: TLS module upgraded from export-gate fixture to publish-ready cinematic scene with crew pipeline artifacts, security accuracy sign-off, and export quality assertions passing a production rubric.
-- [ ] **PROD-02**: ElevenLabs TTS provider integrated with deterministic stub fallback for CI; narration tracks remain aligned to caption timing maps.
+- [x] **PROD-01**: TLS module upgraded from export-gate fixture to publish-ready cinematic scene with crew pipeline artifacts, security accuracy sign-off, and export quality assertions passing a production rubric.
+- [x] **PROD-02**: ElevenLabs TTS when `ELEVENLABS_API_KEY` is set; otherwise deterministic dummy audio (`deterministic-stub`) for CI and keyless runs — narration tracks stay aligned to caption timing maps.
 
 ### Verification & Governance
 
-- [ ] **VER-07**: v1.4 production content requirements are machine-validated in CI and pass milestone-close with zero unmapped requirements.
+- [x] **VER-07**: v1.4 production content requirements are machine-validated in CI and pass milestone-close with zero unmapped requirements.
 
 ## v5 Requirements
 
@@ -54,11 +54,11 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 |-------------|-------|--------|
 | VIZ-01 | Phase 17 | Complete |
 | VIZ-02 | Phase 17 | Complete |
-| VIZ-03 | Phase 18 | Pending |
-| VIZ-04 | Phase 18 | Pending |
-| PROD-01 | Phase 19 | Pending |
-| PROD-02 | Phase 20 | Pending |
-| VER-07 | Phase 20 | Pending |
+| VIZ-03 | Phase 18 | Complete |
+| VIZ-04 | Phase 18 | Complete |
+| PROD-01 | Phase 19 | Complete |
+| PROD-02 | Phase 20 | Complete |
+| VER-07 | Phase 20 | Complete |
 
 **Coverage:**
 - v1.4 requirements: 7 total
@@ -67,4 +67,4 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 
 ---
 *Requirements defined: 2026-05-31*
-*Last updated: 2026-05-31 — Phase 17 R3F Packet & Tunnel Modules complete*
+*Last updated: 2026-05-31 — v1.4 Production Content milestone closed*

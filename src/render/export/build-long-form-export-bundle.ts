@@ -14,7 +14,10 @@ import {
   writeNarrationArtifacts,
   type NarrationTrackManifest
 } from "../../content/narration/generate-narration-track.js";
-import { createDeterministicStubProvider } from "../../content/narration/providers/deterministic-stub-provider.js";
+import {
+  resolveNarrationProvider,
+  type NarrationProviderEnv
+} from "../../content/narration/providers/resolve-narration-provider.js";
 import type { TopicId } from "../../content/contracts/types.js";
 import {
   buildDeterministicManifest,
@@ -43,6 +46,7 @@ export interface BuildLongFormExportBundleOptions {
   specHash?: string;
   seed?: string;
   repoRoot?: string;
+  narrationEnv?: NarrationProviderEnv;
 }
 
 function sha256(input: string): string {
@@ -91,7 +95,7 @@ export function buildLongFormExportBundle(
   const captionTimingMap = generateCaptionTimingMap(assemblySlug, topicScenes, {
     branchId: options.branchId
   });
-  const provider = createDeterministicStubProvider();
+  const provider = resolveNarrationProvider(options.narrationEnv ?? process.env);
   const narrationTrack = generateNarrationTrack(captionTimingMap, provider);
   const sceneId = buildSceneId(assemblySlug, options.branchId);
   const exportDir = buildExportBundleDir(assemblySlug, options.branchId);
@@ -153,7 +157,7 @@ export function writeExportBundleArtifacts(
   const captionPath = resolve(repoRoot, bundle.captionTimingMapPath);
   writeFileSync(captionPath, `${JSON.stringify(bundle.captionTimingMap, null, 2)}\n`, "utf-8");
 
-  const provider = createDeterministicStubProvider();
+  const provider = resolveNarrationProvider(process.env);
   writeNarrationArtifacts(bundle.narrationTrack, bundle.captionTimingMap, provider, repoRoot);
 
   const narrationPath = resolve(repoRoot, bundle.narrationTrackPath);

@@ -1,7 +1,9 @@
+import type { CaptionTimingMap } from "../../content/composition/generate-caption-timing-map.js";
 import type { SceneSpec } from "../../engine/contracts/scene-spec.js";
 import { validateSceneSpec } from "../../engine/contracts/validate-scene-spec.js";
 import { scheduleFrame, type ScheduledFrameState } from "../../engine/timeline/scheduler.js";
 import { buildVizFrameState, type VizFrameState } from "../../client/viz/build-viz-frame-state.js";
+import { getComposePlan } from "../../client/viz/compose-scene.js";
 import { createHash } from "node:crypto";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -12,7 +14,29 @@ import { spawnSync } from "node:child_process";
 export interface DeterministicRenderFrameState extends ScheduledFrameState {
   timelineTraceInput: string;
   vizFrameState: VizFrameState;
+  vizRenderTraceInput: string;
 }
+
+export type ProductionRenderProfile = {
+  width: number;
+  height: number;
+  fps: number;
+};
+
+export type DeriveRenderFrameStateOptions = {
+  captionMap?: CaptionTimingMap;
+};
+
+export type RenderCompositionProductionOptions = {
+  profile?: Partial<ProductionRenderProfile>;
+  captionMap?: CaptionTimingMap;
+};
+
+const DEFAULT_PRODUCTION_PROFILE: ProductionRenderProfile = {
+  width: 640,
+  height: 360,
+  fps: 30
+};
 
 function assertValidSceneSpec(sceneSpec: SceneSpec): void {
   const validation = validateSceneSpec(sceneSpec);
@@ -24,13 +48,44 @@ function assertValidSceneSpec(sceneSpec: SceneSpec): void {
   }
 }
 
-export function deriveRenderFrameState(sceneSpec: SceneSpec, frame: number): DeterministicRenderFrameState {
+function digestPacketPositions(vizFrameState: VizFrameState): string {
+  const parts = vizFrameState.packets
+    .map(
+      (packet) =>
+        `${packet.id}:${packet.progress.toFixed(4)}:${packet.position.x.toFixed(3)},${packet.position.y.toFixed(3)},${packet.position.z.toFixed(3)}:${packet.moduleId}`
+    )
+    .sort((left, right) => left.localeCompare(right));
+  return createHash("sha256").update(parts.join("|")).digest("hex").slice(0, 16);
+}
+
+export function buildVizRenderTraceInput(
+  sceneSpec: SceneSpec,
+  frame: number,
+  captionMap?: CaptionTimingMap
+): string {
   assertValidSceneSpec(sceneSpec);
   const scheduled = scheduleFrame(sceneSpec, frame);
+  const plan = getComposePlan(sceneSpec, frame, { captionMap });
+  const positionsDigest = digestPacketPositions(plan.vizFrameState);
+  return `${scheduled.seed}:${scheduled.frame}:${plan.renderOrder.join(",")}:${positionsDigest}`;
+}
+
+export function deriveRenderFrameState(
+  sceneSpec: SceneSpec,
+  frame: number,
+  options: DeriveRenderFrameStateOptions = {}
+): DeterministicRenderFrameState {
+  assertValidSceneSpec(sceneSpec);
+  const scheduled = scheduleFrame(sceneSpec, frame);
+  const vizFrameState = buildVizFrameState(sceneSpec, frame);
+  const timelineTraceInput = `${scheduled.seed}:${scheduled.frame}:${scheduled.activeTimelineIds.join(",")}`;
+  const vizRenderTraceInput = buildVizRenderTraceInput(sceneSpec, frame, options.captionMap);
+
   return {
     ...scheduled,
-    timelineTraceInput: `${scheduled.seed}:${scheduled.frame}:${scheduled.activeTimelineIds.join(",")}`,
-    vizFrameState: buildVizFrameState(sceneSpec, frame)
+    timelineTraceInput,
+    vizFrameState,
+    vizRenderTraceInput
   };
 }
 
@@ -112,6 +167,33 @@ function writePpmFrame(framePath: string, width: number, height: number, color: 
   writeFileSync(framePath, Buffer.concat([Buffer.from(header, "ascii"), body]));
 }
 
+function encodePpmFramesToMp4(
+  tempDir: string,
+  outputPath: string,
+  fps: number
+): void {
+  const encode = spawnSync(
+    "ffmpeg",
+    [
+      "-hide_banner",
+      "-loglevel",
+      "error",
+      "-y",
+      "-framerate",
+      String(fps),
+      "-i",
+      join(tempDir, "frame-%04d.ppm"),
+      "-pix_fmt",
+      "yuv420p",
+      outputPath
+    ],
+    { stdio: "pipe", encoding: "utf8" }
+  );
+  if (encode.status !== 0) {
+    throw new Error(`ffmpeg encoding failed: ${encode.stderr || encode.stdout}`.trim());
+  }
+}
+
 export function renderCompositionDemoMp4(sceneSpec: SceneSpec, outputPath: string): void {
   assertValidSceneSpec(sceneSpec);
   mkdirSync(dirname(outputPath), { recursive: true });
@@ -130,26 +212,38 @@ export function renderCompositionDemoMp4(sceneSpec: SceneSpec, outputPath: strin
       writePpmFrame(framePath, width, height, color);
     }
 
-    const encode = spawnSync(
-      "ffmpeg",
-      [
-        "-hide_banner",
-        "-loglevel",
-        "error",
-        "-y",
-        "-framerate",
-        String(fps),
-        "-i",
-        join(tempDir, "frame-%04d.ppm"),
-        "-pix_fmt",
-        "yuv420p",
-        outputPath
-      ],
-      { stdio: "pipe", encoding: "utf8" }
-    );
-    if (encode.status !== 0) {
-      throw new Error(`ffmpeg encoding failed: ${encode.stderr || encode.stdout}`.trim());
+    encodePpmFramesToMp4(tempDir, outputPath, fps);
+  } finally {
+    rmSync(tempDir, { recursive: true, force: true });
+  }
+}
+
+export function renderCompositionProductionMp4(
+  sceneSpec: SceneSpec,
+  outputPath: string,
+  options: RenderCompositionProductionOptions = {}
+): void {
+  assertValidSceneSpec(sceneSpec);
+  mkdirSync(dirname(outputPath), { recursive: true });
+
+  const profile: ProductionRenderProfile = {
+    ...DEFAULT_PRODUCTION_PROFILE,
+    ...options.profile
+  };
+  const frameCount = sceneSpec.totalFrames;
+  const tempDir = mkdtempSync(join(tmpdir(), "composition-production-frames-"));
+
+  try {
+    for (let frame = 0; frame < frameCount; frame += 1) {
+      const renderState = deriveRenderFrameState(sceneSpec, frame, {
+        captionMap: options.captionMap
+      });
+      const color = colorFromTrace(renderState.vizRenderTraceInput);
+      const framePath = join(tempDir, `frame-${String(frame + 1).padStart(4, "0")}.ppm`);
+      writePpmFrame(framePath, profile.width, profile.height, color);
     }
+
+    encodePpmFramesToMp4(tempDir, outputPath, profile.fps);
   } finally {
     rmSync(tempDir, { recursive: true, force: true });
   }

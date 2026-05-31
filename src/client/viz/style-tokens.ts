@@ -7,6 +7,12 @@ export const STYLE_TOKENS = {
   colorAccentTrust: "#3dffa8",
   colorAccentThreat: "#ff4757",
   colorAccentNeutral: "#8892a8",
+  colorTextPrimary: "#e8ecf4",
+  colorTextMuted: "#6b7894",
+  fontHud: '"JetBrains Mono", "SF Mono", monospace',
+  fontHudMd: 14,
+  fontHudSm: 12,
+  cameraFovIntimate: 35,
   lightRimIntensity: 0.85,
   lightAccentGlowOpacity: 0.4,
   lightThreatPulseOpacity: 0.6

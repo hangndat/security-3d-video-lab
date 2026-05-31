@@ -77,7 +77,8 @@ describe("resolveVizModuleStack", () => {
       const first = resolveVizModuleStack(vizFrameState, goldenSceneSpec);
       const second = resolveVizModuleStack(vizFrameState, goldenSceneSpec);
       expect(first).toEqual(second);
-      expect(first.zOrder).toEqual(["viz-tunnel-handshake", "viz-packet-flow"]);
+      expect(first.zOrder.slice(0, 2)).toEqual(["viz-tunnel-handshake", "viz-packet-flow"]);
+      expect(first.zOrder).toContain("viz-hud-actor-label");
     }
   });
 });
@@ -115,7 +116,9 @@ describe("VIZ-02 tunnel modules", () => {
 describe("compose scene", () => {
   it("lists modules back-to-front matching catalog z-order", () => {
     const plan = getComposePlan(goldenSceneSpec, 15);
-    expect(plan.renderOrder).toEqual(["viz-tunnel-handshake", "viz-packet-flow"]);
+    expect(plan.renderOrder.slice(0, 2)).toEqual(["viz-tunnel-handshake", "viz-packet-flow"]);
+    expect(plan.renderOrder).toContain("viz-hud-actor-label");
+    expect(plan.renderOrder.at(-1)).toBe("viz-hud-packet-id");
     expect(plan.moduleStack.primary).toHaveLength(2);
   });
 });

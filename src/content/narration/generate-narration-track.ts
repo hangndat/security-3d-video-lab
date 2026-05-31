@@ -132,6 +132,11 @@ export function generateNarrationTrack(
   return track;
 }
 
+export interface WriteNarrationArtifactsOptions {
+  artifactsRoot?: string;
+  manifestRelativePath?: string;
+}
+
 export interface WriteNarrationArtifactsResult {
   manifestPath: string;
   audioPaths: string[];
@@ -141,13 +146,18 @@ export function writeNarrationArtifacts(
   track: NarrationTrackManifest,
   captionMap: CaptionTimingMap,
   provider: NarrationProvider = createDeterministicStubProvider(),
-  repoRoot: string
+  repoRoot: string,
+  options: WriteNarrationArtifactsOptions = {}
 ): WriteNarrationArtifactsResult {
-  const manifestDir = resolve(
-    repoRoot,
-    buildNarrationArtifactDir(track.assemblySlug, track.branchId)
-  );
-  mkdirSync(manifestDir, { recursive: true });
+  const artifactsRoot = options.artifactsRoot ?? ".artifacts/narration";
+  const manifestPath = options.manifestRelativePath
+    ? resolve(repoRoot, options.manifestRelativePath)
+    : resolve(
+        repoRoot,
+        buildNarrationArtifactDir(track.assemblySlug, track.branchId, artifactsRoot),
+        "narration-track.json"
+      );
+  mkdirSync(dirname(manifestPath), { recursive: true });
 
   const audioPaths: string[] = [];
   for (const entry of captionMap.entries) {
@@ -166,7 +176,6 @@ export function writeNarrationArtifacts(
     audioPaths.push(audioPath);
   }
 
-  const manifestPath = resolve(manifestDir, "narration-track.json");
   writeFileSync(manifestPath, `${JSON.stringify(track, null, 2)}\n`, "utf-8");
 
   return { manifestPath, audioPaths };

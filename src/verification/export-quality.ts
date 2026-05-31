@@ -2,6 +2,8 @@ import { statSync } from "node:fs";
 import { basename } from "node:path";
 import { spawnSync } from "node:child_process";
 
+import type { SceneSpec } from "../engine/contracts/scene-spec.js";
+
 export interface ExportQualityPolicy {
   codec: string;
   container: string;
@@ -15,6 +17,30 @@ export const DEFAULT_EXPORT_QUALITY_POLICY: ExportQualityPolicy = {
   minDurationSeconds: 0.9,
   maxDurationSeconds: 1.2
 };
+
+export const PRODUCTION_EXPORT_QUALITY_POLICY: ExportQualityPolicy = {
+  codec: "h264",
+  container: "mp4",
+  minDurationSeconds: 7.0,
+  maxDurationSeconds: 9.0
+};
+
+const PRODUCTION_FPS = 30;
+const PRODUCTION_DURATION_TOLERANCE_SECONDS = 0.5;
+
+export function productionPolicyForScene(
+  sceneSpec: SceneSpec,
+  fps: number = PRODUCTION_FPS,
+  toleranceSeconds: number = PRODUCTION_DURATION_TOLERANCE_SECONDS
+): ExportQualityPolicy {
+  const targetDuration = sceneSpec.totalFrames / fps;
+  return {
+    codec: "h264",
+    container: "mp4",
+    minDurationSeconds: Number((targetDuration - toleranceSeconds).toFixed(2)),
+    maxDurationSeconds: Number((targetDuration + toleranceSeconds).toFixed(2))
+  };
+}
 
 export interface ExportProbeResult {
   codec: string;

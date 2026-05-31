@@ -2,7 +2,7 @@
 
 Canonical visual module vocabulary for Security Cinematic Lab. Agents cite **module ids** from this document in shot lists and motion handoffs.
 
-**Scope:** v1.3 defines catalog and conventions only. R3F `.tsx` component implementation is deferred to **v1.4 Production Content**.
+**Scope:** v1.3 defined catalog and conventions. R3F `.tsx` implementations live under `src/client/viz/` (v1.4 Production Content).
 
 Style tokens: [style-bible.md](style-bible.md). SceneSpec inputs: [scene-spec.ts](../src/engine/contracts/scene-spec.ts).
 
@@ -63,10 +63,11 @@ Rules:
 | Module id | Variant | SceneSpec inputs | Style tokens | Beat affinity |
 |-----------|---------|------------------|--------------|---------------|
 | `viz-hud-actor-label` | name plate | `actors[].label` | `--font-hud-md`, `--color-text-primary` | all beats |
+| `viz-hud-beat-caption` | narration overlay | `CaptionTimingMap.scriptIntent` | `--font-size-narration`, `--color-text-primary` | beat windows |
 | `viz-hud-packet-id` | debug label | `packets[].id` | `--font-hud-sm`, `--color-text-muted` | mechanism beats |
 | `viz-hud-frame-counter` | timeline debug | scheduler frame index | `--font-hud-sm`, `--color-text-muted` | optional QA overlay |
 
-**Binding:** HUD overlays read SceneSpec actors/packets; frame counter reads `scheduleFrame(sceneSpec, frame)` from scheduler.
+**Binding:** HUD overlays read SceneSpec actors/packets and caption timing maps; frame counter reads `scheduleFrame(sceneSpec, frame)` from scheduler.
 
 ---
 
@@ -95,7 +96,7 @@ Do not combine `viz-packet-threat` and `viz-packet-encrypted` in the same beat w
 | SceneSpec validation | `src/engine/contracts/validate-scene-spec.ts` | Pre-render gate for all modules |
 | Render (deterministic) | `src/render/remotion/render-composition.tsx` | Color trace MVP; R3F binding v1.4+ |
 
-**v1.4 target:** Each catalog id maps to one R3F component under `src/client/viz/` (not created in v1.3).
+**v1.4:** Each catalog id maps to one R3F component under `src/client/viz/` (Phase 17–18).
 
 ---
 

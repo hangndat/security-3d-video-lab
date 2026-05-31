@@ -8,9 +8,11 @@ import {
   buildMilestoneAuditReport,
   buildV12MilestoneAuditReport,
   buildV13MilestoneAuditReport,
+  buildV14MilestoneAuditReport,
   renderMilestoneAuditMarkdown,
   renderV12MilestoneAuditMarkdown,
-  renderV13MilestoneAuditMarkdown
+  renderV13MilestoneAuditMarkdown,
+  renderV14MilestoneAuditMarkdown
 } from "../src/verification/milestone-audit.js";
 import { validateRequirementTraceability, parseTraceabilityTable } from "../src/verification/requirement-traceability.js";
 
@@ -90,6 +92,24 @@ describe("v1.3 milestone audit aggregation", () => {
   });
 });
 
+describe("v1.4 milestone audit aggregation", () => {
+  it("reports PASS when phase17–20 JSON gateStatus values are pass", () => {
+    const report = buildV14MilestoneAuditReport(REPO_ROOT, { skipTraceabilityCheck: true });
+    expect(report.phases).toHaveLength(4);
+    expect(report.phases.every((phase) => phase.passed)).toBe(true);
+    expect(report.verdict).toBe("PASS");
+  });
+
+  it("generated v1.4 audit markdown includes seven-requirement coverage", () => {
+    const markdown = renderV14MilestoneAuditMarkdown(
+      buildV14MilestoneAuditReport(REPO_ROOT, { skipTraceabilityCheck: true })
+    );
+    expect(markdown).toContain("7/7");
+    expect(markdown).toContain("Production Content");
+    expect(markdown).toMatch(/\*\*PASS\*\*/);
+  });
+});
+
 describe("milestone governance policy", () => {
   it("requirement traceability milestone-close reflects Pending row count", () => {
     const result = validateRequirementTraceability();
@@ -114,6 +134,7 @@ describe("milestone governance policy", () => {
     const pkg = readFileSync(resolve(REPO_ROOT, "package.json"), "utf-8");
     expect(pkg).toContain("validate:requirements");
     expect(pkg).toContain("verify:crew-skills");
+    expect(pkg).toContain("verify:tts-integration");
     expect(pkg).toContain("verify:milestone-governance");
   });
 });
