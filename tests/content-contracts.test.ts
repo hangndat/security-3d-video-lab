@@ -7,6 +7,11 @@ import { describe, expect, it } from "vitest";
 import { loadTopicContracts } from "../src/content/contracts/load-topic-contracts.js";
 import { loadTopicManifest } from "../src/content/contracts/load-topic-manifest.js";
 import { validateTopicContracts } from "../src/content/contracts/validate-topic-contracts.js";
+import {
+  REQUIRED_TRANSITION_PRESET_IDS,
+  validateTransitionPresetPair
+} from "../src/content/contracts/transition-presets.js";
+import { V12_TOPIC_IDS, type TopicId } from "../src/content/contracts/types.js";
 
 const TEST_TOPICS_ROOT = resolve(
   dirname(fileURLToPath(import.meta.url)),
@@ -32,6 +37,22 @@ describe("content contracts schema and preset validation", () => {
     expect(result.errors.some((item) => item.reason.includes("must match pattern"))).toBe(true);
   });
 
+  it("schema accepts v1.2 topic enum values", () => {
+    for (const topicId of V12_TOPIC_IDS) {
+      expect(V12_TOPIC_IDS.includes(topicId)).toBe(true);
+    }
+    const allTopics: TopicId[] = [
+      "tls",
+      "ssh",
+      "dns",
+      "auth-session",
+      "pki-trust-chain",
+      "mitm-defense",
+      ...V12_TOPIC_IDS
+    ];
+    expect(allTopics).toHaveLength(9);
+  });
+
   it("schema rejects beat arrays with invalid frame windows", () => {
     const contracts = loadFixtureContracts();
     contracts[1]!.contract.storyboardBeats[0]!.endFrame = contracts[1]!.contract.storyboardBeats[0]!.startFrame;
@@ -46,6 +67,40 @@ describe("content contracts schema and preset validation", () => {
 
     const result = validateTopicContracts(contracts, loadFixtureManifest().order);
     expect(result.errors.some((item) => item.reason.includes("Unknown transition preset"))).toBe(true);
+  });
+
+  it("v1.2 transition presets validate mitm-defense through api-gateway-waf chain", () => {
+    expect(REQUIRED_TRANSITION_PRESET_IDS).toHaveLength(8);
+    expect(
+      validateTransitionPresetPair("mitm-defense-to-zero-trust-access", "mitm-defense", "zero-trust-access")
+    ).toBeNull();
+    expect(
+      validateTransitionPresetPair(
+        "zero-trust-access-to-oauth-jwt-session",
+        "zero-trust-access",
+        "oauth-jwt-session"
+      )
+    ).toBeNull();
+    expect(
+      validateTransitionPresetPair(
+        "oauth-jwt-session-to-api-gateway-waf",
+        "oauth-jwt-session",
+        "api-gateway-waf"
+      )
+    ).toBeNull();
+    expect(validateTransitionPresetPair("made-up-v12-preset", "mitm-defense", "zero-trust-access")).toMatch(
+      /Unknown transition preset/
+    );
+  });
+
+  it("mitm-defense contract validates with transitionToNext to zero-trust-access", () => {
+    const contracts = loadFixtureContracts();
+    const mitm = contracts.find((entry) => entry.contract.topic === "mitm-defense");
+    expect(mitm?.contract.transitionToNext?.toTopic).toBe("zero-trust-access");
+    expect(mitm?.contract.transitionToNext?.presetId).toBe("mitm-defense-to-zero-trust-access");
+
+    const result = validateTopicContracts(contracts, loadFixtureManifest().order);
+    expect(result.errors).toEqual([]);
   });
 });
 

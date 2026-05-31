@@ -14,7 +14,10 @@ export const REQUIRED_TRANSITION_PRESET_IDS = [
   "remote-shell-to-name-resolution",
   "dns-to-auth-boundary",
   "auth-session-to-pki-trust-chain",
-  "pki-trust-chain-to-mitm-defense"
+  "pki-trust-chain-to-mitm-defense",
+  "mitm-defense-to-zero-trust-access",
+  "zero-trust-access-to-oauth-jwt-session",
+  "oauth-jwt-session-to-api-gateway-waf"
 ] as const;
 
 export const TRANSITION_PRESETS: Record<string, TransitionPreset> = {
@@ -42,6 +45,21 @@ export const TRANSITION_PRESETS: Record<string, TransitionPreset> = {
     id: "pki-trust-chain-to-mitm-defense",
     label: "PKI trust chain to MITM defense narrative",
     allowedPairs: [{ fromTopic: "pki-trust-chain", toTopic: "mitm-defense" }]
+  },
+  "mitm-defense-to-zero-trust-access": {
+    id: "mitm-defense-to-zero-trust-access",
+    label: "MITM defense to zero-trust access boundary",
+    allowedPairs: [{ fromTopic: "mitm-defense", toTopic: "zero-trust-access" }]
+  },
+  "zero-trust-access-to-oauth-jwt-session": {
+    id: "zero-trust-access-to-oauth-jwt-session",
+    label: "Zero-trust access to OAuth/JWT session flow",
+    allowedPairs: [{ fromTopic: "zero-trust-access", toTopic: "oauth-jwt-session" }]
+  },
+  "oauth-jwt-session-to-api-gateway-waf": {
+    id: "oauth-jwt-session-to-api-gateway-waf",
+    label: "OAuth/JWT session to API gateway and WAF edge",
+    allowedPairs: [{ fromTopic: "oauth-jwt-session", toTopic: "api-gateway-waf" }]
   }
 };
 

@@ -102,8 +102,39 @@ describe("transition and pacing presets", () => {
       `${ASSEMBLIES_ROOT}/security-expansion-long-v1.json`
     );
     expect(result.errors).toEqual([]);
+    expect(profile.sequence).toEqual(loadTopicManifest().order.slice(0, 6));
+    expect(Object.keys(TRANSITION_PRESETS).length).toBeGreaterThanOrEqual(8);
+  });
+
+  it("content-depth-long-v1 validates with nine-topic manifest sequence", () => {
+    const profile = loadLongFormAssemblyProfile("content-depth-long-v1", ASSEMBLIES_ROOT);
+    const result = validateLongFormAssemblyProfile(
+      profile,
+      `${ASSEMBLIES_ROOT}/content-depth-long-v1.json`
+    );
+    expect(result.errors).toEqual([]);
     expect(profile.sequence).toEqual(loadTopicManifest().order);
-    expect(Object.keys(TRANSITION_PRESETS).length).toBeGreaterThanOrEqual(5);
+    expect(profile.targetWindowMinutes).toEqual({ min: 10, max: 14 });
+  });
+
+  it("v1.2 tail presets allow zero-trust through api-gateway-waf transitions", () => {
+    expect(
+      validateTransitionPresetPair("mitm-defense-to-zero-trust-access", "mitm-defense", "zero-trust-access")
+    ).toBeNull();
+    expect(
+      validateTransitionPresetPair(
+        "zero-trust-access-to-oauth-jwt-session",
+        "zero-trust-access",
+        "oauth-jwt-session"
+      )
+    ).toBeNull();
+    expect(
+      validateTransitionPresetPair(
+        "oauth-jwt-session-to-api-gateway-waf",
+        "oauth-jwt-session",
+        "api-gateway-waf"
+      )
+    ).toBeNull();
   });
 });
 

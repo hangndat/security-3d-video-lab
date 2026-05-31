@@ -73,5 +73,10 @@
       "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
     }
   ],
-  "pacingPresetId": "documentary-standard"
+  "pacingPresetId": "documentary-standard",
+  "transitionToNext": {
+    "toTopic": "zero-trust-access",
+    "presetId": "mitm-defense-to-zero-trust-access",
+    "rationale": "Network interception risks motivate identity-aware zero-trust access controls."
+  }
 }

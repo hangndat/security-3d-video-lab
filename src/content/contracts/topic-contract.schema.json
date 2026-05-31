@@ -19,7 +19,17 @@
     },
     "topic": {
       "type": "string",
-      "enum": ["tls", "ssh", "dns", "auth-session", "pki-trust-chain", "mitm-defense"]
+      "enum": [
+        "tls",
+        "ssh",
+        "dns",
+        "auth-session",
+        "pki-trust-chain",
+        "mitm-defense",
+        "zero-trust-access",
+        "oauth-jwt-session",
+        "api-gateway-waf"
+      ]
     },
     "slug": {
       "type": "string",
@@ -116,7 +126,17 @@
       "properties": {
         "toTopic": {
           "type": "string",
-          "enum": ["tls", "ssh", "dns", "auth-session", "pki-trust-chain", "mitm-defense"]
+          "enum": [
+        "tls",
+        "ssh",
+        "dns",
+        "auth-session",
+        "pki-trust-chain",
+        "mitm-defense",
+        "zero-trust-access",
+        "oauth-jwt-session",
+        "api-gateway-waf"
+      ]
         },
         "presetId": {
           "type": "string",
