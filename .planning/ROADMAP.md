@@ -75,14 +75,14 @@
 
 ### Phase 15: Render & Security Audio Skills
 
-- [ ] **Phase 15: Render & Security Audio Skills** (0/2 plans)
+- [x] **Phase 15: Render & Security Audio Skills** (2/2 plans) — completed 2026-05-31
   - **Goal:** Wire creative technology and subject-matter accuracy into the production pipeline.
   - **Requirements:** `CREW-05`, `CREW-06`
   - **Depends on:** Phase 14 SceneSpec handoff, v1.2 narration pipeline
   - **Plans:** 2 plans, 1 wave
   - **Plan List:**
-    - [ ] `15-01-PLAN.md` — Creative Technologist skill: Remotion + engine + export bundle (CREW-05).
-    - [ ] `15-02-PLAN.md` — Security SME + Audio skill: accuracy checklist + voice/sound layers (CREW-06).
+    - [x] `15-01-PLAN.md` — Creative Technologist skill: Remotion + engine + export bundle (CREW-05).
+    - [x] `15-02-PLAN.md` — Security SME + Audio skill: accuracy checklist + voice/sound layers (CREW-06).
   - **Success Criteria:**
     1. Creative Technologist skill documents render profiles, determinism, and export paths.
     2. Security SME skill ties beat objectives to verifiable security claims.
@@ -105,9 +105,9 @@
 
 ## Current Status
 
-**Active milestone:** v1.3 Cinematic Crew Skills — Phase 15 ready to execute.
+**Active milestone:** v1.3 Cinematic Crew Skills — Phase 16 next.
 
-Run `/gsd-execute-phase 15` to deliver Creative Technologist and Security SME + Audio skills.
+Run `/gsd-plan-phase 16` or `/gsd-execute-phase 16` when planned.
 
 ## Status Rules
 

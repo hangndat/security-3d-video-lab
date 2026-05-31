@@ -19,8 +19,8 @@ Requirements for the Cinematic Crew Skills milestone — codify six production r
 
 ### Render & Subject Matter
 
-- [ ] **CREW-05**: Creative Technologist skill documents Remotion composition, engine wiring, render profiles, and export bundle linkage.
-- [ ] **CREW-06**: Security SME + Audio skill provides technical accuracy checklist and voice/sound layer guidance tied to narration pipeline.
+- [x] **CREW-05**: Creative Technologist skill documents Remotion composition, engine wiring, render profiles, and export bundle linkage.
+- [x] **CREW-06**: Security SME + Audio skill provides technical accuracy checklist and voice/sound layer guidance tied to narration pipeline.
 
 ### Orchestration & Verification
 
@@ -62,8 +62,8 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 | CREW-02 | Phase 13 | Complete |
 | CREW-03 | Phase 14 | Complete |
 | CREW-04 | Phase 14 | Complete |
-| CREW-05 | Phase 15 | Pending |
-| CREW-06 | Phase 15 | Pending |
+| CREW-05 | Phase 15 | Complete |
+| CREW-06 | Phase 15 | Complete |
 | CREW-07 | Phase 16 | Pending |
 | VER-06 | Phase 16 | Pending |
 
@@ -74,4 +74,4 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 
 ---
 *Requirements defined: 2026-05-31*
-*Last updated: 2026-05-31 — Phase 14 Storyboard & 3D Motion skills complete*
+*Last updated: 2026-05-31 — Phase 15 Render & Security Audio skills complete*

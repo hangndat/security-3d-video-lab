@@ -162,3 +162,69 @@ describe("cinematic-3d-motion-designer skill (CREW-04)", () => {
     expect(content).toContain("r3f-module-catalog.md");
   });
 });
+
+describe("cinematic-creative-technologist skill (CREW-05)", () => {
+  const skillPath = ".cursor/skills/cinematic-creative-technologist/SKILL.md";
+  const renderHandoffPath =
+    ".cursor/skills/cinematic-creative-technologist/templates/render-handoff.md";
+
+  it("SKILL.md exists with cinematic-creative-technologist frontmatter name", () => {
+    const content = readRepoFile(skillPath);
+    const frontmatter = parseSkillFrontmatter(content);
+    expect(frontmatter.name).toBe("cinematic-creative-technologist");
+    expect(frontmatter.description).toBeTruthy();
+  });
+
+  it("SKILL.md references deriveRenderFrameState and assertExportQuality", () => {
+    const content = readRepoFile(skillPath);
+    expect(content).toContain("deriveRenderFrameState");
+    expect(content).toContain("assertExportQuality");
+  });
+
+  it("render-handoff.md template exists", () => {
+    expect(existsSync(resolve(REPO_ROOT, renderHandoffPath))).toBe(true);
+  });
+
+  it("SKILL.md references buildLongFormExportBundle or export bundle", () => {
+    const content = readRepoFile(skillPath);
+    expect(content).toMatch(/buildLongFormExportBundle|export bundle/i);
+  });
+});
+
+describe("cinematic-security-sme-audio skill (CREW-06)", () => {
+  const skillPath = ".cursor/skills/cinematic-security-sme-audio/SKILL.md";
+  const checklistPath = "docs/security-accuracy-checklist.md";
+  const audioHandoffPath =
+    ".cursor/skills/cinematic-security-sme-audio/templates/audio-layer-handoff.md";
+
+  const requiredChecklistSections = [
+    "## Claim Verification Process",
+    "## Per-Beat Checklist Table",
+    "## Common Failure Modes",
+    "## Sign-Off"
+  ];
+
+  it("SKILL.md exists with cinematic-security-sme-audio frontmatter name", () => {
+    const content = readRepoFile(skillPath);
+    const frontmatter = parseSkillFrontmatter(content);
+    expect(frontmatter.name).toBe("cinematic-security-sme-audio");
+    expect(frontmatter.description).toBeTruthy();
+  });
+
+  it("security-accuracy-checklist.md contains required H2 sections", () => {
+    const content = readRepoFile(checklistPath);
+    for (const section of requiredChecklistSections) {
+      expect(content).toContain(section);
+    }
+  });
+
+  it("SKILL.md links to security-accuracy-checklist.md and validateNarrationAlignment", () => {
+    const content = readRepoFile(skillPath);
+    expect(content).toContain("security-accuracy-checklist.md");
+    expect(content).toContain("validateNarrationAlignment");
+  });
+
+  it("audio-layer-handoff.md template exists", () => {
+    expect(existsSync(resolve(REPO_ROOT, audioHandoffPath))).toBe(true);
+  });
+});
