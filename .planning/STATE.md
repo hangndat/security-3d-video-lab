@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: Real 3D Render
 status: in_progress
-last_updated: "2026-05-31T15:47:00.000Z"
-last_activity: 2026-05-31 — Phase 23 TLS 3D Production Export planned (RENDER-03)
+last_updated: "2026-05-31T15:50:00.000Z"
+last_activity: 2026-05-31 — Phase 23 TLS 3D Production Export executed (RENDER-03)
 progress:
   total_phases: 4
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 8
-  completed_plans: 4
-  percent: 50
+  completed_plans: 6
+  percent: 75
 ---
 
 # Project State
@@ -20,41 +20,40 @@ progress:
 See `.planning/PROJECT.md` (updated 2026-05-31)
 
 **Core value:** cinematic, deterministic security/infrastructure visualization.
-**Current focus:** v1.5 Phase 23 — TLS 3D Production Export (planned, ready to execute).
+**Current focus:** v1.5 Phase 24 — Render CI & Milestone Close (planned).
 
 ## Current Position
 
-Phase: 23 — TLS 3D Production Export (planned)
-Plan: 23-01, 23-02 ready — PLAN-CHECK PASS
-Status: Ready to execute — `/gsd-execute-phase 23`
-Last activity: 2026-05-31 — Phase 23 planned (RENDER-03)
+Phase: 24 — Render CI & Milestone Close (planned)
+Plan: Not yet planned
+Status: Phase 23 complete — `/gsd-plan-phase 24`
+Last activity: 2026-05-31 — Phase 23 executed (RENDER-03)
 
 ## Accumulated Context
 
 ### Decisions
 
-**Mesh SOT:** `src/client/viz/viz-mesh-spec.ts` shared by R3F catalog and headless builder.
+**v1.5 video-only default:** `generateTlsProductionArtifacts` skips narration; manifest v1.1.0 with `videoOnly`, `frameSource`.
 
-**HUD headless:** Placeholder planes + userData only — no text rendering in GL capture.
+**Legacy narration:** `SECURITY_LAB_INCLUDE_NARRATION=true` restores v1.4 path for TTS regression gates.
 
-**Lighting/camera:** Tokenized via extended `STYLE_TOKENS` aligned with style bible.
+**Local 3D publish:** Default env → `r3f-headless` + `frameSource: png`; CI uses trace-hash (Phase 24).
 
 ### Pending Todos
 
-- Plan Phase 23 TLS 3D production export (RENDER-03).
+- Plan Phase 24 CI strategy and v1.5 milestone close (RENDER-04, VER-08).
 
 ### Blockers/Concerns
 
-- None for Phase 23 planning.
+- None for Phase 24 planning.
 
 ## Deferred Items
 
-- TTS / narration audio mux on 3D exports (PROD-04, v6)
-- Pixel golden PNG regression suite
-- `@remotion/three` full React composition capture
+- TTS/audio mux on 3D MP4 (PROD-04)
+- Pixel golden PNG regression
 
 ## Session Continuity
 
 - Last session: 2026-05-31
-- Stopped at: Phase 22 complete
+- Stopped at: Phase 23 complete
 - Resume file: None

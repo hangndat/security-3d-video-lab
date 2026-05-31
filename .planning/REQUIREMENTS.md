@@ -14,7 +14,7 @@ Requirements for the Real 3D Render milestone — export TLS cinematic video fro
 
 ### Production Video Export
 
-- [ ] **RENDER-03**: TLS production export generates video-only MP4 (640×360, full frame count) using the `r3f-headless` render backend by default; narration/TTS/audio mux is not required in this milestone.
+- [x] **RENDER-03**: TLS production export generates video-only MP4 (640×360, full frame count) using the `r3f-headless` render backend by default; narration/TTS/audio mux is not required in this milestone.
 - [ ] **RENDER-04**: Render backend selection is env-gated (`SECURITY_LAB_RENDER_BACKEND`): CI smoke uses `trace-hash` fallback on GL-less runners; local and nightly profiles can run full 3D capture with documented commands.
 
 ### Verification & Governance
@@ -57,7 +57,7 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 |-------------|-------|--------|
 | RENDER-01 | Phase 21 | Complete |
 | RENDER-02 | Phase 22 | Complete |
-| RENDER-03 | Phase 23 | Pending |
+| RENDER-03 | Phase 23 | Complete |
 | RENDER-04 | Phase 24 | Pending |
 | VER-08 | Phase 24 | Pending |
 
@@ -68,4 +68,4 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 
 ---
 *Requirements defined: 2026-05-31*
-*Last updated: 2026-05-31 — Phase 22 complete (RENDER-02)*
+*Last updated: 2026-05-31 — Phase 23 complete (RENDER-03)*
