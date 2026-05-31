@@ -88,19 +88,32 @@ Post-MVP camera overrides remain gated by SceneSpec `capabilities.postMvpCameraO
 
 ## SceneSpec Mapping Notes
 
-SceneSpec schema: `src/engine/contracts/scene-spec.ts` (v1.0.0). Phase 13 does **not** extend the schema; tokens below map to existing fields conceptually for Phase 14+ implementation.
+SceneSpec schema: `src/engine/contracts/scene-spec.ts` (v1.0.0). Style tokens apply at the R3F/headless render layer — not as JSON fields.
 
 | SceneSpec field | Style token application |
 |-----------------|-------------------------|
-| `actors[].label` | Render with `--font-hud` / `--color-text-primary` |
-| `packets[].route` | Trail color from semantic packet table; glow via `--light-accent-glow` |
-| `timeline[].track` | `"packet"` tracks use `--color-accent-data` default; shift to cyan/threat per beat state |
-| `totalFrames` | Camera mood pacing derived from Director beat sheet retention hooks |
-| `capabilities` | Respect `postMvpCameraOverrides: false` until v1.4+ |
+| `actors[].label` | Billboard + marker at world anchor (`actor-anchors.ts` on TLS production) |
+| `packets[].route` | Y-axis role: threat above link, handshake on link, encrypted below in tunnel |
+| `timeline[].payload.packetVariant` | `threat` / `flow` / `encrypted` → packet semantic colors |
+| `timeline[].payload.messageType` | HUD monospace label on active packet (e.g. `ClientHello`) |
+| `totalFrames` | Camera mood pacing from Director beat sheet retention hooks |
+| `capabilities` | Respect `postMvpCameraOverrides: false` until post-MVP registry update |
 
-**Fixture reference:** `src/fixtures/auth-session-scene-spec.json` — minimal actor/packet/timeline structure; apply palette tokens at render layer (R3F/Remotion), not in JSON until schema supports style blocks.
+### TLS production layout (`tls-production-scene`)
 
-**Future:** Phase 14 storyboard skill may add a parallel `styleNotes` handoff column; do not add fields to SceneSpec without a schema version bump.
+| Role | Token / module |
+|------|----------------|
+| Browser marker (x=-4) | `--color-accent-data` |
+| Origin marker (x=4) | `--color-accent-trust` |
+| Sniffer (hook only, x=0 elevated) | `--color-accent-threat`, `--light-threat-pulse` |
+| Link wire | `--color-accent-neutral` |
+| Bottom narration | `--color-bg-panel`, `--color-text-primary`, `--font-narration` (PNG burn-in) |
+
+Reference: `src/fixtures/tls-production-scene-spec.json`, `src/content/topics/tls/KICH-BAN.md`, `docs/tls-crew-walkthrough.md`.
+
+**Other fixtures:** `src/fixtures/auth-session-scene-spec.json` — minimal structure; `golden-scene-spec.json` — CI short demo only.
+
+**Future:** Parallel `styleNotes` handoff column allowed in storyboard templates; do not add fields to SceneSpec without a schema version bump.
 
 ---
 
@@ -110,3 +123,4 @@ SceneSpec schema: `src/engine/contracts/scene-spec.ts` (v1.0.0). Phase 13 does *
 |---------|------|-------|
 | 1.0.0 | 2026-05-31 | Initial dark sci-fi documentary tokens (Phase 13 / CREW-02) |
 | 1.1.0 | 2026-05-31 | Headless lighting/camera tokens in `STYLE_TOKENS` (Phase 22 / RENDER-02) |
+| 1.2.0 | 2026-05-31 | TLS production spatial mapping (actor anchors, route Y roles, messageType labels) |

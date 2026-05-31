@@ -47,24 +47,24 @@ describe.skipIf(!glAvailable)("headless scene parity (GL)", () => {
     expect(meshCount).toBeGreaterThanOrEqual(activeModules.length);
   });
 
-  it("tls-production frame 75 has more meshes than packet-only frame 0", () => {
+  it("tls-production frame 270 has more meshes than packet-only frame 0", () => {
     const captionMap = buildTlsProductionCaptionMap();
     const sparse = buildVizThreeScene(tlsProductionSceneSpec, 0, 320, 180, captionMap);
-    const rich = buildVizThreeScene(tlsProductionSceneSpec, 75, 320, 180, captionMap);
+    const rich = buildVizThreeScene(tlsProductionSceneSpec, 270, 320, 180, captionMap);
 
     expect(countSceneMeshes(rich.scene)).toBeGreaterThan(countSceneMeshes(sparse.scene));
     expect(rich.plan.renderOrder.some((id) => id.startsWith("viz-cert-"))).toBe(true);
   });
 
-  it("tls-production frame 200 dispatches every module in renderOrder", () => {
+  it("tls-production frame 525 dispatches every module in renderOrder", () => {
     const captionMap = buildTlsProductionCaptionMap();
-    const { scene, plan } = buildVizThreeScene(tlsProductionSceneSpec, 200, 320, 180, captionMap);
+    const { scene, plan } = buildVizThreeScene(tlsProductionSceneSpec, 525, 320, 180, captionMap);
 
     for (const moduleId of plan.renderOrder) {
       expect(() =>
         createHeadlessModuleMeshes(moduleId as (typeof CATALOG_VIZ_MODULE_IDS)[number], {
           sceneSpec: tlsProductionSceneSpec,
-          frame: 200,
+          frame: 525,
           plan
         })
       ).not.toThrow();

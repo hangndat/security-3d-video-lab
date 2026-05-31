@@ -61,7 +61,8 @@ Two runs with identical SceneSpec and trace inputs must produce identical trace 
 |---------|------------|--------|-----|-----|
 | CI short | 320×180 | 30 | 30 | PR gates, `renderCompositionDemoMp4` default |
 | Module export | 320×180 | 30 | 30 | `v12-content-depth-export.test.ts`, expansion E2E |
-| Full module | topic `totalFrames` | varies | 30 | Future v1.4 publish-ready renders |
+| TLS production | 640×360 | 600 | 30 | `tls-production-scene-spec.json` → `.artifacts/production/tls/` |
+| Full module | topic `totalFrames` | varies | 30 | Other topics publish-ready renders |
 
 Export quality policy (`src/verification/export-quality.ts`):
 
@@ -112,7 +113,7 @@ Narration generation: `src/content/narration/generate-narration-track.ts` (stub 
 - Never render without prior `validateSceneSpec` pass.
 - Use `.artifacts/export/` paths — do not write MP4s to repo root.
 - Do not enable disabled capabilities (`postMvpCameraOverrides`, `postMvpPacketPhysics`) without registry update.
-- Real Remotion R3F composition is MVP stub (color trace); full cinematic render deferred v1.4.
+- TLS publish uses headless Three.js (`r3f-headless`) with actor anchors, packet labels, and caption burn-in; CI may use `trace-hash`.
 
 ## Canonical References
 

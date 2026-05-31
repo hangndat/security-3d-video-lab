@@ -1,20 +1,58 @@
 {
   "schemaVersion": "1.0.0",
-  "seed": "tls-production-seed-001",
+  "seed": "tls-production-seed-005",
   "sceneId": "tls-production-scene",
   "actors": [
-    { "id": "actor-client", "label": "client" },
-    { "id": "actor-server", "label": "server" }
+    { "id": "actor-client", "label": "browser" },
+    { "id": "actor-server", "label": "origin" },
+    { "id": "actor-attacker", "label": "sniffer" }
   ],
   "packets": [
     {
-      "id": "packet-tls-main",
+      "id": "packet-cleartext-sniff",
       "route": [
-        { "x": -2, "y": 0, "z": 0 },
-        { "x": 0, "y": 0.5, "z": 0 },
-        { "x": 2, "y": 1, "z": 0 },
-        { "x": 3, "y": 1, "z": -1 },
-        { "x": 5, "y": 0, "z": -2 }
+        { "x": -4, "y": 2.8, "z": 0 },
+        { "x": -2, "y": 3.1, "z": 0.1 },
+        { "x": 0, "y": 3.3, "z": 0 },
+        { "x": 2, "y": 3, "z": -0.1 },
+        { "x": 4, "y": 2.6, "z": 0 }
+      ]
+    },
+    {
+      "id": "packet-client-hello",
+      "route": [
+        { "x": -4, "y": 0.25, "z": 0 },
+        { "x": -2, "y": 0.3, "z": 0 },
+        { "x": 0, "y": 0.35, "z": 0 },
+        { "x": 2, "y": 0.3, "z": 0 },
+        { "x": 4, "y": 0.25, "z": 0 }
+      ]
+    },
+    {
+      "id": "packet-server-hello",
+      "route": [
+        { "x": 4, "y": 0.25, "z": 0 },
+        { "x": 2, "y": 0.3, "z": 0 },
+        { "x": 0, "y": 0.35, "z": 0 },
+        { "x": -2, "y": 0.3, "z": 0 },
+        { "x": -4, "y": 0.25, "z": 0 }
+      ]
+    },
+    {
+      "id": "packet-finished",
+      "route": [
+        { "x": -1.2, "y": 0.55, "z": 0 },
+        { "x": 0, "y": 0.75, "z": 0 },
+        { "x": 1.2, "y": 0.55, "z": 0 }
+      ]
+    },
+    {
+      "id": "packet-app-encrypted",
+      "route": [
+        { "x": -4, "y": -0.25, "z": 0 },
+        { "x": -1.5, "y": -0.3, "z": 0 },
+        { "x": 1.5, "y": -0.3, "z": 0 },
+        { "x": 4, "y": -0.25, "z": 0 }
       ]
     }
   ],
@@ -23,59 +61,64 @@
       "id": "tls-hook-cue",
       "track": "packet",
       "startFrame": 0,
-      "duration": 12,
+      "duration": 90,
       "easing": "linear",
       "payload": {
-        "packetId": "packet-tls-main",
-        "packetVariant": "threat"
+        "packetId": "packet-cleartext-sniff",
+        "packetVariant": "threat",
+        "messageType": "plaintext-exposure"
       }
     },
     {
       "id": "tls-client-hello-beat-cue",
       "track": "packet",
-      "startFrame": 12,
-      "duration": 42,
+      "startFrame": 90,
+      "duration": 120,
       "easing": "linear",
       "payload": {
-        "packetId": "packet-tls-main",
-        "packetVariant": "flow"
+        "packetId": "packet-client-hello",
+        "packetVariant": "flow",
+        "messageType": "ClientHello"
       }
     },
     {
       "id": "tls-server-hello-beat-cue",
       "track": "packet",
-      "startFrame": 54,
-      "duration": 56,
+      "startFrame": 210,
+      "duration": 120,
       "easing": "linear",
       "payload": {
-        "packetId": "packet-tls-main",
-        "packetVariant": "flow"
+        "packetId": "packet-server-hello",
+        "packetVariant": "flow",
+        "messageType": "ServerHello"
       }
     },
     {
       "id": "tls-finished-beat-cue",
       "track": "packet",
-      "startFrame": 110,
-      "duration": 60,
+      "startFrame": 330,
+      "duration": 120,
       "easing": "linear",
       "payload": {
-        "packetId": "packet-tls-main",
-        "packetVariant": "flow"
+        "packetId": "packet-finished",
+        "packetVariant": "flow",
+        "messageType": "Finished"
       }
     },
     {
       "id": "tls-app-data-beat-cue",
       "track": "packet",
-      "startFrame": 170,
-      "duration": 66,
+      "startFrame": 450,
+      "duration": 150,
       "easing": "linear",
       "payload": {
-        "packetId": "packet-tls-main",
-        "packetVariant": "encrypted"
+        "packetId": "packet-app-encrypted",
+        "packetVariant": "encrypted",
+        "messageType": "ApplicationData"
       }
     }
   ],
-  "totalFrames": 236,
+  "totalFrames": 600,
   "capabilities": {
     "postMvpCameraOverrides": false,
     "postMvpPacketPhysics": false

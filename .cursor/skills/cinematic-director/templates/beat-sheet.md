@@ -6,55 +6,55 @@
 
 | Field | Value |
 |-------|-------|
-| Topic slug | _e.g. `tls`_ |
-| Assembly | _e.g. `content-depth-long-v1` or single-topic short_ |
-| Contract | `src/content/topics/<topic>/contract.json` |
-| Duration budget | _from contract `durationBudget.targetSeconds`_ |
+| Topic slug | `tls` |
+| Assembly | single-topic publish (~20s) |
+| Contract | `src/content/topics/tls/contract.json` |
+| Kịch bản | `src/content/topics/tls/KICH-BAN.md` |
+| Duration budget | 20s (`durationBudget.targetSeconds`) |
+| Audience | software engineer |
 
 ## Branch
 
 | Mode | Value |
 |------|-------|
-| Branch | `linear` \| `attack-path` \| `defense-path` |
-| Default branch (if branched) | `defense-path` |
+| Branch | `linear` |
+| Default branch (if branched) | n/a |
 
-### Branch sequence (if branched)
+## Beat Table (TLS production)
 
-List topic order from `content-depth-branched-v1.json` → `branches[].sequence`.
+Derived from contract `storyboardBeats`. Frame ranges must match contract and `tls-production-scene-spec.json`.
 
-## Beat Table
+| Beat id | Frames | Objective (summary) | Retention hook |
+|---------|--------|---------------------|----------------|
+| tls-hook | 0–89 | Cleartext observable on untrusted path before TLS | **p25** |
+| tls-client-hello-beat | 90–209 | ClientHello; versions/suites; no app secrets | p50 |
+| tls-server-hello-beat | 210–329 | ServerHello + cert; client validates trust | p50 |
+| tls-finished-beat | 330–449 | Session keys + AEAD record layer ready | **p75** |
+| tls-app-data-beat | 450–599 | Application data inside encrypted tunnel | completion |
 
-Derived from contract `storyboardBeats`. Frame ranges must match contract exactly.
+Narration `scriptIntent` per beat: see contract `narrationPlaceholders` and KICH-BAN burn-in table.
 
-| Beat id | Frames | Objective | Narration intent | Retention hook |
-|---------|--------|-----------|------------------|----------------|
-| tls-hook | 0–30 | Show attacker visibility risk. | Show attacker visibility risk. | **p25** — early threat hook |
-| tls-client-hello-beat | 12–48 | Client proposes cryptographic capabilities. | Client proposes cryptographic capabilities. | p50 |
-| tls-server-hello-beat | 54–98 | Server presents certificate and selected ciphers. | Server presents certificate and selected ciphers. | p50 |
-| tls-finished-beat | 110–168 | Key exchange finalizes a secure channel. | Key exchange finalizes a secure channel. | p75 |
-| tls-app-data-beat | 170–236 | Encrypted application data flows. | Encrypted application data flows. | completion |
+## Spatial handoff (Storyboard)
 
-_Add or remove rows per topic contract. Do not rename beat ids._
-
-## Transition Rationale (branched assemblies only)
-
-| From | To | Preset | Rationale (from assembly) |
-|------|-----|--------|---------------------------|
-| auth-session | mitm-defense | auth-session-to-mitm-defense | Attack path skips PKI trust chain and jumps directly to interception narrative. |
-
-_Copy from `transitionOverrides[]` in `content-depth-branched-v1.json`. Omit section for linear single-topic modules._
+| Beat id | Visual beat (one line) |
+|---------|------------------------|
+| tls-hook | Cleartext above link; sniffer visible |
+| tls-client-hello-beat | ClientHello L→R on link; wireframe tunnel |
+| tls-server-hello-beat | ServerHello R→L; cert at origin |
+| tls-finished-beat | Finished at center; solid tunnel |
+| tls-app-data-beat | ApplicationData inside tunnel (y below wire) |
 
 ## Pacing Verdict Target
 
 | Field | Value |
 |-------|-------|
 | Target verdict | `balanced` |
-| Feedback tags | _optional, e.g. `clear-pacing`_ |
-| Notes | _deviations from documentary-standard preset_ |
+| Feedback tags | _optional_ |
+| Notes | One packet per beat; sniffer exits after hook |
 
 ## Handoff Checklist
 
 - [ ] All beat ids exist in contract `storyboardBeats`
 - [ ] p25 / p50 / p75 / completion hooks assigned
-- [ ] Branch rationale cited (if branched)
-- [ ] Ready for storyboard skill (Phase 14)
+- [ ] Frame ranges match publish SceneSpec timeline
+- [ ] Ready for storyboard skill → `tls-production-scene-spec.json`

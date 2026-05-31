@@ -12,13 +12,13 @@
 
 ## Shot Table
 
-| Beat id | Framing | Module id | Style tokens | Actors | Packets | Timeline cue |
-|---------|---------|-----------|--------------|--------|---------|--------------|
-| tls-hook | wide (`--camera-framing`) | `viz-packet-threat` | `--color-accent-threat`, `--light-threat-pulse` | actor-client, actor-attacker | packet-client-hello | tls-hook-cue |
-| tls-client-hello-beat | medium tracking | `viz-packet-flow` | `--color-accent-data`, `--light-rim-intensity` | actor-client, actor-server | packet-client-hello | tls-client-hello-cue |
-| tls-server-hello-beat | medium + cert detail | `viz-cert-single` | `--color-accent-trust`, `--camera-fov-intimate` | actor-server | packet-server-hello | tls-server-hello-cue |
-| tls-finished-beat | medium | `viz-tunnel-secure` | `--color-accent-cyan`, `--light-accent-glow` | actor-client, actor-server | packet-finished | tls-finished-cue |
-| tls-app-data-beat | wide hold | `viz-packet-encrypted` | `--color-accent-cyan`, `--color-text-primary` | actor-client, actor-server | packet-app-data | tls-app-data-cue |
+| Beat id | Framing | Module id | Style tokens | Actors | Packets / route | Timeline cue |
+|---------|---------|-----------|--------------|--------|-----------------|--------------|
+| tls-hook | wide (`--camera-framing`) | `viz-packet-threat` | `--color-accent-threat`, `--light-threat-pulse` | browser, origin, **sniffer** (hook only) | `packet-cleartext-sniff` **above** link x=-4→4 | tls-hook-cue |
+| tls-client-hello-beat | medium tracking | `viz-packet-flow`, `viz-tunnel-handshake` | `--color-accent-data`, wireframe tunnel | browser, origin | `packet-client-hello` **on** link L→R · `ClientHello` | tls-client-hello-beat-cue |
+| tls-server-hello-beat | medium + cert at origin | `viz-cert-single`, handshake | `--color-accent-trust`, `--camera-fov-intimate` | browser, origin | `packet-server-hello` R→L · cert @ x≈3.5 | tls-server-hello-beat-cue |
+| tls-finished-beat | medium center | `viz-tunnel-secure` | `--color-accent-cyan`, solid tunnel along link | browser, origin | `packet-finished` center exchange | tls-finished-beat-cue |
+| tls-app-data-beat | wide hold | `viz-packet-encrypted`, tunnel | `--color-accent-cyan` | browser, origin | `packet-app-encrypted` **inside** tunnel y&lt;0 | tls-app-data-beat-cue |
 
 _All beat ids from contract `storyboardBeats`. Frame ranges in SceneSpec handoff._
 

@@ -25,6 +25,7 @@ import {
 import { generateTlsProductionArtifacts } from "../src/render/export/generate-tls-production-artifacts.js";
 import {
   assertTlsProductionRubric,
+  buildTlsOnlyCaptionMap,
   buildTlsProductionCaptionMap,
   TLS_BEAT_MODULE_EXPECTATIONS
 } from "../src/verification/tls-production-rubric.js";
@@ -40,6 +41,8 @@ const TLS_CONTRACT_BEAT_IDS = [
 const PRODUCTION_EXPORT_ROOT = resolve(REPO_ROOT, ".artifacts/export/phase19");
 const PRODUCTION_MP4 = resolve(PRODUCTION_EXPORT_ROOT, "tls-production-scene.mp4");
 const LEGACY_NARRATION_ENV = { SECURITY_LAB_INCLUDE_NARRATION: "true" };
+const TRACE_HASH_ENV = { SECURITY_LAB_RENDER_BACKEND: "trace-hash" };
+const HEADLESS_RENDER_TIMEOUT_MS = 180_000;
 
 function headlessGlAvailable(): boolean {
   try {
@@ -64,12 +67,22 @@ describe("PROD-01 production scene fixture", () => {
       expect(cueIds).toContain(beatId);
     }
   });
+
+  it("each beat uses a dedicated packet id aligned to narrative direction", () => {
+    const byCue = Object.fromEntries(
+      tlsProductionSceneSpec.timeline.map((cue) => [cue.id, cue.payload.packetId])
+    );
+    expect(byCue["tls-hook-cue"]).toBe("packet-cleartext-sniff");
+    expect(byCue["tls-client-hello-beat-cue"]).toBe("packet-client-hello");
+    expect(byCue["tls-server-hello-beat-cue"]).toBe("packet-server-hello");
+    expect(byCue["tls-app-data-beat-cue"]).toBe("packet-app-encrypted");
+  });
 });
 
 describe("PROD-01 production scene viz trace", () => {
   it("vizRenderTraceInput is deterministic on production fixture frames 0, 75, 200", () => {
     const captionMap = buildTlsProductionCaptionMap();
-    for (const frame of [0, 75, 200]) {
+    for (const frame of [0, 270, 525]) {
       const first = buildVizRenderTraceInput(tlsProductionSceneSpec, frame, captionMap);
       const second = buildVizRenderTraceInput(tlsProductionSceneSpec, frame, captionMap);
       expect(first).toEqual(second);
@@ -78,7 +91,7 @@ describe("PROD-01 production scene viz trace", () => {
 
   it("vizRenderTraceInput differs from timelineTraceInput when viz modules enrich compose plan", () => {
     const captionMap = buildTlsProductionCaptionMap();
-    const state = deriveRenderFrameState(tlsProductionSceneSpec, 75, { captionMap });
+    const state = deriveRenderFrameState(tlsProductionSceneSpec, 270, { captionMap });
     expect(state.vizRenderTraceInput).not.toEqual(state.timelineTraceInput);
     expect(state.vizRenderTraceInput).toContain("viz-cert-single");
   });
@@ -92,7 +105,10 @@ describe("PROD-01 production scene viz trace", () => {
 describe("PROD-01 production render", () => {
   it("renderCompositionProductionMp4 writes non-empty MP4 for production fixture", () => {
     const captionMap = buildTlsProductionCaptionMap();
-    renderCompositionProductionMp4(tlsProductionSceneSpec, PRODUCTION_MP4, { captionMap });
+    renderCompositionProductionMp4(tlsProductionSceneSpec, PRODUCTION_MP4, {
+      captionMap,
+      backend: "trace-hash"
+    });
     expect(statSync(PRODUCTION_MP4).size).toBeGreaterThan(0);
   });
 });
@@ -164,7 +180,10 @@ describe("RENDER-03 videoOnly manifest", () => {
 describe("PROD-01 publish-ready TLS", () => {
   it("renderCompositionProductionMp4 passes production export quality policy", () => {
     const captionMap = buildTlsProductionCaptionMap();
-    renderCompositionProductionMp4(tlsProductionSceneSpec, PRODUCTION_MP4, { captionMap });
+    renderCompositionProductionMp4(tlsProductionSceneSpec, PRODUCTION_MP4, {
+      captionMap,
+      backend: "trace-hash"
+    });
     const policy = productionPolicyForScene(tlsProductionSceneSpec);
     assertExportQuality(PRODUCTION_MP4, "tls-production-scene.mp4", policy);
   });
@@ -208,11 +227,10 @@ describe("PROD-01 publish-ready TLS", () => {
 
 describe("PROD-01 legacy narration path", () => {
   it("generateTlsProductionArtifacts writes narration-track.json with stub provider when INCLUDE_NARRATION", () => {
-    const result = generateTlsProductionArtifacts(
-      REPO_ROOT,
-      tlsProductionSceneSpec,
-      LEGACY_NARRATION_ENV
-    );
+    const result = generateTlsProductionArtifacts(REPO_ROOT, tlsProductionSceneSpec, {
+      ...LEGACY_NARRATION_ENV,
+      ...TRACE_HASH_ENV
+    });
     const track = JSON.parse(readFileSync(result.narrationTrackPath!, "utf-8")) as {
       providerId: string;
       segments: Array<{ audioArtifactPath: string }>;
@@ -226,11 +244,10 @@ describe("PROD-01 legacy narration path", () => {
   });
 
   it("security-signoff.json includes narration provider and alignment fields with INCLUDE_NARRATION", () => {
-    const result = generateTlsProductionArtifacts(
-      REPO_ROOT,
-      tlsProductionSceneSpec,
-      LEGACY_NARRATION_ENV
-    );
+    const result = generateTlsProductionArtifacts(REPO_ROOT, tlsProductionSceneSpec, {
+      ...LEGACY_NARRATION_ENV,
+      ...TRACE_HASH_ENV
+    });
     const signoff = JSON.parse(readFileSync(result.securitySignoffPath, "utf-8")) as {
       narrationProviderId: string;
       narrationAlignmentValid: boolean;
@@ -241,12 +258,16 @@ describe("PROD-01 legacy narration path", () => {
 });
 
 describe.skipIf(!glAvailable)("RENDER-03 3D production export", () => {
-  it("default env export uses r3f-headless and frameSource png", () => {
+  it(
+    "default env export uses r3f-headless and frameSource png",
+    () => {
     const result = generateTlsProductionArtifacts(REPO_ROOT, tlsProductionSceneSpec, {});
     expect(result.manifest.renderBackend).toBe("r3f-headless");
     expect(result.manifest.frameSource).toBe("png");
     expect(result.manifest.videoOnly).toBe(true);
     const policy = productionPolicyForScene(tlsProductionSceneSpec);
     assertExportQuality(result.mp4Path, "tls-production.mp4", policy);
-  });
+    },
+    HEADLESS_RENDER_TIMEOUT_MS
+  );
 });

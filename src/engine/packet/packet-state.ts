@@ -50,9 +50,14 @@ function clamp01(value: number): number {
 }
 
 function resolvePacketProgress(sceneSpec: SceneSpec, packetId: string, frame: number): number {
-  const cue = sceneSpec.timeline.find(
-    (item) => item.track === "packet" && item.payload.packetId === packetId
+  const activeCues = sceneSpec.timeline.filter(
+    (item) =>
+      item.track === "packet" &&
+      item.payload.packetId === packetId &&
+      frame >= item.startFrame &&
+      frame < item.startFrame + item.duration
   );
+  const cue = activeCues.at(-1);
   if (!cue) {
     return 0;
   }
@@ -67,22 +72,34 @@ function resolvePacketProgress(sceneSpec: SceneSpec, packetId: string, frame: nu
   return clamp01((frame - cue.startFrame) / cue.duration);
 }
 
+function isPacketActiveOnFrame(sceneSpec: SceneSpec, packetId: string, frame: number): boolean {
+  return sceneSpec.timeline.some(
+    (item) =>
+      item.track === "packet" &&
+      item.payload.packetId === packetId &&
+      frame >= item.startFrame &&
+      frame < item.startFrame + item.duration
+  );
+}
+
 function buildInitialPacketStates(sceneSpec: SceneSpec, frame: number): Record<string, PacketState> {
   return Object.fromEntries(
-    sceneSpec.packets.map((packet) => [
-      packet.id,
-      {
-        id: packet.id,
-        route: packet.route,
-        lineage: [packet.id],
-        progress: resolvePacketProgress(sceneSpec, packet.id, frame),
-        terminal: false,
-        visual: {
-          trailActive: true,
-          dimmed: false
+    sceneSpec.packets
+      .filter((packet) => isPacketActiveOnFrame(sceneSpec, packet.id, frame))
+      .map((packet) => [
+        packet.id,
+        {
+          id: packet.id,
+          route: packet.route,
+          lineage: [packet.id],
+          progress: resolvePacketProgress(sceneSpec, packet.id, frame),
+          terminal: false,
+          visual: {
+            trailActive: true,
+            dimmed: false
+          }
         }
-      }
-    ])
+      ])
   );
 }
 

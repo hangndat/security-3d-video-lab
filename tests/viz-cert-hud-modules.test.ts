@@ -1,4 +1,4 @@
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -11,6 +11,8 @@ import sshSceneSpec from "../src/fixtures/ssh-scene-spec.json";
 import { buildVizFrameState } from "../src/client/viz/build-viz-frame-state.js";
 import { getComposePlan } from "../src/client/viz/compose-scene.js";
 import { resolveActiveCaption } from "../src/client/viz/resolve-hud-caption.js";
+import { buildTlsOnlyCaptionMap } from "../src/verification/tls-production-rubric.js";
+import tlsProductionSceneSpec from "../src/fixtures/tls-production-scene-spec.json";
 import {
   CERT_MODULE_IDS,
   CATALOG_VIZ_MODULE_IDS,
@@ -26,8 +28,20 @@ import {
 import { validateSceneSpec } from "../src/engine/contracts/validate-scene-spec.js";
 import { generateCaptionTimingMap } from "../src/content/composition/generate-caption-timing-map.js";
 import type { SceneSpec } from "../src/engine/contracts/scene-spec.js";
+import { captureVizFramePng } from "../src/render/headless/capture-viz-frame-png.js";
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+
+function headlessGlAvailable(): boolean {
+  try {
+    captureVizFramePng(goldenSceneSpec, 0, { width: 64, height: 36 });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+const glAvailable = headlessGlAvailable();
 
 const CERT_COMPONENT_PATHS = [
   "src/client/viz/cert/viz-cert-single.tsx",
@@ -115,9 +129,41 @@ describe("resolveActiveCaption", () => {
       ssh: sshSceneSpec,
       dns: dnsSceneSpec
     });
-    const entry = resolveActiveCaption(captionMap, 60);
+    const entry = resolveActiveCaption(captionMap, 270);
     expect(entry?.beatId).toBe("tls-server-hello-beat");
-    expect(entry?.scriptIntent).toContain("certificate");
+    expect(entry?.scriptIntent).toMatch(/thẻ tên|certificate/i);
+  });
+});
+
+describe("TLS production caption sync", () => {
+  it("resolveActiveCaption returns client-hello beat at frame 150", () => {
+    const captionMap = buildTlsOnlyCaptionMap(tlsProductionSceneSpec);
+    const entry = resolveActiveCaption(captionMap, 150, { topic: "tls" });
+    expect(entry?.beatId).toBe("tls-client-hello-beat");
+  });
+
+  it("frame 45 caption matches hook while cleartext sniff packet is active", () => {
+    const captionMap = buildTlsOnlyCaptionMap(tlsProductionSceneSpec);
+    expect(resolveActiveCaption(captionMap, 45, { topic: "tls" })?.beatId).toBe("tls-hook");
+    const plan = getComposePlan(tlsProductionSceneSpec, 45, { captionMap });
+    expect(plan.renderOrder).toContain("viz-packet-threat");
+    expect(plan.renderOrder).toContain("viz-hud-beat-caption");
+  });
+});
+
+describe.skipIf(!glAvailable)("TLS production caption burn-in", () => {
+  it("burns Vietnamese scriptIntent into PNG bytes at bottom bar", () => {
+    const captionMap = buildTlsOnlyCaptionMap(tlsProductionSceneSpec);
+    const png = captureVizFramePng(tlsProductionSceneSpec, 150, {
+      width: 640,
+      height: 360,
+      captionMap
+    });
+    expect(png.length).toBeGreaterThan(5000);
+    writeFileSync(
+      resolve(REPO_ROOT, ".artifacts/production/tls/debug-frame-150-caption.png"),
+      png
+    );
   });
 });
 

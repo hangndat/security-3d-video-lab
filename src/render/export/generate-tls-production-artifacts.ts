@@ -25,7 +25,7 @@ import {
 import { productionPolicyForScene } from "../../verification/export-quality.js";
 import {
   assertTlsProductionRubric,
-  buildTlsProductionCaptionMap,
+  buildTlsOnlyCaptionMap,
   buildTlsSecuritySignoff,
   type TlsSecuritySignoff
 } from "../../verification/tls-production-rubric.js";
@@ -89,7 +89,7 @@ export function generateTlsProductionArtifacts(
 
   copyFileSync(sceneSpecPath, resolve(artifactRoot, "tls-production-scene-spec.json"));
 
-  const captionMap = buildTlsProductionCaptionMap(sceneSpec);
+  const captionMap = buildTlsOnlyCaptionMap(sceneSpec);
   writeFileSync(captionMapPath, `${JSON.stringify(captionMap, null, 2)}\n`, "utf-8");
 
   let narrationTrack: ReturnType<typeof generateNarrationTrack> | undefined;
@@ -154,7 +154,7 @@ export function generateTlsProductionArtifacts(
 
   writeFileSync(
     beatSheetPath,
-    `# TLS Production Beat Sheet\n\n| Beat id | Frames | Module focus |\n| --- | --- | --- |\n| tls-hook | 0–30 | viz-packet-threat |\n| tls-client-hello-beat | 12–48 | viz-packet-flow, viz-tunnel-handshake |\n| tls-server-hello-beat | 54–98 | viz-cert-single, viz-tunnel-handshake |\n| tls-finished-beat | 110–168 | viz-tunnel-secure |\n| tls-app-data-beat | 170–236 | viz-packet-encrypted, viz-tunnel-secure |\n\nContract: src/content/topics/tls/contract.json\nSceneSpec: src/fixtures/tls-production-scene-spec.json\n`,
+    `# TLS Production Beat Sheet\n\n| Beat id | Frames | Module focus |\n| --- | --- | --- |\n| tls-hook | 0–89 | viz-packet-threat |\n| tls-client-hello-beat | 90–209 | viz-packet-flow, viz-tunnel-handshake |\n| tls-server-hello-beat | 210–329 | viz-cert-single, viz-tunnel-handshake |\n| tls-finished-beat | 330–449 | viz-tunnel-secure |\n| tls-app-data-beat | 450–599 | viz-packet-encrypted, viz-tunnel-secure |\n\nContract: src/content/topics/tls/contract.json\nSceneSpec: src/fixtures/tls-production-scene-spec.json\n`,
     "utf-8"
   );
 

@@ -11,6 +11,15 @@ import {
   TUNNEL_MODULE_IDS,
   type Phase18ModuleId
 } from "./registry.js";
+import {
+  createCaptionTexture,
+  createHudLabelTexture
+} from "../../render/headless/create-caption-texture.js";
+import {
+  resolveActorWorldAnchor,
+  resolveTlsLinkEndpoints,
+  type ActorWorldAnchor
+} from "./actor-anchors.js";
 import { STYLE_TOKENS, type StyleTokenKey } from "./style-tokens.js";
 
 export const PACKET_DIMMED_OPACITY = 0.35;
@@ -200,12 +209,29 @@ function resolveCertLabel(actors: Array<{ id: string; label: string }>): string 
   return serverActor?.label ?? actors[0]?.label ?? "cert";
 }
 
+function attachLabelBillboard(parent: THREE.Object3D, label: string, offsetY: number): void {
+  const texture = createHudLabelTexture(label);
+  const textPlane = new THREE.Mesh(
+    new THREE.PlaneGeometry(1.1, 0.18),
+    new THREE.MeshBasicMaterial({
+      map: texture,
+      transparent: true,
+      depthWrite: false
+    })
+  );
+  textPlane.position.set(0, offsetY, 0.05);
+  parent.add(textPlane);
+}
+
 function createPacketMesh(
   moduleId: (typeof PACKET_MODULE_IDS)[number],
   packet: VizPacketRenderState
-): THREE.Mesh {
+): THREE.Group {
   const spec = PACKET_MESH_SPEC[moduleId];
   const color = tokenColor(spec.colorToken);
+  const group = new THREE.Group();
+  group.position.set(packet.position.x, packet.position.y, packet.position.z);
+
   const mesh = new THREE.Mesh(
     new THREE.SphereGeometry(spec.radius, spec.widthSegments, spec.heightSegments),
     new THREE.MeshStandardMaterial({
@@ -216,13 +242,43 @@ function createPacketMesh(
       opacity: packet.dimmed ? PACKET_DIMMED_OPACITY : 1
     })
   );
-  mesh.position.set(packet.position.x, packet.position.y, packet.position.z);
+  group.add(mesh);
+
+  if (packet.messageLabel) {
+    attachLabelBillboard(group, packet.messageLabel, spec.radius + 0.35);
+  }
+
+  return group;
+}
+
+function createLinkWireMesh(sceneSpec: SceneSpec): THREE.Mesh {
+  const { client, server } = resolveTlsLinkEndpoints(sceneSpec);
+  const span = server.x - client.x;
+  const color = tokenColor("colorAccentNeutral");
+  const mesh = new THREE.Mesh(
+    new THREE.BoxGeometry(span, 0.04, 0.04),
+    new THREE.MeshStandardMaterial({
+      color,
+      emissive: color,
+      emissiveIntensity: 0.15,
+      transparent: true,
+      opacity: 0.55
+    })
+  );
+  mesh.position.set((client.x + server.x) / 2, 0.12, 0);
   return mesh;
 }
 
-function createTunnelMesh(moduleId: (typeof TUNNEL_MODULE_IDS)[number]): THREE.Mesh {
+function createTunnelMesh(
+  moduleId: (typeof TUNNEL_MODULE_IDS)[number],
+  sceneSpec: SceneSpec
+): THREE.Group {
   const spec = TUNNEL_MESH_SPEC[moduleId];
   const color = tokenColor(spec.colorToken);
+  const { client, server } = resolveTlsLinkEndpoints(sceneSpec);
+  const span = Math.max(1, server.x - client.x);
+  const group = new THREE.Group();
+
   const mesh = new THREE.Mesh(
     new THREE.TorusGeometry(spec.radius, spec.tube, spec.radialSegments, spec.tubularSegments),
     new THREE.MeshStandardMaterial({
@@ -234,15 +290,28 @@ function createTunnelMesh(moduleId: (typeof TUNNEL_MODULE_IDS)[number]): THREE.M
       wireframe: spec.wireframe
     })
   );
-  mesh.rotation.x = Math.PI / 2;
-  return mesh;
+  mesh.rotation.y = Math.PI / 2;
+  mesh.scale.set(span / 2.4, 1, 0.45);
+  mesh.position.set(0, moduleId === "viz-tunnel-secure" ? -0.05 : 0.15, 0);
+  group.add(mesh);
+
+  return group;
 }
 
-function createCertSingleMeshes(actors: SceneSpec["actors"]): THREE.Group {
+function createCertSingleMeshes(
+  actors: SceneSpec["actors"],
+  sceneSpec: SceneSpec
+): THREE.Group {
   const spec = CERT_MESH_SPEC["viz-cert-single"];
   const color = tokenColor(spec.colorToken);
   const group = new THREE.Group();
-  group.position.set(...spec.groupPosition);
+  const serverAnchor = actors.find((actor) => actor.id === "actor-server");
+  if (serverAnchor && sceneSpec.sceneId === "tls-production-scene") {
+    const anchor = resolveActorWorldAnchor(serverAnchor, sceneSpec);
+    group.position.set(anchor.position.x - 0.5, 0.55, anchor.position.z);
+  } else {
+    group.position.set(...spec.groupPosition);
+  }
   group.userData.certLabel = resolveCertLabel(actors);
 
   const certMesh = new THREE.Mesh(
@@ -265,6 +334,7 @@ function createCertSingleMeshes(actors: SceneSpec["actors"]): THREE.Group {
   );
   labelPanel.position.set(...spec.labelPanelOffset!);
   group.add(labelPanel);
+  attachLabelBillboard(group, "Certificate", 0.75);
 
   return group;
 }
@@ -306,28 +376,53 @@ function createCertChainMeshes(actors: SceneSpec["actors"]): THREE.Group {
   return group;
 }
 
-function createHudActorLabelMeshes(actors: SceneSpec["actors"]): THREE.Group {
-  const spec = HUD_MESH_SPEC["viz-hud-actor-label"];
+function actorMarkerColor(role: ActorWorldAnchor["role"]): StyleTokenKey {
+  if (role === "client") {
+    return "colorAccentData";
+  }
+  if (role === "server") {
+    return "colorAccentTrust";
+  }
+  if (role === "attacker") {
+    return "colorAccentThreat";
+  }
+  return "colorAccentNeutral";
+}
+
+function createHudActorLabelMeshes(
+  actors: SceneSpec["actors"],
+  sceneSpec: SceneSpec
+): THREE.Group {
   const group = new THREE.Group();
   group.userData.hudFont = STYLE_TOKENS.fontHud;
   group.userData.hudColor = STYLE_TOKENS.colorTextPrimary;
 
-  actors.forEach((actor, index) => {
+  actors.forEach((actor) => {
+    const anchor = resolveActorWorldAnchor(actor, sceneSpec);
     const row = new THREE.Group();
-    row.position.set(spec.origin[0], spec.origin[1] - index * spec.rowStep!, spec.origin[2]);
+    const labelY = anchor.role === "attacker" ? 2.4 : 0.85;
+    row.position.set(anchor.position.x, labelY, anchor.position.z);
     row.userData.label = actor.label;
 
-    const plane = new THREE.Mesh(
-      new THREE.PlaneGeometry(...spec.planeSize),
-      new THREE.MeshBasicMaterial({
-        color: tokenColor(spec.colorToken),
-        transparent: true,
-        opacity: 0
+    const markerColor = tokenColor(actorMarkerColor(anchor.role));
+    const pillar = new THREE.Mesh(
+      new THREE.BoxGeometry(0.35, anchor.role === "attacker" ? 0.2 : 0.55, 0.35),
+      new THREE.MeshStandardMaterial({
+        color: markerColor,
+        emissive: markerColor,
+        emissiveIntensity: anchor.role === "attacker" ? 0.45 : 0.25
       })
     );
-    row.add(plane);
+    pillar.position.set(0, anchor.role === "attacker" ? 2.1 : 0.25, 0);
+    row.add(pillar);
+
+    attachLabelBillboard(row, actor.label.toUpperCase(), anchor.role === "attacker" ? 2.55 : 1.05);
     group.add(row);
   });
+
+  if (sceneSpec.sceneId === "tls-production-scene") {
+    group.add(createLinkWireMesh(sceneSpec));
+  }
 
   return group;
 }
@@ -354,6 +449,18 @@ function createHudBeatCaptionMeshes(
     })
   );
   group.add(panel);
+
+  const texture = createCaptionTexture(activeCaption.scriptIntent);
+  const textPlane = new THREE.Mesh(
+    new THREE.PlaneGeometry(2.35, 0.33),
+    new THREE.MeshBasicMaterial({
+      map: texture,
+      transparent: true,
+      depthWrite: false
+    })
+  );
+  textPlane.position.set(0, 0, 0.02);
+  group.add(textPlane);
 
   return [group];
 }
@@ -415,16 +522,17 @@ export function createHeadlessModuleMeshes(
   const { vizFrameState } = plan;
 
   if (moduleId === "viz-packet-flow" || moduleId === "viz-packet-encrypted" || moduleId === "viz-packet-threat") {
-    const packet = findPacketForModule(vizFrameState.packets, moduleId);
-    return packet ? [createPacketMesh(moduleId, packet)] : [];
+    return vizFrameState.packets
+      .filter((packet) => packet.moduleId === moduleId)
+      .map((packet) => createPacketMesh(moduleId, packet));
   }
 
   if (moduleId === "viz-tunnel-secure" || moduleId === "viz-tunnel-handshake") {
-    return [createTunnelMesh(moduleId)];
+    return [createTunnelMesh(moduleId, sceneSpec)];
   }
 
   if (moduleId === "viz-cert-single") {
-    return [createCertSingleMeshes(sceneSpec.actors)];
+    return [createCertSingleMeshes(sceneSpec.actors, sceneSpec)];
   }
 
   if (moduleId === "viz-cert-chain") {
@@ -432,10 +540,10 @@ export function createHeadlessModuleMeshes(
   }
 
   if (moduleId === "viz-hud-actor-label") {
-    if (sceneSpec.actors.length === 0) {
+    if (plan.visibleActors.length === 0) {
       return [];
     }
-    return [createHudActorLabelMeshes(sceneSpec.actors)];
+    return [createHudActorLabelMeshes(plan.visibleActors, sceneSpec)];
   }
 
   if (moduleId === "viz-hud-beat-caption") {

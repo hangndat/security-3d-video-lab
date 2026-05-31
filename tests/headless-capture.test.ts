@@ -61,8 +61,8 @@ describe.skipIf(!glAvailable)("captureVizFramePng", () => {
     expect(sha256(second)).toBe(sha256(first));
   });
 
-  it("returns non-empty PNG for tls-production-scene-spec frame 75", () => {
-    const buffer = captureVizFramePng(tlsProductionSceneSpec, 75, { width: 320, height: 180 });
+  it("returns non-empty PNG for tls-production-scene-spec frame 270", () => {
+    const buffer = captureVizFramePng(tlsProductionSceneSpec, 270, { width: 320, height: 180 });
     expect(buffer.length).toBeGreaterThan(44);
     expect(isPng(buffer)).toBe(true);
   });

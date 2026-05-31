@@ -41,25 +41,25 @@ export type TlsSecuritySignoff = {
 };
 
 export const TLS_BEAT_MODULE_EXPECTATIONS: TlsBeatModuleExpectation[] = [
-  { beatId: "tls-hook", representativeFrame: 8, expectedModules: ["viz-packet-threat"] },
+  { beatId: "tls-hook", representativeFrame: 45, expectedModules: ["viz-packet-threat"] },
   {
     beatId: "tls-client-hello-beat",
-    representativeFrame: 30,
+    representativeFrame: 150,
     expectedModules: ["viz-packet-flow", "viz-tunnel-handshake"]
   },
   {
     beatId: "tls-server-hello-beat",
-    representativeFrame: 75,
+    representativeFrame: 270,
     expectedModules: ["viz-cert-single", "viz-tunnel-handshake"]
   },
   {
     beatId: "tls-finished-beat",
-    representativeFrame: 140,
+    representativeFrame: 390,
     expectedModules: ["viz-tunnel-secure"]
   },
   {
     beatId: "tls-app-data-beat",
-    representativeFrame: 200,
+    representativeFrame: 525,
     expectedModules: ["viz-packet-encrypted", "viz-tunnel-secure"]
   }
 ];
@@ -76,6 +76,17 @@ export function buildTlsProductionCaptionMap(
   });
 }
 
+/** TLS-only captions for publish export (no SSH/DNS entries on short scene frames). */
+export function buildTlsOnlyCaptionMap(
+  sceneSpec: SceneSpec = tlsProductionSceneSpec
+): CaptionTimingMap {
+  const full = buildTlsProductionCaptionMap(sceneSpec);
+  return {
+    ...full,
+    entries: full.entries.filter((entry) => entry.topic === "tls")
+  };
+}
+
 export function assertTlsBeatCoverage(sceneSpec: SceneSpec): void {
   const cueIds = sceneSpec.timeline.map((cue) => cue.id);
   const missing = TLS_CONTRACT_BEAT_IDS.filter(
@@ -90,7 +101,7 @@ export function evaluateTlsModuleMapping(
   sceneSpec: SceneSpec,
   captionMap?: CaptionTimingMap
 ): TlsBeatSignoffEntry[] {
-  const map = captionMap ?? buildTlsProductionCaptionMap(sceneSpec);
+  const map = captionMap ?? buildTlsOnlyCaptionMap(sceneSpec);
 
   return TLS_BEAT_MODULE_EXPECTATIONS.map((expectation) => {
     const plan = getComposePlan(sceneSpec, expectation.representativeFrame, {
@@ -142,7 +153,7 @@ export function buildTlsSecuritySignoff(
   captionMap?: CaptionTimingMap,
   options: { provider?: NarrationProvider; videoOnly?: boolean } = {}
 ): TlsSecuritySignoff {
-  const map = captionMap ?? buildTlsProductionCaptionMap(sceneSpec);
+  const map = captionMap ?? buildTlsOnlyCaptionMap(sceneSpec);
   const beatEntries = evaluateTlsModuleMapping(sceneSpec, map);
   const beatsPassed = beatEntries.filter((entry) => entry.passed).length;
 
@@ -188,7 +199,7 @@ export function assertTlsProductionRubric(
 ): { signoff: TlsSecuritySignoff } {
   assertTlsBeatCoverage(sceneSpec);
   assertTlsModuleMapping(sceneSpec, captionMap);
-  const map = captionMap ?? buildTlsProductionCaptionMap(sceneSpec);
+  const map = captionMap ?? buildTlsOnlyCaptionMap(sceneSpec);
   if (!options.videoOnly) {
     assertTlsNarrationAlignment(map);
   }

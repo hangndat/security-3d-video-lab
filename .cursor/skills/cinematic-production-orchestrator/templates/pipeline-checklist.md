@@ -8,7 +8,9 @@
 |-------|-------|
 | Topic | `tls` |
 | Contract | `src/content/topics/tls/contract.json` |
-| Assembly | single-topic short (or `content-depth-long-v1` for long-form) |
+| Kịch bản | `src/content/topics/tls/KICH-BAN.md` |
+| Publish SceneSpec | `src/fixtures/tls-production-scene-spec.json` |
+| Assembly | single-topic short (~20s publish) |
 
 ---
 
@@ -20,8 +22,9 @@
 | Handoff | `.cursor/skills/cinematic-director/templates/beat-sheet.md` |
 
 - [ ] Beat sheet filled with contract beat ids (`tls-hook` … `tls-app-data-beat`)
+- [ ] Frame ranges match contract (0–89 … 450–599 for production)
 - [ ] Retention hooks assigned (p25/p50/p75/completion)
-- [ ] Branch section complete (linear or branched)
+- [ ] KICH-BAN shot table aligned
 
 **Gate:** All beat ids exist in contract `storyboardBeats`.
 
@@ -35,6 +38,7 @@
 | Handoff | `docs/style-bible.md` |
 
 - [ ] Style tokens cited per beat (`--color-*`, `--camera-*`, `--light-*`)
+- [ ] TLS spatial roles: threat above link, data on link, cyan in tunnel
 - [ ] No one-off hex outside style bible
 
 **Gate:** Token names documented for each beat row.
@@ -48,11 +52,12 @@
 | Skill | `.cursor/skills/cinematic-storyboard-artist/SKILL.md` |
 | Handoff | `templates/shot-list.md`, `templates/scenespec-handoff.md` |
 
-- [ ] Shot list rows for each beat id
-- [ ] SceneSpec JSON assembled
+- [ ] Shot list rows for each beat id (spatial route column filled)
+- [ ] SceneSpec JSON assembled → **`tls-production-scene-spec.json`**
+- [ ] Timeline payloads include `packetVariant` + `messageType`
 - [ ] `validateSceneSpec` passed
 
-**Gate:** Valid SceneSpec; reference `src/fixtures/golden-scene-spec.json` for TLS.
+**Gate:** Valid publish SceneSpec; `tests/tls-visual-story.test.ts` pass.
 
 ---
 
@@ -64,9 +69,10 @@
 | Handoff | `docs/r3f-module-catalog.md` |
 
 - [ ] Every shot `module id` is a catalog `viz-*` id
+- [ ] Server hello uses `viz-cert-single` (not chain) with sniffer actor present
 - [ ] Composition rules respected (max 2 primary modules per shot)
 
-**Gate:** No ad-hoc module names.
+**Gate:** `TLS_BEAT_MODULE_EXPECTATIONS` rubric passes.
 
 ---
 
@@ -77,9 +83,9 @@
 | Skill | `.cursor/skills/cinematic-creative-technologist/SKILL.md` |
 | Handoff | `templates/render-handoff.md` |
 
-- [ ] Short MP4 exported under `.artifacts/export/`
-- [ ] `assertExportQuality` passed
-- [ ] Export bundle documented (if long-form): `bundleHash`, caption + narration paths
+- [ ] Production MP4: `.artifacts/production/tls/tls-production.mp4`
+- [ ] `assertExportQuality` + `assertTlsProductionRubric` passed
+- [ ] Headless GL or `trace-hash` backend documented in manifest
 
 **Gate:** Render handoff checklist complete.
 
@@ -92,11 +98,11 @@
 | Skill | `.cursor/skills/cinematic-security-sme-audio/SKILL.md` |
 | Handoff | `docs/security-accuracy-checklist.md`, `templates/audio-layer-handoff.md` |
 
-- [ ] Per-beat accuracy checklist signed off
-- [ ] Narration placeholders aligned to contract
-- [ ] `validateNarrationAlignment` passed
+- [ ] Per-beat accuracy checklist signed off (spatial column)
+- [ ] `scriptIntent` aligned to contract + KICH-BAN
+- [ ] `validateNarrationAlignment` passed (when narration enabled)
 
-**Gate:** SME sign-off + audio alignment valid.
+**Gate:** SME sign-off; no sniffer during encrypted beats.
 
 ---
 
@@ -105,5 +111,5 @@
 | Field | Value |
 |-------|-------|
 | All steps 1–6 | ☐ Complete |
-| TLS walkthrough reference | `docs/tls-crew-walkthrough.md` |
-| Ready for publish planning (v1.4+) | ☐ |
+| TLS walkthrough | `docs/tls-crew-walkthrough.md` |
+| Ready for publish | ☐ |

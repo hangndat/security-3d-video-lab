@@ -20,6 +20,8 @@
 | R3F module catalog | `docs/r3f-module-catalog.md` |
 | Security accuracy checklist | `docs/security-accuracy-checklist.md` |
 | TLS crew walkthrough | `docs/tls-crew-walkthrough.md` |
+| TLS KICH-BAN | `src/content/topics/tls/KICH-BAN.md` |
+| TLS publish SceneSpec | `src/fixtures/tls-production-scene-spec.json` |
 | Agent index | `AGENTS.md` |
 
 ## Templates

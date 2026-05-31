@@ -20,6 +20,7 @@ Codifies the combined **Security SME** and **Audio** crew role. Verify beat-leve
 |----------|------|
 | Accuracy checklist | [docs/security-accuracy-checklist.md](../../docs/security-accuracy-checklist.md) |
 | Topic contract | `src/content/topics/<topic>/contract.json` |
+| TLS KICH-BAN + spatial story | `src/content/topics/tls/KICH-BAN.md`, [docs/tls-crew-walkthrough.md](../../docs/tls-crew-walkthrough.md) |
 | Render handoff | `.cursor/skills/cinematic-creative-technologist/templates/render-handoff.md` |
 
 ## Workflow
@@ -28,8 +29,9 @@ Codifies the combined **Security SME** and **Audio** crew role. Verify beat-leve
 
 1. Load contract `storyboardBeats` and `narrationPlaceholders`.
 2. Walk [security-accuracy-checklist.md](../../docs/security-accuracy-checklist.md) per-beat table.
-3. Cross-check shot list modules support each claim.
-4. Record pass/fail in checklist sign-off.
+3. Cross-check shot list modules and spatial layout support each claim (TLS: sniffer only in hook, cert not implied trusted).
+4. Run `tests/tls-visual-story.test.ts` for TLS publish regressions.
+5. Record pass/fail in checklist sign-off.
 
 ### Audio (narration + captions)
 

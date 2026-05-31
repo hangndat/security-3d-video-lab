@@ -1,5 +1,6 @@
 import type { CaptionTimingMap } from "../../content/composition/generate-caption-timing-map.js";
 import type { SceneSpec } from "../../engine/contracts/scene-spec.js";
+import { resolveVisibleActors } from "./actor-anchors.js";
 import { buildVizFrameState, type VizFrameState } from "./build-viz-frame-state.js";
 import { resolveActiveCaption } from "./resolve-hud-caption.js";
 import { resolveVizModuleStack, type VizModuleStack } from "./resolve-modules.js";
@@ -16,6 +17,7 @@ export type ComposePlan = {
   moduleStack: VizModuleStack;
   renderOrder: string[];
   activeCaption: ReturnType<typeof resolveActiveCaption>;
+  visibleActors: SceneSpec["actors"];
 };
 
 export function getComposePlan(
@@ -30,7 +32,8 @@ export function getComposePlan(
     vizFrameState,
     moduleStack,
     renderOrder: moduleStack.zOrder,
-    activeCaption
+    activeCaption,
+    visibleActors: resolveVisibleActors(sceneSpec, frame)
   };
 }
 
@@ -50,7 +53,7 @@ function findPacketForModule(
 
 export function VizScene({ sceneSpec, frame, captionMap, showFrameCounter }: VizSceneProps) {
   const plan = getComposePlan(sceneSpec, frame, { captionMap, showFrameCounter });
-  const { vizFrameState, renderOrder, activeCaption } = plan;
+  const { vizFrameState, renderOrder, activeCaption, visibleActors } = plan;
 
   return (
     <>
@@ -81,7 +84,7 @@ export function VizScene({ sceneSpec, frame, captionMap, showFrameCounter }: Viz
 
         if (moduleId === "viz-hud-actor-label") {
           const HudComponent = Component as typeof VIZ_REGISTRY["viz-hud-actor-label"];
-          return <HudComponent key={moduleId} actors={sceneSpec.actors} visible={true} />;
+          return <HudComponent key={moduleId} actors={visibleActors} visible={true} />;
         }
 
         if (moduleId === "viz-hud-beat-caption") {
@@ -94,7 +97,9 @@ export function VizScene({ sceneSpec, frame, captionMap, showFrameCounter }: Viz
           return (
             <HudComponent
               key={moduleId}
-              packetIds={vizFrameState.packets.map((packet) => packet.id)}
+              packetIds={vizFrameState.packets.map(
+                (packet) => packet.messageLabel ?? packet.id
+              )}
               visible={true}
             />
           );
