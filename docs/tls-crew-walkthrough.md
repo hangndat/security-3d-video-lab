@@ -76,6 +76,22 @@ End-to-end proof of the cinematic crew skill chain on the **TLS** topic module (
 
 **Gate:** MP4 under `.artifacts/production/tls/`; production quality + security sign-off pass.
 
+### Render Backend Policy
+
+| Profile | `SECURITY_LAB_RENDER_BACKEND` | Backend | Frame source |
+|---------|-------------------------------|---------|--------------|
+| Local default | *(unset)* | `r3f-headless` | PNG via headless GL |
+| CI / nightly Ubuntu | `trace-hash` | `trace-hash` | Deterministic color hash |
+| Legacy narration | `SECURITY_LAB_INCLUDE_NARRATION=true` | same as above | + TTS mux (v1.4 path) |
+
+**Local full 3D publish** (requires headless GL, e.g. macOS):
+
+```bash
+npm run test -- tests/tls-production-export.test.ts --testNamePattern="3D production export"
+```
+
+CI and nightly jobs set `trace-hash` so PR gates pass without GPU. Use the local command above for real PNG frames and `.artifacts/production/tls/tls-production.mp4`.
+
 ---
 
 ## Step 6: Security SME + Audio (optional for v1.5 video-only)
@@ -118,6 +134,7 @@ node scripts/verify-crew-skills.mjs --quick
 npm run test -- tests/render-composition.test.ts
 npm run test -- tests/headless-capture.test.ts
 npm run verify:headless-capture -- --quick
+npm run verify:3d-render -- --quick
 node scripts/verify-narration-pipeline.mjs --quick
 node scripts/validate-requirement-traceability.mjs --milestone-close
 ```
