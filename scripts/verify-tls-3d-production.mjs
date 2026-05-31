@@ -5,22 +5,21 @@ import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const JSON_OUT = resolve(REPO_ROOT, ".artifacts/verification/phase20/tts-integration.json");
+const JSON_OUT = resolve(REPO_ROOT, ".artifacts/verification/phase23/tls-3d-production.json");
 
 const quickMode = process.argv.includes("--quick");
 const gateEnv = {
   ...process.env,
-  ELEVENLABS_API_KEY: "",
-  SECURITY_LAB_INCLUDE_NARRATION: "true"
+  SECURITY_LAB_RENDER_BACKEND: "trace-hash"
 };
 
-function runSuite(label, command, args) {
+function runSuite(label, command, args, env = gateEnv) {
   const startedAt = new Date().toISOString();
   const result = spawnSync(command, args, {
     cwd: REPO_ROOT,
     encoding: "utf-8",
     shell: false,
-    env: gateEnv
+    env
   });
   return {
     label,
@@ -34,38 +33,45 @@ function runSuite(label, command, args) {
   };
 }
 
-const providerId = "deterministic-stub";
-const stubProviderUsed = !gateEnv.ELEVENLABS_API_KEY?.trim();
-
 const suites = [
-  runSuite("tts-provider tests", "npm", [
-    "run",
-    "test",
-    "--",
-    "tests/tts-provider.test.ts"
-  ]),
-  runSuite("tls-production narration tests", "npm", [
+  runSuite("frameSource mapping tests", "npm", [
     "run",
     "test",
     "--",
     "tests/tls-production-export.test.ts",
-    "--testNamePattern=narration"
+    "--testNamePattern=frameSource"
+  ]),
+  runSuite("videoOnly manifest tests", "npm", [
+    "run",
+    "test",
+    "--",
+    "tests/tls-production-export.test.ts",
+    "--testNamePattern=videoOnly"
+  ]),
+  runSuite("video-only rubric tests", "npm", [
+    "run",
+    "test",
+    "--",
+    "tests/tls-production-export.test.ts",
+    "--testNamePattern=rubric"
   ])
 ];
 
 if (!quickMode) {
   suites.push(
-    runSuite("narration-track regression", "npm", [
+    runSuite("3D production GL smoke", "npm", [
       "run",
       "test",
       "--",
-      "tests/narration-track.test.ts"
+      "tests/tls-production-export.test.ts",
+      "--testNamePattern=3D production"
     ])
   );
 }
 
-const allSuitesPassed = suites.every((suite) => suite.passed);
-const gatePassed = allSuitesPassed && stubProviderUsed;
+const videoOnlyManifestTestsPassed = suites[1]?.passed ?? false;
+const tls3dSmokeTestsPassed = quickMode ? null : suites[3]?.passed ?? null;
+const gatePassed = suites.every((suite) => suite.passed);
 
 mkdirSync(dirname(JSON_OUT), { recursive: true });
 
@@ -73,12 +79,15 @@ const report = {
   generatedAt: new Date().toISOString(),
   gateStatus: gatePassed ? "pass" : "fail",
   quickMode,
-  providerId,
+  manifestChecks: {
+    expectsVideoOnly: true,
+    expectsFrameSourceWhenR3f: "png"
+  },
   blockingCriteria: {
-    stubProviderUsed,
-    ttsTestsPassed: suites[0]?.passed ?? false,
-    tlsNarrationTestsPassed: suites[1]?.passed ?? false,
-    narrationTrackRegressionPassed: quickMode ? null : suites[2]?.passed ?? null
+    videoOnlyManifestTestsPassed,
+    frameSourceTestsPassed: suites[0]?.passed ?? false,
+    moduleRubricPassed: suites[2]?.passed ?? false,
+    tls3dSmokeTestsPassed
   },
   suites
 };
@@ -86,12 +95,9 @@ const report = {
 writeFileSync(JSON_OUT, `${JSON.stringify(report, null, 2)}\n`, "utf-8");
 
 if (!gatePassed) {
-  console.error("TTS integration verification gate: FAIL");
-  if (!stubProviderUsed) {
-    console.error("Expected deterministic-stub provider when ELEVENLABS_API_KEY is unset.");
-  }
+  console.error("TLS 3D production verification gate: FAIL");
   process.exit(1);
 }
 
-console.log("TTS integration verification gate: PASS");
+console.log("TLS 3D production verification gate: PASS");
 console.log(`Evidence: ${JSON_OUT}`);

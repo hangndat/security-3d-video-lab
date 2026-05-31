@@ -68,18 +68,21 @@ End-to-end proof of the cinematic crew skill chain on the **TLS** topic module (
 1. Input: validated SceneSpec — **`src/fixtures/tls-production-scene-spec.json`** for publish-ready TLS.
 2. Render: `deriveRenderFrameState` (viz-aware trace) → `renderCompositionProductionMp4` (640×360, full `totalFrames`).
 3. Backend: `resolveProductionRenderBackend()` — local default **`r3f-headless`** (Three.js PNG via `@headless-three/renderer`); set **`SECURITY_LAB_RENDER_BACKEND=trace-hash`** (or `hash`) for CI-safe deterministic color frames without headless GL.
-4. Quality: `assertExportQuality` with `productionPolicyForScene` per `src/verification/export-quality.ts`.
-5. Short CI export: `renderCompositionDemoMp4` + `golden-scene-spec.json` (unchanged).
-6. Production artifacts: `generateTlsProductionArtifacts` → `.artifacts/production/tls/` (manifest includes `renderBackend`).
-7. Verify: `npm run verify:tls-production` and `npm run verify:headless-capture -- --quick`.
+4. **v1.5 video-only:** default export skips narration/TTS mux; manifest `videoOnly: true`, `frameSource: png`. Legacy narration path: `SECURITY_LAB_INCLUDE_NARRATION=true`.
+5. Quality: `assertExportQuality` with `productionPolicyForScene` per `src/verification/export-quality.ts`.
+6. Short CI export: `renderCompositionDemoMp4` + `golden-scene-spec.json` (unchanged).
+7. Production artifacts: `generateTlsProductionArtifacts` → `.artifacts/production/tls/` (manifest v1.1.0 with `renderBackend`, `frameSource`).
+8. Verify: `npm run verify:tls-3d-production -- --quick` and `npm run verify:headless-scene-parity -- --quick`.
 
 **Gate:** MP4 under `.artifacts/production/tls/`; production quality + security sign-off pass.
 
 ---
 
-## Step 6: Security SME + Audio
+## Step 6: Security SME + Audio (optional for v1.5 video-only)
 
 **Skill:** `.cursor/skills/cinematic-security-sme-audio/SKILL.md`
+
+> **v1.5 note:** Step 6 is optional when publishing video-only TLS exports (`videoOnly: true` in production manifest). Re-enable with `SECURITY_LAB_INCLUDE_NARRATION=true` for legacy v1.4 narration artifacts.
 
 1. Walk `docs/security-accuracy-checklist.md` TLS per-beat table.
 2. Verify `narrationPlaceholders` in contract match spoken intent.
@@ -108,6 +111,7 @@ End-to-end proof of the cinematic crew skill chain on the **TLS** topic module (
 ```bash
 npm run test -- tests/tls-production-export.test.ts
 npm run verify:tls-production
+npm run verify:tls-3d-production -- --quick
 npm run verify:tts-integration -- --quick
 npm run test -- tests/cinematic-crew-skills.test.ts
 node scripts/verify-crew-skills.mjs --quick

@@ -34,8 +34,8 @@ export type TlsSecuritySignoff = {
   reviewedAt: string;
   beatsReviewed: number;
   beatsPassed: number;
-  narrationProviderId: string;
-  narrationAlignmentValid: boolean;
+  narrationProviderId?: string;
+  narrationAlignmentValid: boolean | null;
   approvedForProduction: boolean;
   beats: TlsBeatSignoffEntry[];
 };
@@ -140,15 +140,30 @@ export function assertTlsNarrationAlignment(captionMap: CaptionTimingMap): void 
 export function buildTlsSecuritySignoff(
   sceneSpec: SceneSpec,
   captionMap?: CaptionTimingMap,
-  options: { provider?: NarrationProvider } = {}
+  options: { provider?: NarrationProvider; videoOnly?: boolean } = {}
 ): TlsSecuritySignoff {
   const map = captionMap ?? buildTlsProductionCaptionMap(sceneSpec);
   const beatEntries = evaluateTlsModuleMapping(sceneSpec, map);
+  const beatsPassed = beatEntries.filter((entry) => entry.passed).length;
+
+  if (options.videoOnly) {
+    return {
+      schemaVersion: "1.0.0",
+      topic: "tls",
+      contractPath: "src/content/topics/tls/contract.json",
+      sceneSpecPath: "src/fixtures/tls-production-scene-spec.json",
+      reviewedAt: new Date().toISOString(),
+      beatsReviewed: beatEntries.length,
+      beatsPassed,
+      narrationAlignmentValid: null,
+      approvedForProduction: beatsPassed === beatEntries.length,
+      beats: beatEntries
+    };
+  }
+
   const provider = options.provider;
   const track = provider ? generateNarrationTrack(map, provider) : generateNarrationTrack(map);
   const narrationAlignment = validateNarrationAlignment(map, track);
-
-  const beatsPassed = beatEntries.filter((entry) => entry.passed).length;
 
   return {
     schemaVersion: "1.0.0",
@@ -168,13 +183,16 @@ export function buildTlsSecuritySignoff(
 
 export function assertTlsProductionRubric(
   sceneSpec: SceneSpec,
-  captionMap?: CaptionTimingMap
+  captionMap?: CaptionTimingMap,
+  options: { videoOnly?: boolean } = {}
 ): { signoff: TlsSecuritySignoff } {
   assertTlsBeatCoverage(sceneSpec);
   assertTlsModuleMapping(sceneSpec, captionMap);
   const map = captionMap ?? buildTlsProductionCaptionMap(sceneSpec);
-  assertTlsNarrationAlignment(map);
-  const signoff = buildTlsSecuritySignoff(sceneSpec, map);
+  if (!options.videoOnly) {
+    assertTlsNarrationAlignment(map);
+  }
+  const signoff = buildTlsSecuritySignoff(sceneSpec, map, options);
   if (!signoff.approvedForProduction) {
     throw new Error("TLS production rubric sign-off not approved.");
   }

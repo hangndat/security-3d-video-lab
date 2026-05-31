@@ -15,12 +15,13 @@ const REQUIRED_ARTIFACTS = [
   "production-manifest.json",
   "security-signoff.json",
   "caption-timing-map.json",
-  "narration-track.json",
   "beat-sheet.md",
   "render-handoff.md",
   "audio-layer-handoff.md",
   "tls-production-scene-spec.json"
 ];
+
+const LEGACY_NARRATION_ARTIFACTS = ["narration-track.json"];
 
 function runSuite(label, command, args) {
   const startedAt = new Date().toISOString();
@@ -42,7 +43,17 @@ function runSuite(label, command, args) {
 }
 
 function checkArtifacts() {
-  const missing = REQUIRED_ARTIFACTS.filter((fileName) => !existsSync(resolve(ARTIFACT_ROOT, fileName)));
+  let manifest = null;
+  if (existsSync(resolve(ARTIFACT_ROOT, "production-manifest.json"))) {
+    manifest = JSON.parse(readFileSync(resolve(ARTIFACT_ROOT, "production-manifest.json"), "utf-8"));
+  }
+
+  const required = [...REQUIRED_ARTIFACTS];
+  if (manifest?.videoOnly !== true) {
+    required.push(...LEGACY_NARRATION_ARTIFACTS);
+  }
+
+  const missing = required.filter((fileName) => !existsSync(resolve(ARTIFACT_ROOT, fileName)));
   let signoff = null;
   if (existsSync(resolve(ARTIFACT_ROOT, "security-signoff.json"))) {
     signoff = JSON.parse(readFileSync(resolve(ARTIFACT_ROOT, "security-signoff.json"), "utf-8"));
@@ -50,7 +61,8 @@ function checkArtifacts() {
   return {
     passed: missing.length === 0 && signoff?.approvedForProduction === true,
     missing,
-    signoff
+    signoff,
+    manifest
   };
 }
 
@@ -87,6 +99,7 @@ const report = {
   artifactRoot: ".artifacts/production/tls",
   missingArtifacts: artifactCheck.missing,
   securitySignoff: artifactCheck.signoff,
+  productionManifest: artifactCheck.manifest,
   suites
 };
 
