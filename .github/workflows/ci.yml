@@ -36,8 +36,8 @@ jobs:
       # Governance gates re-enabled for v1.2 milestone close.
       - name: Run requirement traceability gate
         run: npm run validate:requirements
-      - name: Run governance and milestone audit tests
-        run: npm run test -- tests/requirement-traceability.test.ts tests/milestone-governance.test.ts
+      - name: Run requirement traceability tests
+        run: npm run test -- tests/requirement-traceability.test.ts
       - name: Run canonical E2E smoke gate
         run: npm run test:e2e:all -- --smoke
       - name: Run deterministic render smoke gate
@@ -49,7 +49,10 @@ jobs:
           npm run verify:narration-pipeline -- --quick
           npm run verify:batch-quality
           npm run verify:content-depth -- --quick
-          npm run verify:milestone-governance -- --quick
+      - name: Run milestone audit tests
+        run: npm run test -- tests/milestone-governance.test.ts
+      - name: Run milestone governance gate
+        run: npm run verify:milestone-governance -- --quick
       - name: Run full baseline test suite
         run: npm test
       - name: Upload failure evidence bundle
