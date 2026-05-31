@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0.0",
+  "slug": "content-depth-long-v1",
+  "sequence": [
+    "tls",
+    "ssh",
+    "dns",
+    "auth-session",
+    "pki-trust-chain",
+    "mitm-defense",
+    "zero-trust-access",
+    "oauth-jwt-session",
+    "api-gateway-waf"
+  ],
+  "targetWindowMinutes": { "min": 10, "max": 14 },
+  "defaultPacingPresetId": "documentary-standard"
+}

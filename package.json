@@ -1,0 +1,38 @@
+{
+  "name": "security-3d-video-lab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:quick": "vitest run --passWithNoTests",
+    "test": "vitest run",
+    "test:e2e:render-smoke": "vitest run tests/render-repro-smoke.test.ts",
+    "test:e2e:tls": "vitest run tests/e2e-canonical-flows.test.ts --testNamePattern=\"TLS canonical flow\"",
+    "test:e2e:ssh": "vitest run tests/e2e-canonical-flows.test.ts --testNamePattern=\"SSH canonical flow\"",
+    "test:e2e:dns": "vitest run tests/e2e-canonical-flows.test.ts --testNamePattern=\"DNS canonical flow\"",
+    "test:e2e:all": "node scripts/run-e2e-all.mjs",
+    "render:demo": "vitest run tests/render-composition.test.ts",
+    "export:demo": "vitest run tests/render-export-demo.test.ts",
+    "verify:content-authoring": "node scripts/verify-content-authoring.mjs",
+    "verify:narrative-composition": "node scripts/verify-narrative-composition.mjs",
+    "verify:narration-pipeline": "node scripts/verify-narration-pipeline.mjs",
+    "verify:batch-quality": "node scripts/verify-batch-quality.mjs",
+    "verify:content-depth": "node scripts/verify-content-depth.mjs",
+    "validate:requirements": "node scripts/validate-requirement-traceability.mjs",
+    "verify:milestone-governance": "node scripts/verify-milestone-governance.mjs"
+  },
+  "dependencies": {
+    "@react-three/drei": "10.7.7",
+    "@react-three/fiber": "9.6.1",
+    "ajv": "8.20.0",
+    "remotion": "4.0.468",
+    "seedrandom": "3.0.5",
+    "three": "0.184.0",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.8"
+  }
+}

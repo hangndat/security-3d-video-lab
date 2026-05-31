@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0.0",
+  "seed": "zero-trust-access-seed-001",
+  "sceneId": "zero-trust-access-scene",
+  "actors": [{ "id": "actor-client", "label": "client" }],
+  "packets": [
+    {
+      "id": "packet-access-request",
+      "route": [
+        { "x": 0, "y": 0, "z": 0 },
+        { "x": 2, "y": 1, "z": 0 }
+      ]
+    }
+  ],
+  "timeline": [
+    {
+      "id": "zero-trust-access-main",
+      "track": "packet",
+      "startFrame": 0,
+      "duration": 120,
+      "easing": "linear",
+      "payload": { "packetId": "packet-access-request" }
+    }
+  ],
+  "totalFrames": 300,
+  "capabilities": {
+    "postMvpCameraOverrides": false,
+    "postMvpPacketPhysics": false
+  }
+}

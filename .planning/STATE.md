@@ -1,42 +1,41 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-status: unknown
-last_updated: "2026-05-28T06:41:35.847Z"
+milestone: between
+milestone_name: null
+status: between-milestones
+last_updated: "2026-05-31T14:50:00.000Z"
+last_activity: 2026-05-31 -- Phase 12 complete; v1.2 shipped
 progress:
-  total_phases: 4
+  total_phases: 0
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
+  percent: 100
 ---
 
 # Project State
 
 ## Project Reference
 
-See `.planning/PROJECT.md` (updated 2026-05-28)
+See `.planning/PROJECT.md` (updated 2026-05-31)
 
-Core value: cinematic, deterministic security/infrastructure visualization.
-Current focus: phase 01 docs-foundation.
+**Core value:** cinematic, deterministic security/infrastructure visualization.
+**Current focus:** Between milestones — v1.2 Content Depth shipped.
 
 ## Current Position
 
-Phase: 01 (docs-foundation) — EXECUTING
-Plan: 1 of 1
-
-- Phase: 01 of 04 (docs-foundation)
-- Plan: 1 of 1 in current phase
-- Status: In progress
-- Last activity: 2026-05-28 - Initialized execute workflow and reconstructed STATE.md
+Phase: none (between milestones)
+Plan: none
+Status: Ready for `/gsd-new-milestone`
+Last activity: 2026-05-31 -- Phase 12 complete; v1.2 archived
 
 ## Accumulated Context
 
 ### Decisions
 
-- ADR-001 accepted (tech stack baseline).
-- ADR-002 accepted (timeline architecture contract).
-- ADR-003 accepted (E2E testing strategy).
+**v1.2 strategic choice:** Content-first — platform features (PLAT-01 storyboard UI, PLAT-02 publish portal) deferred to a later milestone.
+
+**Phase 12:** Nine-topic export fixtures, branched E2E tests, CI governance re-enabled, v1.2 milestone audit PASS.
 
 ### Pending Todos
 
@@ -44,10 +43,14 @@ Plan: 1 of 1
 
 ### Blockers/Concerns
 
-- Planning artifacts were previously normalized to generic names; execute tooling expects numbered plan artifacts.
+- None.
+
+## Deferred Items
+
+- None — v1.1 governance debt cleared in Phase 12.
 
 ## Session Continuity
 
-- Last session: 2026-05-28
-- Stopped at: preparing phase 01 execution after STATE reconstruction
+- Last session: 2026-05-31
+- Stopped at: v1.2 milestone close
 - Resume file: None

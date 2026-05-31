@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "1.0.0",
+  "topic": "oauth-jwt-session",
+  "slug": "oauth-jwt-session-short-v1",
+  "hook": "OAuth and JWT tokens carry delegated authorization across services and browsers.",
+  "cta": "Validate issuer, audience, and expiry on every token before granting access.",
+  "durationBudget": {
+    "minSeconds": 7,
+    "targetSeconds": 8,
+    "maxSeconds": 9
+  },
+  "storyboardBeats": [
+    {
+      "id": "oauth-jwt-session-hook",
+      "startFrame": 0,
+      "endFrame": 26,
+      "objective": "Introduce OAuth as delegated authorization for third-party access."
+    },
+    {
+      "id": "oauth-authorize-beat",
+      "startFrame": 16,
+      "endFrame": 68,
+      "objective": "User consents and authorization server issues an authorization code or token."
+    },
+    {
+      "id": "oauth-jwt-claims-beat",
+      "startFrame": 70,
+      "endFrame": 126,
+      "objective": "JWT payload carries signed claims for subject, audience, and expiry."
+    },
+    {
+      "id": "oauth-refresh-beat",
+      "startFrame": 128,
+      "endFrame": 182,
+      "objective": "Refresh tokens rotate short-lived access without repeating full login."
+    },
+    {
+      "id": "oauth-validation-beat",
+      "startFrame": 184,
+      "endFrame": 228,
+      "objective": "Resource servers verify signature, issuer, and scope before honoring requests."
+    }
+  ],
+  "narrationPlaceholders": [
+    {
+      "beatId": "oauth-jwt-session-hook",
+      "analyticKey": "oauth-jwt-session:oauth-jwt-session-hook",
+      "scriptIntent": "Introduce OAuth as delegated authorization for third-party access.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "oauth-authorize-beat",
+      "analyticKey": "oauth-jwt-session:oauth-authorize-beat",
+      "scriptIntent": "User consents and authorization server issues an authorization code or token.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "oauth-jwt-claims-beat",
+      "analyticKey": "oauth-jwt-session:oauth-jwt-claims-beat",
+      "scriptIntent": "JWT payload carries signed claims for subject, audience, and expiry.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "oauth-refresh-beat",
+      "analyticKey": "oauth-jwt-session:oauth-refresh-beat",
+      "scriptIntent": "Refresh tokens rotate short-lived access without repeating full login.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "oauth-validation-beat",
+      "analyticKey": "oauth-jwt-session:oauth-validation-beat",
+      "scriptIntent": "Resource servers verify signature, issuer, and scope before honoring requests.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    }
+  ],
+  "pacingPresetId": "documentary-standard",
+  "transitionToNext": {
+    "toTopic": "api-gateway-waf",
+    "presetId": "oauth-jwt-session-to-api-gateway-waf",
+    "rationale": "Authenticated sessions reach APIs through gateway and WAF inspection layers."
+  }
+}

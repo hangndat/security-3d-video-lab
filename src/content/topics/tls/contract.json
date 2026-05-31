@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "1.0.0",
+  "topic": "tls",
+  "slug": "tls-short-v1",
+  "hook": "Public networks are unsafe for credentials without encryption.",
+  "cta": "Explain why HTTPS trust indicators matter.",
+  "durationBudget": {
+    "minSeconds": 7,
+    "targetSeconds": 8,
+    "maxSeconds": 9
+  },
+  "storyboardBeats": [
+    { "id": "tls-hook", "startFrame": 0, "endFrame": 30, "objective": "Show attacker visibility risk." },
+    {
+      "id": "tls-client-hello-beat",
+      "startFrame": 12,
+      "endFrame": 48,
+      "objective": "Client proposes cryptographic capabilities."
+    },
+    {
+      "id": "tls-server-hello-beat",
+      "startFrame": 54,
+      "endFrame": 98,
+      "objective": "Server presents certificate and selected ciphers."
+    },
+    {
+      "id": "tls-finished-beat",
+      "startFrame": 110,
+      "endFrame": 168,
+      "objective": "Key exchange finalizes a secure channel."
+    },
+    {
+      "id": "tls-app-data-beat",
+      "startFrame": 170,
+      "endFrame": 236,
+      "objective": "Encrypted application data flows."
+    }
+  ],
+  "narrationPlaceholders": [
+    {
+      "beatId": "tls-hook",
+      "analyticKey": "tls:tls-hook",
+      "scriptIntent": "Show attacker visibility risk.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "tls-client-hello-beat",
+      "analyticKey": "tls:tls-client-hello-beat",
+      "scriptIntent": "Client proposes cryptographic capabilities.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "tls-server-hello-beat",
+      "analyticKey": "tls:tls-server-hello-beat",
+      "scriptIntent": "Server presents certificate and selected ciphers.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "tls-finished-beat",
+      "analyticKey": "tls:tls-finished-beat",
+      "scriptIntent": "Key exchange finalizes a secure channel.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "tls-app-data-beat",
+      "analyticKey": "tls:tls-app-data-beat",
+      "scriptIntent": "Encrypted application data flows.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    }
+  ],
+  "pacingPresetId": "documentary-standard",
+  "transitionToNext": {
+    "toTopic": "ssh",
+    "presetId": "secure-channel-to-remote-shell",
+    "rationale": "Encrypted transport enables secure remote administration."
+  }
+}

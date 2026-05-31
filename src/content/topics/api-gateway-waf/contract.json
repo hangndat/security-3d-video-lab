@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "1.0.0",
+  "topic": "api-gateway-waf",
+  "slug": "api-gateway-waf-short-v1",
+  "hook": "API gateways and WAFs inspect traffic at the edge before it reaches application services.",
+  "cta": "Combine rate limiting, routing rules, and WAF signatures to block common attack patterns.",
+  "durationBudget": {
+    "minSeconds": 7,
+    "targetSeconds": 8,
+    "maxSeconds": 9
+  },
+  "storyboardBeats": [
+    {
+      "id": "api-gateway-waf-hook",
+      "startFrame": 0,
+      "endFrame": 26,
+      "objective": "Position the gateway as the controlled entry point for API traffic."
+    },
+    {
+      "id": "api-gateway-route-beat",
+      "startFrame": 16,
+      "endFrame": 68,
+      "objective": "Gateway routes requests to backend services based on path and policy."
+    },
+    {
+      "id": "api-gateway-rate-beat",
+      "startFrame": 70,
+      "endFrame": 126,
+      "objective": "Rate limits throttle abusive clients before they reach origin servers."
+    },
+    {
+      "id": "api-waf-inspect-beat",
+      "startFrame": 128,
+      "endFrame": 182,
+      "objective": "WAF inspects payloads for injection, traversal, and known exploit signatures."
+    },
+    {
+      "id": "api-edge-shield-beat",
+      "startFrame": 184,
+      "endFrame": 228,
+      "objective": "Clean requests pass to origin while blocked traffic is logged and dropped."
+    }
+  ],
+  "narrationPlaceholders": [
+    {
+      "beatId": "api-gateway-waf-hook",
+      "analyticKey": "api-gateway-waf:api-gateway-waf-hook",
+      "scriptIntent": "Position the gateway as the controlled entry point for API traffic.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "api-gateway-route-beat",
+      "analyticKey": "api-gateway-waf:api-gateway-route-beat",
+      "scriptIntent": "Gateway routes requests to backend services based on path and policy.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "api-gateway-rate-beat",
+      "analyticKey": "api-gateway-waf:api-gateway-rate-beat",
+      "scriptIntent": "Rate limits throttle abusive clients before they reach origin servers.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "api-waf-inspect-beat",
+      "analyticKey": "api-gateway-waf:api-waf-inspect-beat",
+      "scriptIntent": "WAF inspects payloads for injection, traversal, and known exploit signatures.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "api-edge-shield-beat",
+      "analyticKey": "api-gateway-waf:api-edge-shield-beat",
+      "scriptIntent": "Clean requests pass to origin while blocked traffic is logged and dropped.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    }
+  ],
+  "pacingPresetId": "documentary-standard"
+}

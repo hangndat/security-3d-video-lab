@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1.0.0",
+  "order": [
+    "tls",
+    "ssh",
+    "dns",
+    "auth-session",
+    "pki-trust-chain",
+    "mitm-defense",
+    "zero-trust-access",
+    "oauth-jwt-session",
+    "api-gateway-waf"
+  ]
+}

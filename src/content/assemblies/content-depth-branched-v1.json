@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1.0.0",
+  "slug": "content-depth-branched-v1",
+  "defaultBranchId": "defense-path",
+  "targetWindowMinutes": { "min": 8, "max": 12 },
+  "defaultPacingPresetId": "documentary-standard",
+  "branches": [
+    {
+      "id": "attack-path",
+      "label": "Attack path narrative",
+      "sequence": [
+        "tls",
+        "ssh",
+        "dns",
+        "auth-session",
+        "mitm-defense",
+        "oauth-jwt-session",
+        "api-gateway-waf"
+      ],
+      "transitionOverrides": [
+        {
+          "fromTopic": "auth-session",
+          "toTopic": "mitm-defense",
+          "presetId": "auth-session-to-mitm-defense",
+          "rationale": "Attack path skips PKI trust chain and jumps directly to interception narrative."
+        },
+        {
+          "fromTopic": "mitm-defense",
+          "toTopic": "oauth-jwt-session",
+          "presetId": "mitm-defense-to-oauth-jwt-session",
+          "rationale": "Attack path abuses OAuth tokens after successful interception."
+        }
+      ]
+    },
+    {
+      "id": "defense-path",
+      "label": "Defense path narrative",
+      "sequence": [
+        "tls",
+        "ssh",
+        "dns",
+        "auth-session",
+        "pki-trust-chain",
+        "zero-trust-access",
+        "oauth-jwt-session",
+        "api-gateway-waf"
+      ],
+      "transitionOverrides": [
+        {
+          "fromTopic": "pki-trust-chain",
+          "toTopic": "zero-trust-access",
+          "presetId": "pki-trust-chain-to-zero-trust-access",
+          "rationale": "Defense path skips MITM module and reinforces trust boundaries via zero-trust access."
+        }
+      ]
+    }
+  ]
+}
