@@ -30,14 +30,14 @@
 
 ### Phase 09: Advanced Security Topics
 
-- [ ] **Phase 09: Advanced Security Topics** (0/2 plans)
+- [x] **Phase 09: Advanced Security Topics** (2/2 plans) — completed 2026-05-31
   - **Goal:** Add three advanced security modules and integrate them into the content manifest and long-form assemblies.
   - **Requirements:** `CONT-04`, `CONT-05`, `CONT-06`
   - **Depends on:** v1.1 Phase 05 (topic contracts, manifest lock, scaffold workflow)
-  - **Plans:** 2 plans
+  - **Plans:** 2/2 plans complete
   - **Plan List:**
-    - [ ] `09-01-PLAN.md` — Extend schema enums, transition presets, and mitm-defense outbound link for v1.2 topic chain.
-    - [ ] `09-02-PLAN.md` — Author three advanced topic contracts, nine-topic manifest, and content-depth-long-v1 assembly.
+    - [x] `09-01-PLAN.md` — Extend schema enums, transition presets, and mitm-defense outbound link for v1.2 topic chain.
+    - [x] `09-02-PLAN.md` — Author three advanced topic contracts, nine-topic manifest, and content-depth-long-v1 assembly.
   - **Success Criteria:**
     1. Topic contracts for zero-trust-access, oauth-jwt-session, and api-gateway-waf validate in CI.
     2. manifest.json includes all nine topics with deterministic ordering rules preserved.
@@ -82,9 +82,9 @@
 
 ## Current Status
 
-**Active milestone:** v1.2 Content Depth — Phase 09 planned (2 plans), ready to execute.
+**Active milestone:** v1.2 Content Depth — Phase 09 complete; Phase 10 next.
 
-Run `/gsd-execute-phase 09` to begin.
+Run `/gsd-plan-phase 10` or `/gsd-execute-phase 10` to continue.
 
 ## Status Rules
 

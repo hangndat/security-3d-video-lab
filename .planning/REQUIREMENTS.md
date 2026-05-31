@@ -9,9 +9,9 @@ Requirements for the Content Depth milestone.
 
 ### Content Domains
 
-- [ ] **CONT-04**: Creator can ship three new security modules (zero-trust access, OAuth/JWT session flow, API gateway/WAF) via topic contracts without editing core render logic.
-- [ ] **CONT-05**: New modules are registered in manifest.json and included in at least one long-form assembly profile with validated transitions.
-- [ ] **CONT-06**: Every new module enforces beat-level narration placeholder coverage through existing contract validation gates.
+- [x] **CONT-04**: Creator can ship three new security modules (zero-trust access, OAuth/JWT session flow, API gateway/WAF) via topic contracts without editing core render logic.
+- [x] **CONT-05**: New modules are registered in manifest.json and included in at least one long-form assembly profile with validated transitions.
+- [x] **CONT-06**: Every new module enforces beat-level narration placeholder coverage through existing contract validation gates.
 
 ### Narrative Branching
 
@@ -52,9 +52,9 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CONT-04 | Phase 09 | Pending |
-| CONT-05 | Phase 09 | Pending |
-| CONT-06 | Phase 09 | Pending |
+| CONT-04 | Phase 09 | Complete |
+| CONT-05 | Phase 09 | Complete |
+| CONT-06 | Phase 09 | Complete |
 | NARR-01 | Phase 10 | Pending |
 | NARR-02 | Phase 10 | Pending |
 | VOIC-01 | Phase 11 | Pending |
@@ -69,4 +69,4 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 
 ---
 *Requirements defined: 2026-05-31*
-*Last updated: 2026-05-31 after v1.2 milestone initialization*
+*Last updated: 2026-05-31 after Phase 09 Advanced Security Topics*

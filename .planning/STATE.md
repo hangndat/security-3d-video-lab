@@ -24,10 +24,10 @@ See `.planning/PROJECT.md` (updated 2026-05-31)
 
 ## Current Position
 
-Phase: 09 — Advanced Security Topics (planned)
-Plan: 09-01, 09-02 (2 plans, 2 waves)
-Status: Ready to execute
-Last activity: 2026-05-31 -- Phase 9 planning complete
+Phase: 10 — Narrative Branch Variants (not started)
+Plan: —
+Status: Phase 09 complete
+Last activity: 2026-05-31 — Phase 09 Advanced Security Topics shipped
 
 ## Accumulated Context
 
