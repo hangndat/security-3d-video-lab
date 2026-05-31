@@ -6,9 +6,24 @@ const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const DEFAULT_REQUIREMENTS_PATH = resolve(REPO_ROOT, ".planning/REQUIREMENTS.md");
 const DEFAULT_ROADMAP_PATH = resolve(REPO_ROOT, ".planning/ROADMAP.md");
 
-export const V11_REQUIREMENT_ID_PATTERN =
-  /^(CONT|AUTHR|CINE|VER)-\d+$/;
+export const ACTIVE_REQUIREMENT_ID_PATTERN =
+  /^(CONT|AUTHR|CINE|NARR|VOIC|CREW|VER)-\d+$/;
 
+/** @deprecated Use ACTIVE_REQUIREMENT_ID_PATTERN for active milestone validation. */
+export const V11_REQUIREMENT_ID_PATTERN = ACTIVE_REQUIREMENT_ID_PATTERN;
+
+export const EXPECTED_V13_REQUIREMENT_IDS = [
+  "CREW-01",
+  "CREW-02",
+  "CREW-03",
+  "CREW-04",
+  "CREW-05",
+  "CREW-06",
+  "CREW-07",
+  "VER-06"
+] as const;
+
+/** @deprecated Use EXPECTED_V13_REQUIREMENT_IDS for active milestone validation. */
 export const EXPECTED_V12_REQUIREMENT_IDS = [
   "CONT-04",
   "CONT-05",
@@ -21,7 +36,7 @@ export const EXPECTED_V12_REQUIREMENT_IDS = [
   "VER-05"
 ] as const;
 
-/** @deprecated Use EXPECTED_V12_REQUIREMENT_IDS for active milestone validation. */
+/** @deprecated Use EXPECTED_V13_REQUIREMENT_IDS for active milestone validation. */
 export const EXPECTED_V11_REQUIREMENT_IDS = [
   "CONT-01",
   "CONT-02",
@@ -38,10 +53,10 @@ export const EXPECTED_V11_REQUIREMENT_IDS = [
 ] as const;
 
 export const EXPECTED_PHASE_REQUIREMENTS: Record<string, readonly string[]> = {
-  "09": ["CONT-04", "CONT-05", "CONT-06"],
-  "10": ["NARR-01", "NARR-02"],
-  "11": ["VOIC-01", "VOIC-02"],
-  "12": ["VER-04", "VER-05"]
+  "13": ["CREW-01", "CREW-02"],
+  "14": ["CREW-03", "CREW-04"],
+  "15": ["CREW-05", "CREW-06"],
+  "16": ["CREW-07", "VER-06"]
 };
 
 export interface TraceabilityRow {
@@ -81,18 +96,23 @@ export interface ValidateTraceabilityOptions {
   milestoneClose?: boolean;
 }
 
-export function parseV12RequirementIds(content: string): string[] {
+export function parseActiveRequirementIds(content: string): string[] {
   const ids = new Set<string>();
   const boldMatches = content.matchAll(/\*\*([A-Z]+-\d+)\*\*/g);
   for (const match of boldMatches) {
     const id = match[1]!;
-    if (V11_REQUIREMENT_ID_PATTERN.test(id) && !id.startsWith("PLAT-")) {
+    if (ACTIVE_REQUIREMENT_ID_PATTERN.test(id) && !id.startsWith("PLAT-")) {
       ids.add(id);
     }
   }
   return [...ids].filter((id) =>
-    EXPECTED_V12_REQUIREMENT_IDS.includes(id as (typeof EXPECTED_V12_REQUIREMENT_IDS)[number])
+    EXPECTED_V13_REQUIREMENT_IDS.includes(id as (typeof EXPECTED_V13_REQUIREMENT_IDS)[number])
   );
+}
+
+/** @deprecated Use parseActiveRequirementIds for active milestone validation. */
+export function parseV12RequirementIds(content: string): string[] {
+  return parseActiveRequirementIds(content);
 }
 
 /** @deprecated Use parseV12RequirementIds for active milestone validation. */
@@ -241,7 +261,7 @@ export function validateRequirementTraceability(
     });
   }
 
-  for (const requirementId of EXPECTED_V12_REQUIREMENT_IDS) {
+  for (const requirementId of EXPECTED_V13_REQUIREMENT_IDS) {
     if (!rowById.has(requirementId)) {
       errors.push({
         path: ".planning/REQUIREMENTS.md#traceability",
@@ -252,7 +272,7 @@ export function validateRequirementTraceability(
 
   const seen = new Set<string>();
   for (const row of rows) {
-    if (!V11_REQUIREMENT_ID_PATTERN.test(row.requirementId)) {
+    if (!ACTIVE_REQUIREMENT_ID_PATTERN.test(row.requirementId)) {
       continue;
     }
     if (seen.has(row.requirementId)) {
@@ -285,7 +305,7 @@ export function validateRequirementTraceability(
   }
 
   let pendingCount = 0;
-  for (const requirementId of EXPECTED_V12_REQUIREMENT_IDS) {
+  for (const requirementId of EXPECTED_V13_REQUIREMENT_IDS) {
     const row = rowById.get(requirementId);
     if (!row) {
       continue;
@@ -324,20 +344,22 @@ export function validateRequirementTraceability(
     }
   }
 
-  const v12IdsInTable = rows
+  const activeIdsInTable = rows
     .map((row) => row.requirementId)
-    .filter((id) => EXPECTED_V12_REQUIREMENT_IDS.includes(id as (typeof EXPECTED_V12_REQUIREMENT_IDS)[number]));
-  if (unmappedCount === 0 && v12IdsInTable.length !== EXPECTED_V12_REQUIREMENT_IDS.length) {
+    .filter((id) =>
+      EXPECTED_V13_REQUIREMENT_IDS.includes(id as (typeof EXPECTED_V13_REQUIREMENT_IDS)[number])
+    );
+  if (unmappedCount === 0 && activeIdsInTable.length !== EXPECTED_V13_REQUIREMENT_IDS.length) {
     errors.push({
       path: ".planning/REQUIREMENTS.md#traceability",
-      reason: `Expected ${EXPECTED_V12_REQUIREMENT_IDS.length} v1.2 rows, found ${v12IdsInTable.length}.`
+      reason: `Expected ${EXPECTED_V13_REQUIREMENT_IDS.length} v1.3 rows, found ${activeIdsInTable.length}.`
     });
   }
 
   return {
     errors,
     warnings,
-    unmappedCount: unmappedCount === -1 ? EXPECTED_V12_REQUIREMENT_IDS.length : unmappedCount,
+    unmappedCount: unmappedCount === -1 ? EXPECTED_V13_REQUIREMENT_IDS.length : unmappedCount,
     pendingCount,
     rows
   };

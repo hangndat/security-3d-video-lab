@@ -3,34 +3,38 @@
 **Defined:** 2026-05-31
 **Core Value:** Cinematic, deterministic security/infrastructure visualization with high technical clarity.
 
-## v1.2 Requirements
+## v1.3 Requirements
 
-Requirements for the Content Depth milestone.
+Requirements for the Cinematic Crew Skills milestone — codify six production roles as project skills before publish-ready content work.
 
-### Content Domains
+### Director & Art Direction
 
-- [x] **CONT-04**: Creator can ship three new security modules (zero-trust access, OAuth/JWT session flow, API gateway/WAF) via topic contracts without editing core render logic.
-- [x] **CONT-05**: New modules are registered in manifest.json and included in at least one long-form assembly profile with validated transitions.
-- [x] **CONT-06**: Every new module enforces beat-level narration placeholder coverage through existing contract validation gates.
+- [ ] **CREW-01**: Director skill guides narrative beats, branch logic, and retention pacing (p25/p50/p75) aligned to topic contracts and long-form assemblies.
+- [ ] **CREW-02**: Art Director skill and style bible codify dark sci-fi documentary look (color, typography, lighting, camera mood) as machine-readable tokens.
 
-### Narrative Branching
+### Storyboard & Motion
 
-- [x] **NARR-01**: Creator can define assembly branch variants (e.g., attack-path vs defense-path) in assembly JSON with explicit module sequences per branch.
-- [x] **NARR-02**: Each declared branch variant produces deterministic replay-verified long-form output with stable artifact hashes.
+- [ ] **CREW-03**: Technical Storyboard Artist skill maps beats to spatial shot lists and validates handoff to SceneSpec schema.
+- [ ] **CREW-04**: 3D Motion Designer skill defines R3F visual module catalog (packet, tunnel, cert, HUD) with naming and composition conventions.
 
-### Narration Pipeline
+### Render & Subject Matter
 
-- [x] **VOIC-01**: Creator can generate narration audio aligned to beat caption timing maps with deterministic duration windows per module.
-- [x] **VOIC-02**: Long-form export artifacts include synchronized narration track metadata alongside existing caption timing maps.
+- [ ] **CREW-05**: Creative Technologist skill documents Remotion composition, engine wiring, render profiles, and export bundle linkage.
+- [ ] **CREW-06**: Security SME + Audio skill provides technical accuracy checklist and voice/sound layer guidance tied to narration pipeline.
 
-### Verification & Governance
+### Orchestration & Verification
 
-- [x] **VER-04**: Every v1.2 module and branch variant has automated tests covering contract completeness, assembly linkage, and export artifacts.
-- [x] **VER-05**: v1.2 requirement traceability is machine-validated in CI and passes milestone-close with zero unmapped requirements.
+- [ ] **CREW-07**: Production orchestrator skill routes the six domain skills in pipeline order with explicit handoff checklists.
+- [ ] **VER-06**: Skills are indexed for agent discovery and verified via TLS module walkthrough proving the full skill chain.
 
-## v3 Requirements
+## v4 Requirements
 
 Deferred to future release.
+
+### Production Content
+
+- **PROD-01**: At least one module upgraded from export-gate fixture to publish-ready cinematic scene.
+- **PROD-02**: Real TTS provider integration (ElevenLabs) with deterministic CI fallback.
 
 ### Platform
 
@@ -41,10 +45,12 @@ Deferred to future release.
 
 | Feature | Reason |
 |---------|--------|
-| Visual storyboard UI | Platform milestone; deferred from v1.2 content-first scope |
-| Publish portal with analytics | Platform milestone; deferred from v1.2 content-first scope |
-| Real-time collaborative editor | File-driven authoring sufficient for v1.2 |
-| Full SaaS multi-tenant platform | Not required for content pipeline milestones |
+| Publish-ready video production | Deferred to v1.4 Production Content milestone after skills land |
+| Real TTS / cloud voice APIs | Skills document layers; provider integration deferred to v1.4 |
+| New security topics in manifest | Content scale deferred; skills apply to existing nine topics |
+| Visual storyboard UI (PLAT-01) | Platform milestone; skills-first for v1.3 |
+| Full R3F module implementation | v1.3 defines catalog and conventions; implementation in v1.4+ |
+| CI governance re-architecture | Reuse v1.2 traceability; extend IDs only |
 
 ## Traceability
 
@@ -52,21 +58,20 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CONT-04 | Phase 09 | Complete |
-| CONT-05 | Phase 09 | Complete |
-| CONT-06 | Phase 09 | Complete |
-| NARR-01 | Phase 10 | Complete |
-| NARR-02 | Phase 10 | Complete |
-| VOIC-01 | Phase 11 | Complete |
-| VOIC-02 | Phase 11 | Complete |
-| VER-04 | Phase 12 | Complete |
-| VER-05 | Phase 12 | Complete |
+| CREW-01 | Phase 13 | Pending |
+| CREW-02 | Phase 13 | Pending |
+| CREW-03 | Phase 14 | Pending |
+| CREW-04 | Phase 14 | Pending |
+| CREW-05 | Phase 15 | Pending |
+| CREW-06 | Phase 15 | Pending |
+| CREW-07 | Phase 16 | Pending |
+| VER-06 | Phase 16 | Pending |
 
 **Coverage:**
-- v1.2 requirements: 9 total
-- Mapped to phases: 9
+- v1.3 requirements: 8 total
+- Mapped to phases: 8
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-05-31*
-*Last updated: 2026-05-31 after Phase 11 Narration Pipeline*
+*Last updated: 2026-05-31 — Milestone v1.3 Cinematic Crew Skills started*
