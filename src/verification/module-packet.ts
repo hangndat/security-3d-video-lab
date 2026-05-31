@@ -59,20 +59,36 @@ export function evaluateModulePacket(topic: TopicId): ModulePacketStatus {
   const shapeErrors = validatePacketShape(loaded.contract);
 
   let longFormLinked = false;
-  try {
-    const depth = loadLongFormAssembly("content-depth-long-v1");
-    if (depth.sequence.includes(topic)) {
-      longFormLinked = true;
+  const assemblySlugs = [
+    "content-depth-long-v1",
+    "security-expansion-long-v1",
+    "content-depth-branched-v1"
+  ] as const;
+
+  for (const slug of assemblySlugs) {
+    if (longFormLinked) {
+      break;
     }
-  } catch {
-    longFormLinked = false;
-  }
-  if (!longFormLinked) {
     try {
-      const expansion = loadLongFormAssembly("security-expansion-long-v1");
-      longFormLinked = expansion.sequence.includes(topic);
+      const assembly = loadLongFormAssembly(slug);
+      if (assembly.sequence.includes(topic)) {
+        longFormLinked = true;
+      }
     } catch {
-      longFormLinked = false;
+      // try next assembly profile
+    }
+    if (!longFormLinked && slug === "content-depth-branched-v1") {
+      for (const branchId of ["attack-path", "defense-path"] as const) {
+        try {
+          const branched = loadLongFormAssembly(slug, branchId);
+          if (branched.sequence.includes(topic)) {
+            longFormLinked = true;
+            break;
+          }
+        } catch {
+          // try next branch
+        }
+      }
     }
   }
 

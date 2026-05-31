@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
-  "seed": "api-gateway-waf-stub-001",
-  "sceneId": "api-gateway-waf-stub-scene",
+  "seed": "api-gateway-waf-seed-001",
+  "sceneId": "api-gateway-waf-scene",
   "actors": [{ "id": "actor-client", "label": "client" }],
   "packets": [
     {
@@ -17,12 +17,12 @@
       "id": "api-gateway-waf-main",
       "track": "packet",
       "startFrame": 0,
-      "duration": 90,
+      "duration": 120,
       "easing": "linear",
       "payload": { "packetId": "packet-api-request" }
     }
   ],
-  "totalFrames": 240,
+  "totalFrames": 300,
   "capabilities": {
     "postMvpCameraOverrides": false,
     "postMvpPacketPhysics": false

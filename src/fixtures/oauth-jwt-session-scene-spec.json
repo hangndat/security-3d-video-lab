@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0.0",
-  "seed": "oauth-jwt-session-stub-001",
-  "sceneId": "oauth-jwt-session-stub-scene",
-  "actors": [{ "id": "actor-client", "label": "client" }],
+  "seed": "oauth-jwt-session-seed-001",
+  "sceneId": "oauth-jwt-session-scene",
+  "actors": [{ "id": "actor-user", "label": "user" }],
   "packets": [
     {
       "id": "packet-token-exchange",
@@ -17,12 +17,12 @@
       "id": "oauth-jwt-session-main",
       "track": "packet",
       "startFrame": 0,
-      "duration": 90,
+      "duration": 120,
       "easing": "linear",
       "payload": { "packetId": "packet-token-exchange" }
     }
   ],
-  "totalFrames": 240,
+  "totalFrames": 300,
   "capabilities": {
     "postMvpCameraOverrides": false,
     "postMvpPacketPhysics": false

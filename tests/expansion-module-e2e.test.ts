@@ -3,12 +3,16 @@ import { mkdirSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 import type { SceneSpec } from "../src/engine/contracts/scene-spec.js";
+import authSessionSceneSpec from "../src/fixtures/auth-session-scene-spec.json";
 import dnsSceneSpec from "../src/fixtures/dns-scene-spec.json";
 import goldenSceneSpec from "../src/fixtures/golden-scene-spec.json";
-import sshSceneSpec from "../src/fixtures/ssh-scene-spec.json";
-import authSessionSceneSpec from "../src/fixtures/auth-session-scene-spec.json";
-import pkiTrustChainSceneSpec from "../src/fixtures/pki-trust-chain-scene-spec.json";
 import mitmDefenseSceneSpec from "../src/fixtures/mitm-defense-scene-spec.json";
+import pkiTrustChainSceneSpec from "../src/fixtures/pki-trust-chain-scene-spec.json";
+import sshSceneSpec from "../src/fixtures/ssh-scene-spec.json";
+import {
+  EXPORT_ROOT_PHASE12,
+  getManifestSceneFixtures
+} from "../src/fixtures/manifest-scene-fixtures.js";
 import { DRAFT_TOPIC_IDS, V12_TOPIC_IDS, type DraftTopicId } from "../src/content/contracts/types.js";
 import { loadLongFormAssembly } from "../src/content/composition/build-long-form-scene-spec.js";
 import { buildLongFormSceneSpec } from "../src/content/composition/build-long-form-scene-spec.js";
@@ -81,4 +85,17 @@ describe("v1.2 module packet completeness (CONT-04, CONT-05)", () => {
       expect(assembly.sequence).toContain(topic);
     }
   });
+
+  for (const topic of V12_TOPIC_IDS) {
+    it(`${topic} short export passes quality gates with slug-based naming`, () => {
+      const status = evaluateModulePacket(topic);
+      const fixtures = getManifestSceneFixtures();
+      const outputPath = `${EXPORT_ROOT_PHASE12}/${status.slug}.mp4`;
+      mkdirSync(EXPORT_ROOT_PHASE12, { recursive: true });
+      renderCompositionDemoMp4(fixtures[topic], outputPath);
+
+      const metadata = assertExportQuality(outputPath, `${status.slug}.mp4`);
+      expect(metadata.durationMs).toBeGreaterThanOrEqual(900);
+    });
+  }
 });
