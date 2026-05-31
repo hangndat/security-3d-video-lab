@@ -3,24 +3,6 @@
 **Defined:** 2026-05-31
 **Core Value:** Cinematic, deterministic security/infrastructure visualization with high technical clarity.
 
-## v1.5 Requirements
-
-Requirements for the Real 3D Render milestone — export TLS cinematic video from headless Three.js using the existing R3F catalog, without TTS or audio mux.
-
-### Headless 3D Capture
-
-- [x] **RENDER-01**: Headless Three.js frame capture produces deterministic PNG bytes per frame from SceneSpec + compose plan via `@headless-three/renderer` (or equivalent), with resolution and camera from style bible tokens.
-- [x] **RENDER-02**: Scene builder maps all eleven `viz-*` catalog modules to Three.js meshes from a single source of truth shared with R3F components (style bible tokens; no divergent duplicate geometry logic).
-
-### Production Video Export
-
-- [x] **RENDER-03**: TLS production export generates video-only MP4 (640×360, full frame count) using the `r3f-headless` render backend by default; narration/TTS/audio mux is not required in this milestone.
-- [ ] **RENDER-04**: Render backend selection is env-gated (`SECURITY_LAB_RENDER_BACKEND`): CI smoke uses `trace-hash` fallback on GL-less runners; local and nightly profiles can run full 3D capture with documented commands.
-
-### Verification & Governance
-
-- [ ] **VER-08**: v1.5 render requirements are machine-validated in CI and pass milestone-close with zero unmapped requirements.
-
 ## v6 Requirements
 
 Deferred to future release.
@@ -42,7 +24,7 @@ Deferred to future release.
 
 | Feature | Reason |
 |---------|--------|
-| TTS / ElevenLabs / narration audio mux | Explicitly deferred; v1.5 is video-only 3D render |
+| TTS / ElevenLabs / narration audio mux | Explicitly deferred; v1.5 shipped video-only 3D render |
 | `@remotion/three` React composition | Evaluate after headless Three.js path is stable |
 | Multi-topic 3D rollout | TLS canonical first; PROD-03 deferred |
 | Visual storyboard UI (PLAT-01) | Platform milestone |
@@ -53,19 +35,16 @@ Deferred to future release.
 
 Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR and at milestone close.
 
+Between milestones: v1.5 requirements archived in `.planning/milestones/v1.5-REQUIREMENTS.md`.
+
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| RENDER-01 | Phase 21 | Complete |
-| RENDER-02 | Phase 22 | Complete |
-| RENDER-03 | Phase 23 | Complete |
-| RENDER-04 | Phase 24 | Pending |
-| VER-08 | Phase 24 | Pending |
+| *(v1.5 archived)* | — | — |
 
 **Coverage:**
-- v1.5 requirements: 5 total
-- Mapped to phases: 5
-- Unmapped: 0 ✓
+- Active milestone requirements: pending next milestone via `/gsd-new-milestone`
+- v1.5 archived: 5/5 complete
 
 ---
 *Requirements defined: 2026-05-31*
-*Last updated: 2026-05-31 — Phase 23 complete (RENDER-03)*
+*Last updated: 2026-05-31 — v1.5 Real 3D Render shipped*

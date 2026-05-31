@@ -107,7 +107,12 @@ export interface TraceabilityValidationResult {
 }
 
 export function isBetweenMilestones(repoRoot: string = REPO_ROOT): boolean {
-  return !existsSync(resolve(repoRoot, ".planning/REQUIREMENTS.md"));
+  const requirementsPath = resolve(repoRoot, ".planning/REQUIREMENTS.md");
+  if (!existsSync(requirementsPath)) {
+    return true;
+  }
+  const content = readFileSync(requirementsPath, "utf-8");
+  return parseActiveRequirementIds(content).length === 0;
 }
 
 export interface ValidateTraceabilityOptions {

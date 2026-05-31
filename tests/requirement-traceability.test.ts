@@ -25,29 +25,33 @@ function loadRoadmap(): string {
 }
 
 describe("requirement traceability validation", () => {
-  it("does not skip when active REQUIREMENTS.md exists", () => {
-    expect(isBetweenMilestones()).toBe(false);
+  it("skips when between milestones with no active requirement ids", () => {
+    expect(isBetweenMilestones()).toBe(true);
+    const result = validateRequirementTraceability();
+    expect(result.skipped).toBe(true);
+    expect(result.errors).toEqual([]);
   });
 
-  it("valid v1.5 REQUIREMENTS.md and ROADMAP.md return zero errors and unmappedCount 0", () => {
+  it("valid archived v1.5 requirements pass milestone-close when all Complete", () => {
+    const archived = readFileSync(
+      resolve(REPO_ROOT, ".planning/milestones/v1.5-REQUIREMENTS.md"),
+      "utf-8"
+    );
     const result = validateRequirementTraceability({
-      requirementsContent: loadRequirements(),
-      roadmapContent: loadRoadmap()
+      requirementsContent: archived,
+      roadmapContent: loadRoadmap(),
+      milestoneClose: true
     });
-
-    expect(result.skipped).toBeUndefined();
     expect(result.errors).toEqual([]);
-    expect(result.unmappedCount).toBe(0);
-    expect(result.pendingCount).toBe(
-      parseTraceabilityTable(loadRequirements()).filter((row) => row.status === "Pending").length
-    );
-    expect(parseTraceabilityTable(loadRequirements())).toHaveLength(
-      EXPECTED_V15_REQUIREMENT_IDS.length
-    );
+    expect(result.pendingCount).toBe(0);
   });
 
   it("fails when a v1.5 requirement row is missing from traceability table", () => {
-    const requirements = loadRequirements().replace("| VER-08 | Phase 24 | Pending |", "");
+    const archived = readFileSync(
+      resolve(REPO_ROOT, ".planning/milestones/v1.5-REQUIREMENTS.md"),
+      "utf-8"
+    );
+    const requirements = archived.replace("| VER-08 | Phase 24 | Complete |", "");
     const result = validateRequirementTraceability({
       requirementsContent: requirements,
       roadmapContent: loadRoadmap()
@@ -72,11 +76,13 @@ describe("requirement traceability validation", () => {
   });
 
   it("milestone-close mode enforces zero Pending requirements", () => {
-    const pendingRows = parseTraceabilityTable(loadRequirements()).filter(
-      (row) => row.status === "Pending"
+    const archived = readFileSync(
+      resolve(REPO_ROOT, ".planning/milestones/v1.5-REQUIREMENTS.md"),
+      "utf-8"
     );
+    const pendingRows = parseTraceabilityTable(archived).filter((row) => row.status === "Pending");
     const result = validateRequirementTraceability({
-      requirementsContent: loadRequirements(),
+      requirementsContent: archived,
       roadmapContent: loadRoadmap(),
       milestoneClose: true
     });
@@ -90,9 +96,13 @@ describe("requirement traceability validation", () => {
   });
 
   it("fails when checkbox and traceability status are out of sync", () => {
-    const requirements = loadRequirements().replace(
-      "- [ ] **VER-08**:",
-      "- [x] **VER-08**:"
+    const archived = readFileSync(
+      resolve(REPO_ROOT, ".planning/milestones/v1.5-REQUIREMENTS.md"),
+      "utf-8"
+    );
+    const requirements = archived.replace(
+      "- [x] **VER-08**:",
+      "- [ ] **VER-08**:"
     );
     const result = validateRequirementTraceability({
       requirementsContent: requirements,
@@ -101,7 +111,7 @@ describe("requirement traceability validation", () => {
 
     expect(
       result.errors.some((issue) =>
-        issue.reason.includes("Checkbox is checked but traceability status is 'Pending'")
+        issue.reason.includes("Checkbox is unchecked but traceability status is Complete")
       )
     ).toBe(true);
   });

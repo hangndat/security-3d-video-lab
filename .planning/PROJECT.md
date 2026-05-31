@@ -9,20 +9,11 @@ Build a code-driven cinematic visualization platform that explains security and 
 ## Problem
 Most technical education is slide-heavy and weakly visual, while modern systems (TLS, SSH, DNS, cloud infrastructure, AI agents) are dynamic and better explained through animated flows.
 
-## Current Milestone: v1.5 Real 3D Render
+## Current Milestone: Between Milestones
 
-**Goal:** Export TLS cinematic video from headless Three.js using the v1.4 R3F catalog — real 3D frames to MP4, no TTS or audio mux.
+**Last shipped:** v1.5 Real 3D Render (2026-05-31) — headless Three.js TLS video-only 3D MP4, CI trace-hash policy, milestone governance close.
 
-**Target features:**
-- Headless Three.js PNG capture via `@headless-three/renderer` wired to compose plan
-- Unified scene builder mapping all eleven `viz-*` modules to Three.js meshes
-- TLS production MP4 as video-only 3D export (640×360 default)
-- CI render backend policy: trace-hash smoke on PR, full 3D on capable profiles
-- v1.5 milestone verification and governance close
-
-**Strategic choice:** Close the render gap left by v1.4 (logic + rubric without real GL pixels) before scaling to PROD-03 or audio mux. Platform UI (PLAT-01/02) still deferred.
-
-**What's next:** `/gsd-plan-phase 21` — Headless Capture Foundation.
+**What's next:** `/gsd-new-milestone` to define the next release cycle.
 
 ## Success Signals
 - Deterministic scene/timeline architecture is defined and followed.
@@ -38,8 +29,8 @@ Most technical education is slide-heavy and weakly visual, while modern systems 
 - **v1.2** shipped 2026-05-31: nine topics, branch variants, narration pipeline, export verification, CI governance.
 - **v1.3** shipped 2026-05-31: seven cinematic crew skills, style bible, R3F catalog, TLS walkthrough, orchestrator.
 - **v1.4** shipped 2026-05-31: eleven R3F modules, TLS publish-ready production, ElevenLabs TTS with stub CI fallback.
-- **235 tests** passing at v1.4 close; headless GL capture path incomplete (imports exist, implementation pending).
-- **v1.5** in planning: real 3D MP4 from headless Three.js, TLS canonical, video-only.
+- **v1.5** shipped 2026-05-31: headless Three.js capture, scene builder parity, TLS video-only 3D MP4, `verify:3d-render` CI policy.
+- **264+ tests** passing at v1.5 close.
 
 ## Validated Requirements
 
@@ -69,6 +60,10 @@ Most technical education is slide-heavy and weakly visual, while modern systems 
 - ✓ PROD-01, PROD-02 — TLS publish-ready production and TTS integration
 - ✓ VER-07 — v1.4 milestone audit and governance close
 
+### v1.5
+- ✓ RENDER-01 through RENDER-04 — headless capture, scene parity, TLS 3D export, CI backend policy
+- ✓ VER-08 — v1.5 milestone audit and governance close
+
 ## Out of Scope
 
 | Feature | Reason |
@@ -91,4 +86,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-31 — v1.5 Real 3D Render milestone started*
+*Last updated: 2026-05-31 — v1.5 Real 3D Render milestone shipped*
