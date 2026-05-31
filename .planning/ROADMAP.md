@@ -105,9 +105,9 @@
 
 ## Current Status
 
-**Active milestone:** v1.3 Cinematic Crew Skills — Phase 16 next.
+**Active milestone:** v1.3 Cinematic Crew Skills — Phase 16 ready to execute (final phase).
 
-Run `/gsd-plan-phase 16` or `/gsd-execute-phase 16` when planned.
+Run `/gsd-execute-phase 16` to deliver orchestrator, AGENTS.md, TLS walkthrough, and close v1.3.
 
 ## Status Rules
 

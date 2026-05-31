@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.3
 milestone_name: Cinematic Crew Skills
-status: planning
-last_updated: "2026-05-31T19:00:00.000Z"
-last_activity: 2026-05-31 — Phase 15 complete (Render & Security Audio skills)
+status: ready-to-execute
+last_updated: "2026-05-31T20:00:00.000Z"
+last_activity: 2026-05-31 — Phase 16 planned (Orchestrator & Skills Verification)
 progress:
   total_phases: 4
   completed_phases: 3
@@ -24,10 +24,10 @@ See `.planning/PROJECT.md` (updated 2026-05-31)
 
 ## Current Position
 
-Phase: 16 — Production Orchestrator & Skills Verification (not started)
-Plan: —
-Status: Phase 15 complete — run `/gsd-plan-phase 16` when ready
-Last activity: 2026-05-31 — Phase 15 executed (CREW-05, CREW-06)
+Phase: 16 — Production Orchestrator & Skills Verification (planned)
+Plan: 16-01, 16-02 (0/2 executed)
+Status: Ready to execute — run `/gsd-execute-phase 16` to close v1.3 milestone
+Last activity: 2026-05-31 — Phase 16 plans verified (16-PLAN-CHECK PASS)
 
 ## Accumulated Context
 
