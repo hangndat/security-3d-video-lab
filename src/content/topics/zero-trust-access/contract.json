@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "1.0.0",
+  "topic": "zero-trust-access",
+  "slug": "zero-trust-access-short-v1",
+  "hook": "Zero trust assumes every request is untrusted until identity and context are verified.",
+  "cta": "Enforce continuous verification with device posture and least-privilege policies.",
+  "durationBudget": {
+    "minSeconds": 7,
+    "targetSeconds": 8,
+    "maxSeconds": 9
+  },
+  "storyboardBeats": [
+    {
+      "id": "zero-trust-access-hook",
+      "startFrame": 0,
+      "endFrame": 26,
+      "objective": "Contrast perimeter trust models with identity-aware access."
+    },
+    {
+      "id": "zero-trust-identity-beat",
+      "startFrame": 16,
+      "endFrame": 68,
+      "objective": "User and device identity are collected before access decisions."
+    },
+    {
+      "id": "zero-trust-policy-beat",
+      "startFrame": 70,
+      "endFrame": 126,
+      "objective": "Policy engine evaluates context signals against required trust level."
+    },
+    {
+      "id": "zero-trust-segment-beat",
+      "startFrame": 128,
+      "endFrame": 182,
+      "objective": "Micro-segmentation limits lateral movement after initial access."
+    },
+    {
+      "id": "zero-trust-continuous-beat",
+      "startFrame": 184,
+      "endFrame": 228,
+      "objective": "Session trust is re-evaluated as context changes during the work session."
+    }
+  ],
+  "narrationPlaceholders": [
+    {
+      "beatId": "zero-trust-access-hook",
+      "analyticKey": "zero-trust-access:zero-trust-access-hook",
+      "scriptIntent": "Contrast perimeter trust models with identity-aware access.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "zero-trust-identity-beat",
+      "analyticKey": "zero-trust-access:zero-trust-identity-beat",
+      "scriptIntent": "User and device identity are collected before access decisions.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "zero-trust-policy-beat",
+      "analyticKey": "zero-trust-access:zero-trust-policy-beat",
+      "scriptIntent": "Policy engine evaluates context signals against required trust level.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "zero-trust-segment-beat",
+      "analyticKey": "zero-trust-access:zero-trust-segment-beat",
+      "scriptIntent": "Micro-segmentation limits lateral movement after initial access.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    },
+    {
+      "beatId": "zero-trust-continuous-beat",
+      "analyticKey": "zero-trust-access:zero-trust-continuous-beat",
+      "scriptIntent": "Session trust is re-evaluated as context changes during the work session.",
+      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+    }
+  ],
+  "pacingPresetId": "documentary-standard",
+  "transitionToNext": {
+    "toTopic": "oauth-jwt-session",
+    "presetId": "zero-trust-access-to-oauth-jwt-session",
+    "rationale": "Identity-aware access policies gate how OAuth tokens establish application sessions."
+  }
+}

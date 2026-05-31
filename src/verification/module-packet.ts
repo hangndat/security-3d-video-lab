@@ -60,10 +60,20 @@ export function evaluateModulePacket(topic: TopicId): ModulePacketStatus {
 
   let longFormLinked = false;
   try {
-    const expansion = loadLongFormAssembly("security-expansion-long-v1");
-    longFormLinked = expansion.sequence.includes(topic);
+    const depth = loadLongFormAssembly("content-depth-long-v1");
+    if (depth.sequence.includes(topic)) {
+      longFormLinked = true;
+    }
   } catch {
     longFormLinked = false;
+  }
+  if (!longFormLinked) {
+    try {
+      const expansion = loadLongFormAssembly("security-expansion-long-v1");
+      longFormLinked = expansion.sequence.includes(topic);
+    } catch {
+      longFormLinked = false;
+    }
   }
 
   const errors = [...contractErrors, ...shapeErrors];

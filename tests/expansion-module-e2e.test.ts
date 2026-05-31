@@ -9,7 +9,7 @@ import sshSceneSpec from "../src/fixtures/ssh-scene-spec.json";
 import authSessionSceneSpec from "../src/fixtures/auth-session-scene-spec.json";
 import pkiTrustChainSceneSpec from "../src/fixtures/pki-trust-chain-scene-spec.json";
 import mitmDefenseSceneSpec from "../src/fixtures/mitm-defense-scene-spec.json";
-import { DRAFT_TOPIC_IDS, type DraftTopicId } from "../src/content/contracts/types.js";
+import { DRAFT_TOPIC_IDS, V12_TOPIC_IDS, type DraftTopicId } from "../src/content/contracts/types.js";
 import { loadLongFormAssembly } from "../src/content/composition/build-long-form-scene-spec.js";
 import { buildLongFormSceneSpec } from "../src/content/composition/build-long-form-scene-spec.js";
 import { renderCompositionDemoMp4 } from "../src/render/remotion/render-composition.js";
@@ -59,5 +59,26 @@ describe("expansion module packet and export linkage (VER-01)", () => {
       "mitm-defense": mitmDefenseSceneSpec
     });
     expect(stitched.sceneId).toBe("security-expansion-long-v1");
+  });
+});
+
+describe("v1.2 module packet completeness (CONT-04, CONT-05)", () => {
+  for (const topic of V12_TOPIC_IDS) {
+    it(`${topic} packet passes completeness and content-depth-long-v1 linkage`, () => {
+      const status = evaluateModulePacket(topic);
+      expect(status.packetComplete).toBe(true);
+      expect(status.errors).toEqual([]);
+      expect(status.beatCount).toBeGreaterThanOrEqual(5);
+      expect(status.placeholderCount).toBe(status.beatCount);
+      expect(status.longFormLinked).toBe(true);
+    });
+  }
+
+  it("content-depth-long-v1 assembly validates with nine-topic transition chain", () => {
+    const assembly = loadLongFormAssembly("content-depth-long-v1");
+    expect(assembly.sequence).toHaveLength(9);
+    for (const topic of V12_TOPIC_IDS) {
+      expect(assembly.sequence).toContain(topic);
+    }
   });
 });

@@ -9,6 +9,7 @@ import { describe, expect, it } from "vitest";
 import { loadTopicContracts } from "../src/content/contracts/load-topic-contracts.js";
 import { loadTopicManifest } from "../src/content/contracts/load-topic-manifest.js";
 import { validateTopicContracts } from "../src/content/contracts/validate-topic-contracts.js";
+import { EXPANSION_TOPIC_IDS, V12_TOPIC_IDS } from "../src/content/contracts/types.js";
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const TOPICS_ROOT = resolve(REPO_ROOT, "src/content/topics");
@@ -152,20 +153,40 @@ describe("scaffold CLI and manifest-locked drafts", () => {
     expect(result.errors.some((item) => item.reason.includes("Topic order mismatch"))).toBe(true);
   });
 
-  it("three new module drafts validate without blocking errors", () => {
+  it("six expansion module drafts validate without blocking errors", () => {
     const manifest = loadTopicManifest(TOPICS_ROOT);
     const contracts = loadTopicContracts(TOPICS_ROOT);
-    const draftIds = ["auth-session", "pki-trust-chain", "mitm-defense"];
 
-    expect(manifest.order.filter((topic) => draftIds.includes(topic))).toEqual(draftIds);
+    expect(manifest.order).toHaveLength(9);
+    expect(manifest.order.filter((topic) => EXPANSION_TOPIC_IDS.includes(topic))).toEqual([
+      ...EXPANSION_TOPIC_IDS
+    ]);
 
     const result = validateTopicContracts(contracts, manifest.order);
     expect(result.errors).toEqual([]);
 
-    for (const draftId of draftIds) {
+    for (const draftId of EXPANSION_TOPIC_IDS) {
       const draft = contracts.find((entry) => entry.contract.topic === draftId);
       expect(draft).toBeDefined();
       expect(draft!.contract.slug).toMatch(new RegExp(`^${draftId}-short-v\\d+$`));
+      expect(draft!.contract.narrationPlaceholders).toHaveLength(
+        draft!.contract.storyboardBeats.length
+      );
+    }
+  });
+
+  it("v1.2 topic contracts have valid transition wiring", () => {
+    const contracts = loadTopicContracts(TOPICS_ROOT);
+    const zeroTrust = contracts.find((entry) => entry.contract.topic === "zero-trust-access");
+    const oauth = contracts.find((entry) => entry.contract.topic === "oauth-jwt-session");
+    const apiGateway = contracts.find((entry) => entry.contract.topic === "api-gateway-waf");
+
+    expect(zeroTrust?.contract.transitionToNext?.toTopic).toBe("oauth-jwt-session");
+    expect(oauth?.contract.transitionToNext?.toTopic).toBe("api-gateway-waf");
+    expect(apiGateway?.contract.transitionToNext).toBeUndefined();
+
+    for (const topicId of V12_TOPIC_IDS) {
+      expect(loadTopicManifest(TOPICS_ROOT).order).toContain(topicId);
     }
   });
 });
@@ -236,8 +257,16 @@ describe("dual-format verification evidence", () => {
     expect(jsonReport.quickMode).toBe(true);
     expect(jsonReport.warningCount).toBeGreaterThanOrEqual(0);
     expect(jsonReport.blockingCriteria.e2eSmokePassed).toBe(false);
-    expect(jsonReport.draftModuleIds).toEqual(["auth-session", "pki-trust-chain", "mitm-defense"]);
-    expect(jsonReport.modules.filter((entry) => entry.draft)).toHaveLength(3);
+    expect(jsonReport.draftModuleIds).toEqual([
+      "auth-session",
+      "pki-trust-chain",
+      "mitm-defense",
+      "zero-trust-access",
+      "oauth-jwt-session",
+      "api-gateway-waf"
+    ]);
+    expect(jsonReport.modules.filter((entry) => entry.draft)).toHaveLength(6);
+    expect(jsonReport.modules).toHaveLength(9);
 
     const e2eSuite = jsonReport.suites.find((suite) => suite.label === "e2e-canonical-smoke");
     expect(e2eSuite?.skipped).toBe(true);

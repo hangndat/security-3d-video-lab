@@ -21,6 +21,8 @@ const MARKDOWN_OUT = resolve(
 );
 
 const DRAFT_MODULE_IDS = ["auth-session", "pki-trust-chain", "mitm-defense"];
+const V12_MODULE_IDS = ["zero-trust-access", "oauth-jwt-session", "api-gateway-waf"];
+const EXPANSION_MODULE_IDS = [...DRAFT_MODULE_IDS, ...V12_MODULE_IDS];
 const FPS = 30;
 const SOFT_DRIFT_RATIO = 0.1;
 const quickMode = process.argv.includes("--quick");
@@ -101,7 +103,7 @@ function summarizeModules(manifestOrder) {
     modules.push({
       id: topicId,
       slug: contract.slug,
-      draft: DRAFT_MODULE_IDS.includes(topicId),
+      draft: EXPANSION_MODULE_IDS.includes(topicId),
       schemaValid,
       schemaErrors,
       beatCount: contract.storyboardBeats?.length ?? 0,
@@ -155,9 +157,9 @@ function buildMarkdown(report) {
 
   lines.push(
     "",
-    "## New Draft Modules (CONT-01)",
+    "## Expansion Modules (CONT-04)",
     "",
-    ...DRAFT_MODULE_IDS.map((moduleId) => {
+    ...EXPANSION_MODULE_IDS.map((moduleId) => {
       const moduleEntry = report.modules.find((entry) => entry.id === moduleId);
       if (!moduleEntry) {
         return `- ${moduleId}: missing`;
@@ -249,7 +251,7 @@ function main() {
     ],
     suites,
     modules,
-    draftModuleIds: DRAFT_MODULE_IDS,
+    draftModuleIds: EXPANSION_MODULE_IDS,
     jsonArtifact: JSON_OUT
   };
 

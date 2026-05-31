@@ -25,12 +25,18 @@ const ALL_SCENES = {
 } as const;
 
 describe("expansion batch export quality (CINE-02)", () => {
-  it("exports all manifest topic shorts with codec, duration, and naming gates", () => {
+  it("exports manifest topics with scene fixtures (six of nine until Phase 12)", () => {
     mkdirSync(EXPORT_ROOT, { recursive: true });
     const contracts = loadTopicContracts();
     const manifest = loadTopicManifest();
+    const exportableTopics = manifest.order.filter(
+      (topic) => topic in ALL_SCENES
+    );
 
-    for (const topic of manifest.order) {
+    expect(manifest.order).toHaveLength(9);
+    expect(exportableTopics).toHaveLength(6);
+
+    for (const topic of exportableTopics) {
       const contract = contracts.find((entry) => entry.contract.topic === topic)!.contract;
       const scene = ALL_SCENES[topic as keyof typeof ALL_SCENES];
       const outputPath = `${EXPORT_ROOT}/${contract.slug}.mp4`;

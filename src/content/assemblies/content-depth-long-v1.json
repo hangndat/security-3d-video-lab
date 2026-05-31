@@ -1,6 +1,7 @@
 {
   "schemaVersion": "1.0.0",
-  "order": [
+  "slug": "content-depth-long-v1",
+  "sequence": [
     "tls",
     "ssh",
     "dns",
@@ -10,5 +11,7 @@
     "zero-trust-access",
     "oauth-jwt-session",
     "api-gateway-waf"
-  ]
+  ],
+  "targetWindowMinutes": { "min": 10, "max": 14 },
+  "defaultPacingPresetId": "documentary-standard"
 }
