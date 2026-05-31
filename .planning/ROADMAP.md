@@ -52,14 +52,14 @@
 
 ### Phase 17: R3F Packet & Tunnel Modules
 
-- [ ] **Phase 17: R3F Packet & Tunnel Modules** (0/2 plans)
+- [x] **Phase 17: R3F Packet & Tunnel Modules** (2/2 plans) — completed 2026-05-31
   - **Goal:** Implement packet and tunnel R3F components bound to engine frame state and style bible tokens.
   - **Requirements:** `VIZ-01`, `VIZ-02`
   - **Depends on:** v1.3 R3F module catalog, `packet-state.ts`, `docs/style-bible.md`, crew motion skill
   - **Plans:** 2 plans, 1 wave
   - **Plan List:**
-    - [ ] `17-01-PLAN.md` — Packet R3F modules: flow, encrypted, threat variants (VIZ-01).
-    - [ ] `17-02-PLAN.md` — Tunnel R3F modules: secure channel and handshake (VIZ-02).
+    - [x] `17-01-PLAN.md` — Packet R3F modules: flow, encrypted, threat variants (VIZ-01).
+    - [x] `17-02-PLAN.md` — Tunnel R3F modules: secure channel and handshake (VIZ-02).
   - **Success Criteria:**
     1. All three packet catalog ids render deterministically from golden SceneSpec fixtures.
     2. Tunnel modules compose with active timeline windows without breaking packet interpolation.
@@ -112,9 +112,9 @@
 
 ## Current Status
 
-**Active milestone:** v1.4 Production Content — Phase 17 next.
+**Active milestone:** v1.4 Production Content — Phase 18 next.
 
-Run `/gsd-discuss-phase 17` or `/gsd-plan-phase 17` to begin.
+Run `/gsd-discuss-phase 18` or `/gsd-plan-phase 18` to continue.
 
 ## Status Rules
 

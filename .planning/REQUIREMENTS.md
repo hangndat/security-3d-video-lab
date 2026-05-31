@@ -9,8 +9,8 @@ Requirements for the Production Content milestone — implement R3F visual modul
 
 ### R3F Visual Modules
 
-- [ ] **VIZ-01**: R3F packet modules (`viz-packet-flow`, `viz-packet-encrypted`, `viz-packet-threat`) render deterministically from SceneSpec packet-state and style bible tokens.
-- [ ] **VIZ-02**: R3F tunnel modules (`viz-tunnel-secure`, `viz-tunnel-handshake`) compose with active timeline windows and packet routes.
+- [x] **VIZ-01**: R3F packet modules (`viz-packet-flow`, `viz-packet-encrypted`, `viz-packet-threat`) render deterministically from SceneSpec packet-state and style bible tokens.
+- [x] **VIZ-02**: R3F tunnel modules (`viz-tunnel-secure`, `viz-tunnel-handshake`) compose with active timeline windows and packet routes.
 - [ ] **VIZ-03**: R3F certificate modules (`viz-cert-single`, `viz-cert-chain`) render beat-aligned trust visuals for TLS handshake scenes.
 - [ ] **VIZ-04**: R3F HUD modules (`viz-hud-actor-label`, `viz-hud-beat-caption`) overlay actor labels and beat captions per style bible typography.
 
@@ -52,8 +52,8 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| VIZ-01 | Phase 17 | Pending |
-| VIZ-02 | Phase 17 | Pending |
+| VIZ-01 | Phase 17 | Complete |
+| VIZ-02 | Phase 17 | Complete |
 | VIZ-03 | Phase 18 | Pending |
 | VIZ-04 | Phase 18 | Pending |
 | PROD-01 | Phase 19 | Pending |
@@ -67,4 +67,4 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 
 ---
 *Requirements defined: 2026-05-31*
-*Last updated: 2026-05-31 — Milestone v1.4 Production Content started*
+*Last updated: 2026-05-31 — Phase 17 R3F Packet & Tunnel Modules complete*

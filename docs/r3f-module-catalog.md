@@ -89,7 +89,7 @@ Do not combine `viz-packet-threat` and `viz-packet-encrypted` in the same beat w
 
 | Engine module | Path | Catalog usage |
 |---------------|------|---------------|
-| Packet interpolation | `src/engine/packet/packet-state.ts` | All `viz-packet-*` modules |
+| Packet interpolation | `src/client/packet/packet-interpolator.ts` | All `viz-packet-*` modules |
 | Timeline scheduler | `src/engine/timeline/scheduler.ts` | Active cue windows per frame |
 | Camera presets | `src/engine/camera/preset-registry.ts` | `viz-cert-*`, `viz-hud-*` framing |
 | SceneSpec validation | `src/engine/contracts/validate-scene-spec.ts` | Pre-render gate for all modules |

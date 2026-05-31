@@ -1,6 +1,7 @@
 import type { SceneSpec } from "../../engine/contracts/scene-spec.js";
 import { validateSceneSpec } from "../../engine/contracts/validate-scene-spec.js";
 import { scheduleFrame, type ScheduledFrameState } from "../../engine/timeline/scheduler.js";
+import { buildVizFrameState, type VizFrameState } from "../../client/viz/build-viz-frame-state.js";
 import { createHash } from "node:crypto";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -10,6 +11,7 @@ import { spawnSync } from "node:child_process";
 
 export interface DeterministicRenderFrameState extends ScheduledFrameState {
   timelineTraceInput: string;
+  vizFrameState: VizFrameState;
 }
 
 function assertValidSceneSpec(sceneSpec: SceneSpec): void {
@@ -27,7 +29,8 @@ export function deriveRenderFrameState(sceneSpec: SceneSpec, frame: number): Det
   const scheduled = scheduleFrame(sceneSpec, frame);
   return {
     ...scheduled,
-    timelineTraceInput: `${scheduled.seed}:${scheduled.frame}:${scheduled.activeTimelineIds.join(",")}`
+    timelineTraceInput: `${scheduled.seed}:${scheduled.frame}:${scheduled.activeTimelineIds.join(",")}`,
+    vizFrameState: buildVizFrameState(sceneSpec, frame)
   };
 }
 
