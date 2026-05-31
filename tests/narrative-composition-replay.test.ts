@@ -7,6 +7,9 @@ import sshSceneSpec from "../src/fixtures/ssh-scene-spec.json";
 import authSessionSceneSpec from "../src/fixtures/auth-session-scene-spec.json";
 import pkiTrustChainSceneSpec from "../src/fixtures/pki-trust-chain-scene-spec.json";
 import mitmDefenseSceneSpec from "../src/fixtures/mitm-defense-scene-spec.json";
+import zeroTrustAccessSceneSpec from "../src/fixtures/zero-trust-access-scene-spec.json";
+import oauthJwtSessionSceneSpec from "../src/fixtures/oauth-jwt-session-scene-spec.json";
+import apiGatewayWafSceneSpec from "../src/fixtures/api-gateway-waf-scene-spec.json";
 import { buildLongFormSceneSpec } from "../src/content/composition/build-long-form-scene-spec.js";
 import type { TopicId } from "../src/content/contracts/types.js";
 import { buildDeterministicTraceInputs } from "../src/render/remotion/render-composition.js";
@@ -26,6 +29,13 @@ const EXPANSION_SCENES: Record<TopicId, SceneSpec> = {
   "auth-session": authSessionSceneSpec,
   "pki-trust-chain": pkiTrustChainSceneSpec,
   "mitm-defense": mitmDefenseSceneSpec
+};
+
+const BRANCHED_SCENES: Record<TopicId, SceneSpec> = {
+  ...EXPANSION_SCENES,
+  "zero-trust-access": zeroTrustAccessSceneSpec,
+  "oauth-jwt-session": oauthJwtSessionSceneSpec,
+  "api-gateway-waf": apiGatewayWafSceneSpec
 };
 
 describe("narrative composition deterministic replay", () => {
@@ -54,5 +64,37 @@ describe("narrative composition deterministic replay", () => {
     const secondRun = buildDeterministicTraceInputs(scene, TRACE_FRAMES);
     expect(secondRun).toEqual(firstRun);
     expect(scene.timeline.length).toBeGreaterThan(goldenSceneSpec.timeline.length);
+  });
+
+  it("attack-path branched assembly produces identical trace inputs on two runs", () => {
+    const scene = buildLongFormSceneSpec("content-depth-branched-v1", BRANCHED_SCENES, {
+      branchId: "attack-path"
+    });
+    expect(scene.sceneId).toBe("content-depth-branched-v1:attack-path");
+    const firstRun = buildDeterministicTraceInputs(scene, TRACE_FRAMES);
+    const secondRun = buildDeterministicTraceInputs(scene, TRACE_FRAMES);
+    expect(secondRun).toEqual(firstRun);
+  });
+
+  it("defense-path branched assembly produces identical trace inputs on two runs", () => {
+    const scene = buildLongFormSceneSpec("content-depth-branched-v1", BRANCHED_SCENES, {
+      branchId: "defense-path"
+    });
+    expect(scene.sceneId).toBe("content-depth-branched-v1:defense-path");
+    const firstRun = buildDeterministicTraceInputs(scene, TRACE_FRAMES);
+    const secondRun = buildDeterministicTraceInputs(scene, TRACE_FRAMES);
+    expect(secondRun).toEqual(firstRun);
+  });
+
+  it("attack-path and defense-path traces differ at sampled frames", () => {
+    const attackScene = buildLongFormSceneSpec("content-depth-branched-v1", BRANCHED_SCENES, {
+      branchId: "attack-path"
+    });
+    const defenseScene = buildLongFormSceneSpec("content-depth-branched-v1", BRANCHED_SCENES, {
+      branchId: "defense-path"
+    });
+    const attackTrace = buildDeterministicTraceInputs(attackScene, TRACE_FRAMES);
+    const defenseTrace = buildDeterministicTraceInputs(defenseScene, TRACE_FRAMES);
+    expect(attackTrace).not.toEqual(defenseTrace);
   });
 });

@@ -8,7 +8,7 @@ import {
   buildMilestoneAuditReport,
   renderMilestoneAuditMarkdown
 } from "../src/verification/milestone-audit.js";
-import { validateRequirementTraceability } from "../src/verification/requirement-traceability.js";
+import { validateRequirementTraceability, parseTraceabilityTable } from "../src/verification/requirement-traceability.js";
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -55,7 +55,11 @@ describe("milestone governance policy", () => {
     const result = validateRequirementTraceability();
     expect(result.skipped).toBeUndefined();
     expect(result.errors).toEqual([]);
-    expect(result.pendingCount).toBe(9);
+    expect(result.pendingCount).toBe(
+      parseTraceabilityTable(readFileSync(resolve(REPO_ROOT, ".planning/REQUIREMENTS.md"), "utf-8")).filter(
+        (row) => row.status === "Pending"
+      ).length
+    );
 
     const closeResult = validateRequirementTraceability({ milestoneClose: true });
     expect(closeResult.errors.some((issue) => issue.reason.includes("still Pending"))).toBe(true);

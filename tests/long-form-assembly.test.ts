@@ -348,3 +348,34 @@ describe("branch assembly schema and validation", () => {
     expect(defense.transitionOverrides).toHaveLength(1);
   });
 });
+
+describe("content-depth-branched-v1 assembly", () => {
+  it("validates with zero errors", () => {
+    const profile = loadLongFormAssemblyProfile("content-depth-branched-v1", ASSEMBLIES_ROOT);
+    const result = validateLongFormAssemblyProfile(
+      profile,
+      `${ASSEMBLIES_ROOT}/content-depth-branched-v1.json`
+    );
+    expect(result.errors).toEqual([]);
+  });
+
+  it("loads attack-path with seven topics and override transitions", () => {
+    const assembly = loadLongFormAssembly("content-depth-branched-v1", "attack-path");
+    expect(assembly.sequence).toHaveLength(7);
+    expect(assembly.branchId).toBe("attack-path");
+    expect(
+      assembly.transitions.find(
+        (transition) =>
+          transition.fromTopic === "auth-session" && transition.toTopic === "mitm-defense"
+      )?.presetId
+    ).toBe("auth-session-to-mitm-defense");
+    expect(() => validateLongFormTransitionCoherence(assembly)).not.toThrow();
+  });
+
+  it("loads defense-path with eight topics", () => {
+    const assembly = loadLongFormAssembly("content-depth-branched-v1", "defense-path");
+    expect(assembly.sequence).toHaveLength(8);
+    expect(assembly.branchId).toBe("defense-path");
+    expect(() => validateLongFormTransitionCoherence(assembly)).not.toThrow();
+  });
+});

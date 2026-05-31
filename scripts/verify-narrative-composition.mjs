@@ -13,7 +13,11 @@ const MARKDOWN_OUT = resolve(
   ".planning/phases/06-narrative-cinematic-composition/VERIFICATION.md"
 );
 
-const ASSEMBLY_SLUGS = ["network-foundations-long-v1", "security-expansion-long-v1"];
+const ASSEMBLY_SLUGS = [
+  "network-foundations-long-v1",
+  "security-expansion-long-v1",
+  "content-depth-branched-v1"
+];
 const quickMode = process.argv.includes("--quick");
 
 function runSuite(label, command, args) {
@@ -42,6 +46,14 @@ function summarizeAssemblies() {
     return {
       slug,
       sequenceLength: assembly.sequence?.length ?? 0,
+      topicCount:
+        assembly.sequence?.length ??
+        assembly.branches?.find((branch) => branch.id === assembly.defaultBranchId)?.sequence
+          .length ??
+        assembly.branches?.[0]?.sequence.length ??
+        0,
+      branchCount: assembly.branches?.length ?? 0,
+      defaultBranchId: assembly.defaultBranchId ?? null,
       targetWindowMinutes: assembly.targetWindowMinutes ?? null,
       assemblyPath: assemblyPath.replace(`${REPO_ROOT}/`, "")
     };
@@ -98,15 +110,19 @@ function buildMarkdown(report) {
     "",
     "## Assembly Coverage",
     "",
-    "| Slug | Topics | Window (min-max) |",
-    "| --- | ---: | --- |"
+    "| Slug | Topics | Branches | Default branch | Window (min-max) |",
+    "| --- | ---: | ---: | --- | --- |"
   );
 
   for (const assembly of report.assemblies) {
     const window = assembly.targetWindowMinutes
       ? `${assembly.targetWindowMinutes.min}-${assembly.targetWindowMinutes.max} min`
       : "n/a";
-    lines.push(`| ${assembly.slug} | ${assembly.sequenceLength} | ${window} |`);
+    const branches = assembly.branchCount > 0 ? String(assembly.branchCount) : "—";
+    const defaultBranch = assembly.defaultBranchId ?? "—";
+    lines.push(
+      `| ${assembly.slug} | ${assembly.topicCount} | ${branches} | ${defaultBranch} | ${window} |`
+    );
   }
 
   lines.push(

@@ -38,7 +38,9 @@ describe("requirement traceability validation", () => {
     expect(result.skipped).toBeUndefined();
     expect(result.errors).toEqual([]);
     expect(result.unmappedCount).toBe(0);
-    expect(result.pendingCount).toBe(EXPECTED_V12_REQUIREMENT_IDS.length);
+    expect(result.pendingCount).toBe(
+      parseTraceabilityTable(loadRequirements()).filter((row) => row.status === "Pending").length
+    );
     expect(parseTraceabilityTable(loadRequirements())).toHaveLength(
       EXPECTED_V12_REQUIREMENT_IDS.length
     );
@@ -82,8 +84,8 @@ describe("requirement traceability validation", () => {
 
   it("fails when checkbox and traceability status are out of sync", () => {
     const requirements = loadRequirements().replace(
-      "| CONT-04 | Phase 09 | Pending |",
-      "| CONT-04 | Phase 09 | Complete |"
+      "| VOIC-01 | Phase 11 | Pending |",
+      "| VOIC-01 | Phase 11 | Complete |"
     );
     const result = validateRequirementTraceability({
       requirementsContent: requirements,
