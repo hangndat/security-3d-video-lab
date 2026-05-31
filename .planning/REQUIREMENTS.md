@@ -3,27 +3,25 @@
 **Defined:** 2026-05-31
 **Core Value:** Cinematic, deterministic security/infrastructure visualization with high technical clarity.
 
-## v1.4 Requirements
+## v1.5 Requirements
 
-Requirements for the Production Content milestone — implement R3F visual modules and deliver the first publish-ready cinematic module (TLS).
+Requirements for the Real 3D Render milestone — export TLS cinematic video from headless Three.js using the existing R3F catalog, without TTS or audio mux.
 
-### R3F Visual Modules
+### Headless 3D Capture
 
-- [x] **VIZ-01**: R3F packet modules (`viz-packet-flow`, `viz-packet-encrypted`, `viz-packet-threat`) render deterministically from SceneSpec packet-state and style bible tokens.
-- [x] **VIZ-02**: R3F tunnel modules (`viz-tunnel-secure`, `viz-tunnel-handshake`) compose with active timeline windows and packet routes.
-- [x] **VIZ-03**: R3F certificate modules (`viz-cert-single`, `viz-cert-chain`) render beat-aligned trust visuals for TLS handshake scenes.
-- [x] **VIZ-04**: R3F HUD modules (`viz-hud-actor-label`, `viz-hud-beat-caption`) overlay actor labels and beat captions per style bible typography.
+- [ ] **RENDER-01**: Headless Three.js frame capture produces deterministic PNG bytes per frame from SceneSpec + compose plan via `@headless-three/renderer` (or equivalent), with resolution and camera from style bible tokens.
+- [ ] **RENDER-02**: Scene builder maps all eleven `viz-*` catalog modules to Three.js meshes from a single source of truth shared with R3F components (style bible tokens; no divergent duplicate geometry logic).
 
-### Publish-Ready Production
+### Production Video Export
 
-- [x] **PROD-01**: TLS module upgraded from export-gate fixture to publish-ready cinematic scene with crew pipeline artifacts, security accuracy sign-off, and export quality assertions passing a production rubric.
-- [x] **PROD-02**: ElevenLabs TTS when `ELEVENLABS_API_KEY` is set; otherwise deterministic dummy audio (`deterministic-stub`) for CI and keyless runs — narration tracks stay aligned to caption timing maps.
+- [ ] **RENDER-03**: TLS production export generates video-only MP4 (640×360, full frame count) using the `r3f-headless` render backend by default; narration/TTS/audio mux is not required in this milestone.
+- [ ] **RENDER-04**: Render backend selection is env-gated (`SECURITY_LAB_RENDER_BACKEND`): CI smoke uses `trace-hash` fallback on GL-less runners; local and nightly profiles can run full 3D capture with documented commands.
 
 ### Verification & Governance
 
-- [x] **VER-07**: v1.4 production content requirements are machine-validated in CI and pass milestone-close with zero unmapped requirements.
+- [ ] **VER-08**: v1.5 render requirements are machine-validated in CI and pass milestone-close with zero unmapped requirements.
 
-## v5 Requirements
+## v6 Requirements
 
 Deferred to future release.
 
@@ -36,15 +34,20 @@ Deferred to future release.
 
 - **PROD-03**: Second topic module (SSH or DNS) upgraded to publish-ready cinematic production using the TLS template.
 
+### Audio
+
+- **PROD-04**: Re-enable narration/TTS audio mux on 3D-rendered production exports when audio milestone resumes.
+
 ## Out of Scope
 
 | Feature | Reason |
 |---------|--------|
-| All nine topics publish-ready | TLS canonical proof first; scale in v1.5+ |
+| TTS / ElevenLabs / narration audio mux | Explicitly deferred; v1.5 is video-only 3D render |
+| `@remotion/three` React composition | Evaluate after headless Three.js path is stable |
+| Multi-topic 3D rollout | TLS canonical first; PROD-03 deferred |
 | Visual storyboard UI (PLAT-01) | Platform milestone |
 | Publish portal (PLAT-02) | Platform milestone |
-| New security topics in manifest | Apply pipeline to existing nine topics only |
-| Crew skill rewrites | v1.3 skills are reference; extend docs only if R3F API diverges |
+| New security topics in manifest | Apply render pipeline to existing catalog only |
 
 ## Traceability
 
@@ -52,19 +55,17 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| VIZ-01 | Phase 17 | Complete |
-| VIZ-02 | Phase 17 | Complete |
-| VIZ-03 | Phase 18 | Complete |
-| VIZ-04 | Phase 18 | Complete |
-| PROD-01 | Phase 19 | Complete |
-| PROD-02 | Phase 20 | Complete |
-| VER-07 | Phase 20 | Complete |
+| RENDER-01 | Phase 21 | Pending |
+| RENDER-02 | Phase 22 | Pending |
+| RENDER-03 | Phase 23 | Pending |
+| RENDER-04 | Phase 24 | Pending |
+| VER-08 | Phase 24 | Pending |
 
 **Coverage:**
-- v1.4 requirements: 7 total
-- Mapped to phases: 7
+- v1.5 requirements: 5 total
+- Mapped to phases: 5
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-05-31*
-*Last updated: 2026-05-31 — v1.4 Production Content milestone closed*
+*Last updated: 2026-05-31 — v1.5 Real 3D Render milestone started*

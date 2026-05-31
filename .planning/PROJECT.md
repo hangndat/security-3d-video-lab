@@ -9,19 +9,20 @@ Build a code-driven cinematic visualization platform that explains security and 
 ## Problem
 Most technical education is slide-heavy and weakly visual, while modern systems (TLS, SSH, DNS, cloud infrastructure, AI agents) are dynamic and better explained through animated flows.
 
-## Current Milestone: v1.4 Production Content (Shipped 2026-05-31)
+## Current Milestone: v1.5 Real 3D Render
 
-**Goal:** Upgrade the canonical TLS module from export-gate fixtures to publish-ready cinematic production using implemented R3F visual modules and TTS integration.
+**Goal:** Export TLS cinematic video from headless Three.js using the v1.4 R3F catalog — real 3D frames to MP4, no TTS or audio mux.
 
-**Delivered:**
-- R3F components for all four catalog families (packet, tunnel, cert, HUD) bound to engine frame state
-- TLS publish-ready scene exceeding export-gate quality rubric with crew pipeline artifacts
-- ElevenLabs TTS provider with deterministic stub fallback for CI
-- v1.4 milestone verification and governance close
+**Target features:**
+- Headless Three.js PNG capture via `@headless-three/renderer` wired to compose plan
+- Unified scene builder mapping all eleven `viz-*` modules to Three.js meshes
+- TLS production MP4 as video-only 3D export (640×360 default)
+- CI render backend policy: trace-hash smoke on PR, full 3D on capable profiles
+- v1.5 milestone verification and governance close
 
-**Strategic choice:** TLS-first canonical module — proves the v1.3 crew pipeline end-to-end before scaling to other nine topics. Platform UI (PLAT-01/02) still deferred.
+**Strategic choice:** Close the render gap left by v1.4 (logic + rubric without real GL pixels) before scaling to PROD-03 or audio mux. Platform UI (PLAT-01/02) still deferred.
 
-**What's next:** Plan next milestone via `/gsd-new-milestone`.
+**What's next:** `/gsd-plan-phase 21` — Headless Capture Foundation.
 
 ## Success Signals
 - Deterministic scene/timeline architecture is defined and followed.
@@ -37,7 +38,8 @@ Most technical education is slide-heavy and weakly visual, while modern systems 
 - **v1.2** shipped 2026-05-31: nine topics, branch variants, narration pipeline, export verification, CI governance.
 - **v1.3** shipped 2026-05-31: seven cinematic crew skills, style bible, R3F catalog, TLS walkthrough, orchestrator.
 - **v1.4** shipped 2026-05-31: eleven R3F modules, TLS publish-ready production, ElevenLabs TTS with stub CI fallback.
-- **235 tests** passing at v1.4 close.
+- **235 tests** passing at v1.4 close; headless GL capture path incomplete (imports exist, implementation pending).
+- **v1.5** in planning: real 3D MP4 from headless Three.js, TLS canonical, video-only.
 
 ## Validated Requirements
 
@@ -71,7 +73,8 @@ Most technical education is slide-heavy and weakly visual, while modern systems 
 
 | Feature | Reason |
 |---------|--------|
-| Multi-topic publish-ready rollout | TLS canonical first; other eight topics deferred to v1.5+ |
+| Multi-topic publish-ready rollout | TLS 3D render first; PROD-03 deferred to v6 |
+| TTS / audio mux on 3D exports | Deferred to PROD-04; v1.5 is video-only |
 | Visual storyboard UI (PLAT-01) | Platform milestone; after production content |
 | Publish portal with analytics (PLAT-02) | Platform milestone; after production content |
 | New security topics in manifest | Content scale deferred; apply crew pipeline to existing nine |
@@ -88,4 +91,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-31 — v1.4 Production Content milestone shipped*
+*Last updated: 2026-05-31 — v1.5 Real 3D Render milestone started*

@@ -1,16 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.4
-milestone_name: Production Content
-status: between_milestones
-last_updated: "2026-05-31T18:00:00.000Z"
-last_activity: 2026-05-31 — v1.4 Production Content milestone closed
+milestone: v1.5
+milestone_name: Real 3D Render
+status: planning
+last_updated: "2026-05-31T08:45:00.000Z"
+last_activity: 2026-05-31 — Milestone v1.5 requirements and roadmap defined
 progress:
   total_phases: 4
-  completed_phases: 4
+  completed_phases: 0
   total_plans: 8
-  completed_plans: 8
-  percent: 100
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -20,42 +20,42 @@ progress:
 See `.planning/PROJECT.md` (updated 2026-05-31)
 
 **Core value:** cinematic, deterministic security/infrastructure visualization.
-**Current focus:** Between milestones — plan next cycle via `/gsd-new-milestone`.
+**Current focus:** v1.5 Phase 21 — Headless Capture Foundation.
 
 ## Current Position
 
-Phase: 20 — TTS Integration & Milestone Close (complete)
-Plan: 20-01, 20-02 complete
-Status: v1.4 shipped
-Last activity: 2026-05-31 — Phase 20 complete; v1.4 milestone audit PASS
+Phase: 21 — Headless Capture Foundation (planned)
+Plan: 21-01, 21-02 not yet written
+Status: Requirements and roadmap defined — ready for `/gsd-plan-phase 21`
+Last activity: 2026-05-31 — v1.5 Real 3D Render milestone initialized
 
 ## Accumulated Context
 
 ### Decisions
 
-**Phase 20 delivered:** `resolveNarrationProvider()` (ElevenLabs when key set, `deterministic-stub` otherwise), TLS production narration artifacts, `verify:tts-integration`, v1.4 milestone audit and governance close.
+**v1.5 scope:** Headless Three.js MP4 from R3F catalog; TLS canonical; **no TTS/audio** in this milestone.
 
-**Phase 19 delivered:** `tls-production-scene-spec.json`, viz-aware production MP4 (640×360, 236 frames), `tls-production-rubric.ts`, crew artifacts under `.artifacts/production/tls/`, `verify:tls-production` gate.
+**v1.4 shipped:** Eleven R3F modules, TLS production rubric/artifacts, TTS with stub fallback — but MP4 may still use trace-hash when headless module missing.
 
-**Phase 18 delivered:** Full R3F catalog (11 module ids), caption resolver, four-layer compose z-order.
-
-**v1.4 Production Content shipped:** All eleven R3F modules, TLS publish-ready scene, TTS integration with CI-safe stub fallback.
+**Render backend policy (planned):** `SECURITY_LAB_RENDER_BACKEND=r3f-headless` local/nightly; `trace-hash` for CI PR smoke on GL-less runners.
 
 ### Pending Todos
 
-- None recorded.
+- Restore `src/render/headless/` implementation (currently empty; imports broken).
 
 ### Blockers/Concerns
 
-- None.
+- `@headless-three/renderer` platform binaries must work on dev machines (darwin/linux); CI may stay on trace-hash.
 
 ## Deferred Items
 
-- Headless WebGL / @remotion/three full cinematic capture
-- Second topic publish-ready upgrade (PROD-03, v5)
+- TTS / narration audio mux on 3D exports (PROD-04, v6)
+- `@remotion/three` full React composition capture
+- Second topic publish-ready (PROD-03)
+- Headless WebGL pixel regression suite (stretch after Phase 21)
 
 ## Session Continuity
 
 - Last session: 2026-05-31
-- Stopped at: v1.4 milestone close complete
+- Stopped at: v1.5 milestone initialized
 - Resume file: None
