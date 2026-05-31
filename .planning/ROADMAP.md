@@ -82,11 +82,11 @@
 
 ### Phase 22: Scene Builder Parity
 
-- [ ] **Phase 22: Scene Builder Parity** (0/2 plans — planned)
+- [ ] **Phase 22: Scene Builder Parity** (0/2 plans — ready to execute)
   - **Goal:** Unify R3F catalog geometry with headless Three.js scene builder so all eleven modules render in GL.
   - **Requirements:** `RENDER-02`
   - **Depends on:** Phase 21 headless capture, `docs/style-bible.md`, `src/client/viz/` registry
-  - **Plans:** 2 plans, 1 wave
+  - **Plans:** 2 plans, 1 wave — PLAN-CHECK PASS
   - **Plan List:**
     - [ ] `22-01-PLAN.md` — Shared mesh factory / scene builder for packet and tunnel modules (RENDER-02).
     - [ ] `22-02-PLAN.md` — Cert, HUD, lighting, camera parity and catalog coverage tests (RENDER-02).
@@ -127,9 +127,9 @@
 
 ## Current Status
 
-**Active milestone:** v1.5 Real 3D Render — Phase 22 next.
+**Active milestone:** v1.5 Real 3D Render — Phase 22 ready to execute.
 
-Run `/gsd-plan-phase 22` to begin scene builder parity.
+Run `/gsd-execute-phase 22` to begin scene builder parity.
 
 ## Status Rules
 
