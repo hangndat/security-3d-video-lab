@@ -15,6 +15,7 @@ import {
 import {
   renderCompositionProductionMp4
 } from "../remotion/render-composition.js";
+import { resolveProductionRenderBackend } from "../headless/resolve-production-render-backend.js";
 import { productionPolicyForScene } from "../../verification/export-quality.js";
 import {
   assertTlsProductionRubric,
@@ -37,6 +38,7 @@ export type TlsProductionManifest = {
   securitySignoffPath: string;
   productionPolicy: ReturnType<typeof productionPolicyForScene>;
   mp4Bytes: number;
+  renderBackend: ReturnType<typeof resolveProductionRenderBackend>;
   bundleHash: string;
   generatedAt: string;
 };
@@ -96,6 +98,7 @@ export function generateTlsProductionArtifacts(
 
   const productionPolicy = productionPolicyForScene(sceneSpec);
   const mp4Bytes = readFileSync(mp4Path).length;
+  const renderBackend = resolveProductionRenderBackend(env);
 
   const manifest: TlsProductionManifest = {
     schemaVersion: "1.0.0",
@@ -108,6 +111,7 @@ export function generateTlsProductionArtifacts(
     securitySignoffPath: ".artifacts/production/tls/security-signoff.json",
     productionPolicy,
     mp4Bytes,
+    renderBackend,
     bundleHash: sha256(
       `${sceneSpec.seed}:${mp4Bytes}:${signoff.beatsPassed}:${provider.id}:${narrationTrack.captionMapHash}`
     ),
@@ -124,7 +128,7 @@ export function generateTlsProductionArtifacts(
 
   writeFileSync(
     renderHandoffPath,
-    `# TLS Production Render Handoff\n\n| Field | Value |\n| --- | --- |\n| SceneSpec | src/fixtures/tls-production-scene-spec.json |\n| Render | renderCompositionProductionMp4 (640×360, ${sceneSpec.totalFrames} frames) |\n| MP4 | .artifacts/production/tls/tls-production.mp4 |\n| Quality policy | productionPolicyForScene (≈${productionPolicy.minDurationSeconds}–${productionPolicy.maxDurationSeconds}s) |\n| Verify | npm run verify:tls-production |\n`,
+    `# TLS Production Render Handoff\n\n| Field | Value |\n| --- | --- |\n| SceneSpec | src/fixtures/tls-production-scene-spec.json |\n| Render | renderCompositionProductionMp4 (640×360, ${sceneSpec.totalFrames} frames) |\n| Backend | ${renderBackend} (default r3f-headless; set SECURITY_LAB_RENDER_BACKEND=trace-hash for CI) |\n| MP4 | .artifacts/production/tls/tls-production.mp4 |\n| Quality policy | productionPolicyForScene (≈${productionPolicy.minDurationSeconds}–${productionPolicy.maxDurationSeconds}s) |\n| Verify | npm run verify:tls-production |\n`,
     "utf-8"
   );
 

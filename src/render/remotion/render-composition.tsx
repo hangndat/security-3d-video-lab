@@ -11,6 +11,12 @@ import { dirname, join } from "node:path";
 import { mkdirSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 
+import { captureVizFramePng } from "../headless/capture-viz-frame-png.js";
+import {
+  resolveProductionRenderBackend,
+  type ProductionRenderBackend
+} from "../headless/resolve-production-render-backend.js";
+
 export interface DeterministicRenderFrameState extends ScheduledFrameState {
   timelineTraceInput: string;
   vizFrameState: VizFrameState;
@@ -30,6 +36,7 @@ export type DeriveRenderFrameStateOptions = {
 export type RenderCompositionProductionOptions = {
   profile?: Partial<ProductionRenderProfile>;
   captionMap?: CaptionTimingMap;
+  backend?: ProductionRenderBackend;
 };
 
 const DEFAULT_PRODUCTION_PROFILE: ProductionRenderProfile = {
@@ -167,11 +174,15 @@ function writePpmFrame(framePath: string, width: number, height: number, color: 
   writeFileSync(framePath, Buffer.concat([Buffer.from(header, "ascii"), body]));
 }
 
-function encodePpmFramesToMp4(
+type FrameSequenceFormat = "ppm" | "png";
+
+function encodeFrameSequenceToMp4(
   tempDir: string,
   outputPath: string,
-  fps: number
+  fps: number,
+  format: FrameSequenceFormat
 ): void {
+  const pattern = format === "png" ? "frame-%04d.png" : "frame-%04d.ppm";
   const encode = spawnSync(
     "ffmpeg",
     [
@@ -182,7 +193,7 @@ function encodePpmFramesToMp4(
       "-framerate",
       String(fps),
       "-i",
-      join(tempDir, "frame-%04d.ppm"),
+      join(tempDir, pattern),
       "-pix_fmt",
       "yuv420p",
       outputPath
@@ -212,9 +223,40 @@ export function renderCompositionDemoMp4(sceneSpec: SceneSpec, outputPath: strin
       writePpmFrame(framePath, width, height, color);
     }
 
-    encodePpmFramesToMp4(tempDir, outputPath, fps);
+    encodeFrameSequenceToMp4(tempDir, outputPath, fps, "ppm");
   } finally {
     rmSync(tempDir, { recursive: true, force: true });
+  }
+}
+
+function renderProductionFramesR3fHeadless(
+  sceneSpec: SceneSpec,
+  tempDir: string,
+  profile: ProductionRenderProfile,
+  captionMap?: CaptionTimingMap
+): void {
+  for (let frame = 0; frame < sceneSpec.totalFrames; frame += 1) {
+    const pngBuffer = captureVizFramePng(sceneSpec, frame, {
+      width: profile.width,
+      height: profile.height,
+      captionMap
+    });
+    const framePath = join(tempDir, `frame-${String(frame + 1).padStart(4, "0")}.png`);
+    writeFileSync(framePath, pngBuffer);
+  }
+}
+
+function renderProductionFramesTraceHash(
+  sceneSpec: SceneSpec,
+  tempDir: string,
+  profile: ProductionRenderProfile,
+  captionMap?: CaptionTimingMap
+): void {
+  for (let frame = 0; frame < sceneSpec.totalFrames; frame += 1) {
+    const renderState = deriveRenderFrameState(sceneSpec, frame, { captionMap });
+    const color = colorFromTrace(renderState.vizRenderTraceInput);
+    const framePath = join(tempDir, `frame-${String(frame + 1).padStart(4, "0")}.ppm`);
+    writePpmFrame(framePath, profile.width, profile.height, color);
   }
 }
 
@@ -230,20 +272,17 @@ export function renderCompositionProductionMp4(
     ...DEFAULT_PRODUCTION_PROFILE,
     ...options.profile
   };
-  const frameCount = sceneSpec.totalFrames;
-  const tempDir = mkdtempSync(join(tmpdir(), "composition-production-frames-"));
+  const backend = options.backend ?? resolveProductionRenderBackend();
+  const tempDir = mkdtempSync(join(tmpdir(), `composition-production-${backend}-`));
 
   try {
-    for (let frame = 0; frame < frameCount; frame += 1) {
-      const renderState = deriveRenderFrameState(sceneSpec, frame, {
-        captionMap: options.captionMap
-      });
-      const color = colorFromTrace(renderState.vizRenderTraceInput);
-      const framePath = join(tempDir, `frame-${String(frame + 1).padStart(4, "0")}.ppm`);
-      writePpmFrame(framePath, profile.width, profile.height, color);
+    if (backend === "r3f-headless") {
+      renderProductionFramesR3fHeadless(sceneSpec, tempDir, profile, options.captionMap);
+      encodeFrameSequenceToMp4(tempDir, outputPath, profile.fps, "png");
+    } else {
+      renderProductionFramesTraceHash(sceneSpec, tempDir, profile, options.captionMap);
+      encodeFrameSequenceToMp4(tempDir, outputPath, profile.fps, "ppm");
     }
-
-    encodePpmFramesToMp4(tempDir, outputPath, profile.fps);
   } finally {
     rmSync(tempDir, { recursive: true, force: true });
   }

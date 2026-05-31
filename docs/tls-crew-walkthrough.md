@@ -67,10 +67,11 @@ End-to-end proof of the cinematic crew skill chain on the **TLS** topic module (
 
 1. Input: validated SceneSpec — **`src/fixtures/tls-production-scene-spec.json`** for publish-ready TLS.
 2. Render: `deriveRenderFrameState` (viz-aware trace) → `renderCompositionProductionMp4` (640×360, full `totalFrames`).
-3. Quality: `assertExportQuality` with `productionPolicyForScene` per `src/verification/export-quality.ts`.
-4. Short CI export: `renderCompositionDemoMp4` + `golden-scene-spec.json` (unchanged).
-5. Production artifacts: `generateTlsProductionArtifacts` → `.artifacts/production/tls/`.
-6. Verify: `npm run verify:tls-production`.
+3. Backend: `resolveProductionRenderBackend()` — local default **`r3f-headless`** (Three.js PNG via `@headless-three/renderer`); set **`SECURITY_LAB_RENDER_BACKEND=trace-hash`** (or `hash`) for CI-safe deterministic color frames without headless GL.
+4. Quality: `assertExportQuality` with `productionPolicyForScene` per `src/verification/export-quality.ts`.
+5. Short CI export: `renderCompositionDemoMp4` + `golden-scene-spec.json` (unchanged).
+6. Production artifacts: `generateTlsProductionArtifacts` → `.artifacts/production/tls/` (manifest includes `renderBackend`).
+7. Verify: `npm run verify:tls-production` and `npm run verify:headless-capture -- --quick`.
 
 **Gate:** MP4 under `.artifacts/production/tls/`; production quality + security sign-off pass.
 
@@ -111,6 +112,8 @@ npm run verify:tts-integration -- --quick
 npm run test -- tests/cinematic-crew-skills.test.ts
 node scripts/verify-crew-skills.mjs --quick
 npm run test -- tests/render-composition.test.ts
+npm run test -- tests/headless-capture.test.ts
+npm run verify:headless-capture -- --quick
 node scripts/verify-narration-pipeline.mjs --quick
 node scripts/validate-requirement-traceability.mjs --milestone-close
 ```

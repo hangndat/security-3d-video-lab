@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       RENDER_PROFILE: reduced
+      SECURITY_LAB_RENDER_BACKEND: trace-hash
       NODE_VERSION: "25.6.0"
     steps:
       - uses: actions/checkout@v4
@@ -52,6 +53,7 @@ jobs:
           npm run verify:crew-skills -- --quick
           npm run verify:tts-integration -- --quick
           npm run verify:tls-production -- --quick
+          npm run verify:headless-capture -- --quick
       - name: Run milestone audit tests
         run: npm run test -- tests/milestone-governance.test.ts
       - name: Run milestone governance gate
