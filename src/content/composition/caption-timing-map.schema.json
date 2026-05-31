@@ -12,6 +12,10 @@
       "type": "string",
       "minLength": 1
     },
+    "branchId": {
+      "type": "string",
+      "minLength": 1
+    },
     "fps": {
       "type": "number",
       "exclusiveMinimum": 0

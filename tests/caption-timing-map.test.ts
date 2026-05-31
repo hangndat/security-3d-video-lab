@@ -11,6 +11,9 @@ import sshSceneSpec from "../src/fixtures/ssh-scene-spec.json";
 import authSessionSceneSpec from "../src/fixtures/auth-session-scene-spec.json";
 import pkiTrustChainSceneSpec from "../src/fixtures/pki-trust-chain-scene-spec.json";
 import mitmDefenseSceneSpec from "../src/fixtures/mitm-defense-scene-spec.json";
+import zeroTrustAccessSceneSpec from "../src/fixtures/zero-trust-access-scene-spec.json";
+import oauthJwtSessionSceneSpec from "../src/fixtures/oauth-jwt-session-scene-spec.json";
+import apiGatewayWafSceneSpec from "../src/fixtures/api-gateway-waf-scene-spec.json";
 import captionSchema from "../src/content/composition/caption-timing-map.schema.json";
 import {
   generateCaptionTimingMap,
@@ -108,5 +111,47 @@ describe("caption timing map generation", () => {
     mkdirSync(dirname(CAPTION_OUT), { recursive: true });
     writeFileSync(CAPTION_OUT, `${JSON.stringify(map, null, 2)}\n`, "utf-8");
     expect(CAPTION_OUT).toContain("network-foundations-long-v1.json");
+  });
+});
+
+const BRANCHED_SCENES = {
+  tls: goldenSceneSpec,
+  ssh: sshSceneSpec,
+  dns: dnsSceneSpec,
+  "auth-session": authSessionSceneSpec,
+  "pki-trust-chain": pkiTrustChainSceneSpec,
+  "mitm-defense": mitmDefenseSceneSpec,
+  "zero-trust-access": zeroTrustAccessSceneSpec,
+  "oauth-jwt-session": oauthJwtSessionSceneSpec,
+  "api-gateway-waf": apiGatewayWafSceneSpec
+};
+
+describe("caption timing map branch variants", () => {
+  it("attack-path branch map uses seven-topic sequence beat count", () => {
+    const map = generateCaptionTimingMap("content-depth-branched-v1", BRANCHED_SCENES, {
+      branchId: "attack-path"
+    });
+    expect(map.branchId).toBe("attack-path");
+    expect(map.entries).toHaveLength(
+      countBeatsForTopics([
+        "tls",
+        "ssh",
+        "dns",
+        "auth-session",
+        "mitm-defense",
+        "oauth-jwt-session",
+        "api-gateway-waf"
+      ])
+    );
+  });
+
+  it("defense-path branch map has more beats than attack-path", () => {
+    const attack = generateCaptionTimingMap("content-depth-branched-v1", BRANCHED_SCENES, {
+      branchId: "attack-path"
+    });
+    const defense = generateCaptionTimingMap("content-depth-branched-v1", BRANCHED_SCENES, {
+      branchId: "defense-path"
+    });
+    expect(defense.entries.length).toBeGreaterThan(attack.entries.length);
   });
 });

@@ -20,8 +20,13 @@ export interface CaptionTimingEntry {
 export interface CaptionTimingMap {
   schemaVersion: "1.0.0";
   assemblySlug: string;
+  branchId?: string;
   fps: number;
   entries: CaptionTimingEntry[];
+}
+
+export interface GenerateCaptionTimingMapOptions {
+  branchId?: string;
 }
 
 function framesToSeconds(frame: number): number {
@@ -34,10 +39,11 @@ function contractByTopic(contracts: ReturnType<typeof loadTopicContracts>): Map<
 
 export function generateCaptionTimingMap(
   assemblySlug: string,
-  topicScenes: Partial<Record<TopicId, SceneSpec>> = {}
+  topicScenes: Partial<Record<TopicId, SceneSpec>> = {},
+  options: GenerateCaptionTimingMapOptions = {}
 ): CaptionTimingMap {
   const profile = loadLongFormAssemblyProfile(assemblySlug);
-  const { sequence } = resolveBranch(profile);
+  const { sequence, branchId } = resolveBranch(profile, options.branchId);
   const contracts = contractByTopic(loadTopicContracts());
   const spansByTopic: Record<string, number> = {};
 
@@ -83,6 +89,7 @@ export function generateCaptionTimingMap(
   return {
     schemaVersion: "1.0.0",
     assemblySlug: profile.slug,
+    ...(branchId ? { branchId } : {}),
     fps: CAPTION_FPS,
     entries
   };
