@@ -15,8 +15,8 @@ Requirements for the Content Depth milestone.
 
 ### Narrative Branching
 
-- [ ] **NARR-01**: Creator can define assembly branch variants (e.g., attack-path vs defense-path) in assembly JSON with explicit module sequences per branch.
-- [ ] **NARR-02**: Each declared branch variant produces deterministic replay-verified long-form output with stable artifact hashes.
+- [x] **NARR-01**: Creator can define assembly branch variants (e.g., attack-path vs defense-path) in assembly JSON with explicit module sequences per branch.
+- [x] **NARR-02**: Each declared branch variant produces deterministic replay-verified long-form output with stable artifact hashes.
 
 ### Narration Pipeline
 
@@ -55,8 +55,8 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 | CONT-04 | Phase 09 | Complete |
 | CONT-05 | Phase 09 | Complete |
 | CONT-06 | Phase 09 | Complete |
-| NARR-01 | Phase 10 | Pending |
-| NARR-02 | Phase 10 | Pending |
+| NARR-01 | Phase 10 | Complete |
+| NARR-02 | Phase 10 | Complete |
 | VOIC-01 | Phase 11 | Pending |
 | VOIC-02 | Phase 11 | Pending |
 | VER-04 | Phase 12 | Pending |
@@ -69,4 +69,4 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 
 ---
 *Requirements defined: 2026-05-31*
-*Last updated: 2026-05-31 after Phase 09 Advanced Security Topics*
+*Last updated: 2026-05-31 after Phase 10 Narrative Branch Variants*

@@ -46,14 +46,14 @@
 
 ### Phase 10: Narrative Branch Variants
 
-- [ ] **Phase 10: Narrative Branch Variants** (0/2 plans)
+- [x] **Phase 10: Narrative Branch Variants** (2/2 plans) — completed 2026-05-31
   - **Goal:** Enable alternate narrative paths in assembly profiles with deterministic replay per branch.
   - **Requirements:** `NARR-01`, `NARR-02`
   - **Depends on:** Phase 09 (new modules available for branch sequences)
-  - **Plans:** 2 plans, 2 waves
+  - **Plans:** 2/2 plans complete
   - **Plan List:**
-    - [ ] `10-01-PLAN.md` — Branch schema, validator, loader, fork presets, and stitch API (NARR-01 engine).
-    - [ ] `10-02-PLAN.md` — content-depth-branched-v1 profile, per-branch replay tests, verify script (NARR-01 + NARR-02).
+    - [x] `10-01-PLAN.md` — Branch schema, validator, loader, fork presets, and stitch API (NARR-01 engine).
+    - [x] `10-02-PLAN.md` — content-depth-branched-v1 profile, per-branch replay tests, verify script (NARR-01 + NARR-02).
   - **Success Criteria:**
     1. Assembly JSON schema supports branch variants with named paths and explicit module sequences.
     2. At least two branch variants (e.g., attack-path, defense-path) render without core engine changes.
@@ -85,9 +85,9 @@
 
 ## Current Status
 
-**Active milestone:** v1.2 Content Depth — Phase 10 planned; ready to execute.
+**Active milestone:** v1.2 Content Depth — Phase 10 complete; Phase 11 next.
 
-Run `/gsd-execute-phase 10` to continue.
+Run `/gsd-plan-phase 11` or `/gsd-execute-phase 11` to continue.
 
 ## Status Rules
 
