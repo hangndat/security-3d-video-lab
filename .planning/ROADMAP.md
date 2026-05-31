@@ -60,14 +60,14 @@
 
 ### Phase 14: Storyboard & 3D Motion Skills
 
-- [ ] **Phase 14: Storyboard & 3D Motion Skills** (0/2 plans)
+- [x] **Phase 14: Storyboard & 3D Motion Skills** (2/2 plans) — completed 2026-05-31
   - **Goal:** Bridge narrative beats to spatial SceneSpec and R3F visual module conventions.
   - **Requirements:** `CREW-03`, `CREW-04`
   - **Depends on:** Phase 13 (style + pacing context), SceneSpec schema, engine contracts
   - **Plans:** 2 plans, 1 wave
   - **Plan List:**
-    - [ ] `14-01-PLAN.md` — Storyboard Artist skill: beat → shot list → SceneSpec handoff (CREW-03).
-    - [ ] `14-02-PLAN.md` — 3D Motion Designer skill: R3F module catalog packet/tunnel/cert/HUD (CREW-04).
+    - [x] `14-01-PLAN.md` — Storyboard Artist skill: beat → shot list → SceneSpec handoff (CREW-03).
+    - [x] `14-02-PLAN.md` — 3D Motion Designer skill: R3F module catalog packet/tunnel/cert/HUD (CREW-04).
   - **Success Criteria:**
     1. Storyboard skill produces shot-list template mappable to `SceneSpec` fields.
     2. Motion skill documents module API and composition rules for R3F visual primitives.
@@ -105,9 +105,9 @@
 
 ## Current Status
 
-**Active milestone:** v1.3 Cinematic Crew Skills — Phase 14 ready to execute.
+**Active milestone:** v1.3 Cinematic Crew Skills — Phase 15 next.
 
-Run `/gsd-execute-phase 14` to deliver Storyboard & 3D Motion skills.
+Run `/gsd-plan-phase 15` or `/gsd-execute-phase 15` when planned.
 
 ## Status Rules
 

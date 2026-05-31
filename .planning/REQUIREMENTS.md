@@ -14,8 +14,8 @@ Requirements for the Cinematic Crew Skills milestone — codify six production r
 
 ### Storyboard & Motion
 
-- [ ] **CREW-03**: Technical Storyboard Artist skill maps beats to spatial shot lists and validates handoff to SceneSpec schema.
-- [ ] **CREW-04**: 3D Motion Designer skill defines R3F visual module catalog (packet, tunnel, cert, HUD) with naming and composition conventions.
+- [x] **CREW-03**: Technical Storyboard Artist skill maps beats to spatial shot lists and validates handoff to SceneSpec schema.
+- [x] **CREW-04**: 3D Motion Designer skill defines R3F visual module catalog (packet, tunnel, cert, HUD) with naming and composition conventions.
 
 ### Render & Subject Matter
 
@@ -60,8 +60,8 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 |-------------|-------|--------|
 | CREW-01 | Phase 13 | Complete |
 | CREW-02 | Phase 13 | Complete |
-| CREW-03 | Phase 14 | Pending |
-| CREW-04 | Phase 14 | Pending |
+| CREW-03 | Phase 14 | Complete |
+| CREW-04 | Phase 14 | Complete |
 | CREW-05 | Phase 15 | Pending |
 | CREW-06 | Phase 15 | Pending |
 | CREW-07 | Phase 16 | Pending |
@@ -74,4 +74,4 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 
 ---
 *Requirements defined: 2026-05-31*
-*Last updated: 2026-05-31 — Phase 13 Director & Art Director skills complete*
+*Last updated: 2026-05-31 — Phase 14 Storyboard & 3D Motion skills complete*

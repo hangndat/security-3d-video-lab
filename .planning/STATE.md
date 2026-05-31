@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.3
 milestone_name: Cinematic Crew Skills
-status: ready-to-execute
-last_updated: "2026-05-31T16:00:00.000Z"
-last_activity: 2026-05-31 — Phase 14 planned (Storyboard & 3D Motion skills)
+status: planning
+last_updated: "2026-05-31T17:00:00.000Z"
+last_activity: 2026-05-31 — Phase 14 complete (Storyboard & 3D Motion skills)
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 8
-  completed_plans: 2
-  percent: 25
+  completed_plans: 4
+  percent: 50
 ---
 
 # Project State
@@ -20,14 +20,14 @@ progress:
 See `.planning/PROJECT.md` (updated 2026-05-31)
 
 **Core value:** cinematic, deterministic security/infrastructure visualization.
-**Current focus:** v1.3 Cinematic Crew Skills — Phase 14 storyboard & motion skills next.
+**Current focus:** v1.3 Cinematic Crew Skills — Phase 15 render & security audio skills next.
 
 ## Current Position
 
-Phase: 14 — Storyboard & 3D Motion Skills (planned)
-Plan: 14-01, 14-02 (0/2 executed)
-Status: Ready to execute — run `/gsd-execute-phase 14`
-Last activity: 2026-05-31 — Phase 14 plans verified (14-PLAN-CHECK PASS)
+Phase: 15 — Render & Security Audio Skills (not started)
+Plan: —
+Status: Phase 14 complete — run `/gsd-plan-phase 15` when ready
+Last activity: 2026-05-31 — Phase 14 executed (CREW-03, CREW-04)
 
 ## Accumulated Context
 
@@ -35,11 +35,11 @@ Last activity: 2026-05-31 — Phase 14 plans verified (14-PLAN-CHECK PASS)
 
 **v1.3 strategic choice:** Skills-first — six cinematic crew domains + orchestrator in `.cursor/skills/` before v1.4 publish-ready production.
 
-**Crew domains:** Director, Art Director, Technical Storyboard Artist, 3D Motion Designer, Creative Technologist, Security SME + Audio.
+**Phase 13 delivered:** Director, Art Director skills; `docs/style-bible.md`.
 
-**Phase 13 delivered:** First project skills at `.cursor/skills/cinematic-director/` and `.cursor/skills/cinematic-art-director/`; style bible at `docs/style-bible.md`.
+**Phase 14 delivered:** Storyboard Artist, 3D Motion Designer skills; `docs/r3f-module-catalog.md` with `viz-*` module ids (R3F `.tsx` deferred v1.4).
 
-**v1.2 carry-forward:** Topic contracts, SceneSpec schema, narration pipeline, and export bundle are reference inputs for skills — not reimplemented.
+**Handoff chain:** beat-sheet → shot-list → SceneSpec → module catalog → (Phase 15) render.
 
 ### Pending Todos
 
@@ -51,12 +51,12 @@ Last activity: 2026-05-31 — Phase 14 plans verified (14-PLAN-CHECK PASS)
 
 ## Deferred Items
 
+- R3F component implementation (`src/client/viz/`) → v1.4
 - Publish-ready cinematic scenes → v1.4 Production Content
 - Real TTS provider → v1.4
-- Platform UI (PLAT-01/02) → post-production milestone
 
 ## Session Continuity
 
 - Last session: 2026-05-31
-- Stopped at: Phase 13 complete; ready for Phase 14 planning
+- Stopped at: Phase 14 complete; ready for Phase 15 planning
 - Resume file: None

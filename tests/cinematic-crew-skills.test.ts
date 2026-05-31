@@ -91,3 +91,74 @@ describe("cinematic-art-director skill (CREW-02)", () => {
     expect(content).toContain("style-bible.md");
   });
 });
+
+describe("cinematic-storyboard-artist skill (CREW-03)", () => {
+  const skillPath = ".cursor/skills/cinematic-storyboard-artist/SKILL.md";
+  const shotListPath = ".cursor/skills/cinematic-storyboard-artist/templates/shot-list.md";
+  const handoffPath = ".cursor/skills/cinematic-storyboard-artist/templates/scenespec-handoff.md";
+
+  it("SKILL.md exists with cinematic-storyboard-artist frontmatter name", () => {
+    const content = readRepoFile(skillPath);
+    const frontmatter = parseSkillFrontmatter(content);
+    expect(frontmatter.name).toBe("cinematic-storyboard-artist");
+    expect(frontmatter.description).toBeTruthy();
+  });
+
+  it("SKILL.md references validateSceneSpec and scene-spec.ts", () => {
+    const content = readRepoFile(skillPath);
+    expect(content).toContain("validateSceneSpec");
+    expect(content).toContain("scene-spec.ts");
+  });
+
+  it("shot-list.md and scenespec-handoff.md exist under templates/", () => {
+    expect(existsSync(resolve(REPO_ROOT, shotListPath))).toBe(true);
+    expect(existsSync(resolve(REPO_ROOT, handoffPath))).toBe(true);
+  });
+
+  it("SKILL.md references beat-sheet handoff from Director skill", () => {
+    const content = readRepoFile(skillPath);
+    expect(content).toContain("beat-sheet");
+  });
+});
+
+describe("cinematic-3d-motion-designer skill (CREW-04)", () => {
+  const skillPath = ".cursor/skills/cinematic-3d-motion-designer/SKILL.md";
+  const catalogPath = "docs/r3f-module-catalog.md";
+
+  const requiredCatalogSections = [
+    "## Module Naming Convention",
+    "## Packet Modules",
+    "## Tunnel Modules",
+    "## Certificate Modules",
+    "## HUD Modules",
+    "## Composition Rules",
+    "## Engine Binding Notes"
+  ];
+
+  it("SKILL.md exists with cinematic-3d-motion-designer frontmatter name", () => {
+    const content = readRepoFile(skillPath);
+    const frontmatter = parseSkillFrontmatter(content);
+    expect(frontmatter.name).toBe("cinematic-3d-motion-designer");
+    expect(frontmatter.description).toBeTruthy();
+  });
+
+  it("docs/r3f-module-catalog.md contains all seven required H2 sections", () => {
+    const content = readRepoFile(catalogPath);
+    for (const section of requiredCatalogSections) {
+      expect(content).toContain(section);
+    }
+  });
+
+  it("catalog includes all four module families via viz- module ids", () => {
+    const content = readRepoFile(catalogPath);
+    expect(content).toMatch(/viz-packet-/);
+    expect(content).toMatch(/viz-tunnel-/);
+    expect(content).toMatch(/viz-cert-/);
+    expect(content).toMatch(/viz-hud-/);
+  });
+
+  it("motion designer SKILL.md links to docs/r3f-module-catalog.md", () => {
+    const content = readRepoFile(skillPath);
+    expect(content).toContain("r3f-module-catalog.md");
+  });
+});
