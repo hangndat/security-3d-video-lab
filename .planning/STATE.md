@@ -1,16 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: between
-milestone_name: null
-status: between-milestones
-last_updated: "2026-05-31T14:50:00.000Z"
-last_activity: 2026-05-31 -- Phase 12 complete; v1.2 shipped
+milestone: v1.3
+milestone_name: Cinematic Crew Skills
+status: planning
+last_updated: "2026-05-31T08:00:00.000Z"
+last_activity: 2026-05-31 — Milestone v1.3 Cinematic Crew Skills initialized
 progress:
-  total_phases: 0
+  total_phases: 4
   completed_phases: 0
-  total_plans: 0
+  total_plans: 8
   completed_plans: 0
-  percent: 100
+  percent: 0
 ---
 
 # Project State
@@ -20,22 +20,24 @@ progress:
 See `.planning/PROJECT.md` (updated 2026-05-31)
 
 **Core value:** cinematic, deterministic security/infrastructure visualization.
-**Current focus:** Between milestones — v1.2 Content Depth shipped.
+**Current focus:** v1.3 Cinematic Crew Skills — defining crew agent skills before production content.
 
 ## Current Position
 
-Phase: none (between milestones)
-Plan: none
-Status: Ready for `/gsd-new-milestone`
-Last activity: 2026-05-31 -- Phase 12 complete; v1.2 archived
+Phase: 13 — Director & Art Director Skills (not started)
+Plan: —
+Status: Defining requirements complete; ready for phase 13 planning
+Last activity: 2026-05-31 — Milestone v1.3 initialized
 
 ## Accumulated Context
 
 ### Decisions
 
-**v1.2 strategic choice:** Content-first — platform features (PLAT-01 storyboard UI, PLAT-02 publish portal) deferred to a later milestone.
+**v1.3 strategic choice:** Skills-first — six cinematic crew domains + orchestrator in `.cursor/skills/` before v1.4 publish-ready production.
 
-**Phase 12:** Nine-topic export fixtures, branched E2E tests, CI governance re-enabled, v1.2 milestone audit PASS.
+**Crew domains:** Director, Art Director, Technical Storyboard Artist, 3D Motion Designer, Creative Technologist, Security SME + Audio.
+
+**v1.2 carry-forward:** Topic contracts, SceneSpec schema, narration pipeline, and export bundle are reference inputs for skills — not reimplemented.
 
 ### Pending Todos
 
@@ -47,10 +49,12 @@ Last activity: 2026-05-31 -- Phase 12 complete; v1.2 archived
 
 ## Deferred Items
 
-- None — v1.1 governance debt cleared in Phase 12.
+- Publish-ready cinematic scenes → v1.4 Production Content
+- Real TTS provider → v1.4
+- Platform UI (PLAT-01/02) → post-production milestone
 
 ## Session Continuity
 
 - Last session: 2026-05-31
-- Stopped at: v1.2 milestone close
+- Stopped at: Milestone v1.3 requirements and roadmap defined
 - Resume file: None
