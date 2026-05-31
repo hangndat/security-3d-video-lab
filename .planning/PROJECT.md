@@ -9,32 +9,33 @@ Build a code-driven cinematic visualization platform that explains security and 
 ## Problem
 Most technical education is slide-heavy and weakly visual, while modern systems (TLS, SSH, DNS, cloud infrastructure, AI agents) are dynamic and better explained through animated flows.
 
-## Current Milestone: v1.3 Cinematic Crew Skills
+## Current Milestone: v1.4 Production Content
 
-**Goal:** Codify six cinematic production roles as project Agent Skills so content work follows a repeatable crew pipeline before publish-ready production.
+**Goal:** Upgrade the canonical TLS module from export-gate fixtures to publish-ready cinematic production using implemented R3F visual modules and real TTS integration.
 
 **Target features:**
-- Director, Art Director, Storyboard Artist, 3D Motion, Creative Technologist, Security SME + Audio skills in `.cursor/skills/`
-- Codifiable style bible (dark sci-fi documentary)
-- Production orchestrator skill chaining handoffs beat → SceneSpec → render → audio
-- TLS walkthrough validating the full skill chain
+- R3F components for all four catalog families (packet, tunnel, cert, HUD) bound to engine frame state
+- TLS publish-ready scene exceeding export-gate quality rubric with crew pipeline artifacts
+- ElevenLabs TTS provider with deterministic stub fallback for CI
+- v1.4 milestone verification and governance close
 
-**Strategic choice:** Skills-first — enables v1.4 Production Content without improvising roles each session. Platform UI (PLAT-01/02) still deferred.
+**Strategic choice:** TLS-first canonical module — proves the v1.3 crew pipeline end-to-end before scaling to other nine topics. Platform UI (PLAT-01/02) still deferred.
 
 ## Success Signals
 - Deterministic scene/timeline architecture is defined and followed.
 - MVP render pipeline is reproducible.
 - Content batches are production-ready with measurable verification gates.
 - Milestone governance (requirements traceability + audit) is automated in CI.
-- Agent skills encode cinematic crew roles with repo-linked references.
+- At least one module produces publish-ready cinematic output, not just export-gate fixtures.
 
 ## Current State
 
 - **v1.0** shipped 2026-05-28: deterministic engine, TLS/SSH/DNS first batch, canonical E2E verification.
 - **v1.1** shipped 2026-05-29: six-topic manifest, JSON authoring contracts, long-form composition, batch quality gates.
 - **v1.2** shipped 2026-05-31: nine topics, branch variants, narration pipeline, export verification, CI governance.
-- **159+ tests** passing; pipeline produces export-gate fixtures, not yet publish-ready cinematics.
-- **No project skills yet** — `.cursor/skills/` to be created in v1.3.
+- **v1.3** shipped 2026-05-31: seven cinematic crew skills, style bible, R3F catalog, TLS walkthrough, orchestrator.
+- **192+ tests** passing; R3F `.tsx` components not yet implemented — catalog and skills only.
+- **Narration** uses deterministic stub provider; ElevenLabs deferred to v1.4.
 
 ## Validated Requirements
 
@@ -55,15 +56,19 @@ Most technical education is slide-heavy and weakly visual, while modern systems 
 - ✓ VOIC-01, VOIC-02 — narration pipeline and export bundle metadata
 - ✓ VER-04, VER-05 — export E2E coverage and CI governance
 
+### v1.3
+- ✓ CREW-01 through CREW-07 — cinematic crew skills and orchestrator pipeline
+- ✓ VER-06 — skills indexed and TLS walkthrough verification
+
 ## Out of Scope
 
 | Feature | Reason |
 |---------|--------|
-| Publish-ready video (v1.4) | Skills milestone precedes production upgrade |
-| Visual storyboard UI (PLAT-01) | Platform milestone; after skills + production |
-| Publish portal with analytics (PLAT-02) | Platform milestone; after skills + production |
-| Real TTS cloud provider | Documented in CREW-06 skill; wired in v1.4 |
-| Full R3F module implementation | Catalog in CREW-04; build in v1.4+ |
+| Multi-topic publish-ready rollout | TLS canonical first; other eight topics deferred to v1.5+ |
+| Visual storyboard UI (PLAT-01) | Platform milestone; after production content |
+| Publish portal with analytics (PLAT-02) | Platform milestone; after production content |
+| New security topics in manifest | Content scale deferred; apply crew pipeline to existing nine |
+| CI governance re-architecture | Extend traceability IDs only |
 
 ## Evolution
 
@@ -76,4 +81,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-31 — v1.3 Cinematic Crew Skills milestone started*
+*Last updated: 2026-05-31 — v1.4 Production Content milestone started*

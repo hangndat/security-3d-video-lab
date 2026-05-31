@@ -1,16 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.3
-milestone_name: Cinematic Crew Skills
-status: between-milestones
-last_updated: "2026-05-31T22:00:00.000Z"
-last_activity: 2026-05-31 — v1.3 Cinematic Crew Skills milestone closed
+milestone: v1.4
+milestone_name: Production Content
+status: planning
+last_updated: "2026-05-31T08:13:49.725Z"
+last_activity: 2026-05-31
 progress:
   total_phases: 4
-  completed_phases: 4
+  completed_phases: 0
   total_plans: 8
-  completed_plans: 8
-  percent: 100
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -20,14 +20,14 @@ progress:
 See `.planning/PROJECT.md` (updated 2026-05-31)
 
 **Core value:** cinematic, deterministic security/infrastructure visualization.
-**Current focus:** Between milestones — plan v1.4 Production Content via `/gsd-new-milestone`.
+**Current focus:** v1.4 Production Content — defining requirements complete; Phase 17 R3F Packet & Tunnel next.
 
 ## Current Position
 
-Phase: — (milestone complete)
+Phase: Not started (defining requirements)
 Plan: —
-Status: Between milestones — v1.3 shipped 2026-05-31
-Last activity: 2026-05-31 — Phase 16 executed; v1.3 audit PASS
+Status: Defining requirements
+Last activity: 2026-05-31 — Milestone v1.4 started
 
 ## Accumulated Context
 
