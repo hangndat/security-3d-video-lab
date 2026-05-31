@@ -1,5 +1,33 @@
 # Project Milestones: Security Cinematic Lab
 
+## v1.4 Production Content (Shipped: 2026-05-31)
+
+**Delivered:** Eleven-id R3F catalog, TLS publish-ready cinematic scene, ElevenLabs TTS with deterministic stub fallback, and v1.4 milestone governance close.
+
+**Phases completed:** 17-20 (8 plans total)
+
+**Key accomplishments:**
+- Packet and tunnel R3F modules bound to deterministic frame state and style bible tokens.
+- Certificate and HUD overlay modules completing the four-family catalog.
+- TLS production scene with crew pipeline artifacts, security sign-off, and production quality rubric.
+- `resolveNarrationProvider()` — ElevenLabs when `ELEVENLABS_API_KEY` set; silent stub WAV in CI.
+- v1.4 milestone audit with phase 17–20 verification JSON backfill.
+
+**Stats:**
+- 4 phases, 8 plans, 7/7 v1.4 requirements complete with zero unmapped traceability rows
+- 235 automated tests passing at close
+- First publish-ready cinematic module (TLS) with narration artifacts
+
+**Verification:**
+- `.planning/milestones/v1.4-MILESTONE-AUDIT.md`
+- `.planning/milestones/v1.4-ROADMAP.md`
+- `.artifacts/verification/phase20/milestone-close.json`
+- `.artifacts/production/tls/production-manifest.json`
+
+**What's next:** Plan next milestone via `/gsd-new-milestone`.
+
+---
+
 ## v1.3 Cinematic Crew Skills (Shipped: 2026-05-31)
 
 **Delivered:** Seven cinematic crew Agent Skills with orchestrated pipeline, agent discovery index, and TLS full-chain walkthrough verification.

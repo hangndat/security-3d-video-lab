@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "1.0.0",
+  "seed": "tls-server-hello-seed-001",
+  "sceneId": "tls-server-hello-scene",
+  "actors": [
+    { "id": "actor-client", "label": "client" },
+    { "id": "actor-server", "label": "server" }
+  ],
+  "packets": [
+    {
+      "id": "packet-server-hello",
+      "route": [
+        { "x": 0, "y": 0, "z": 0 },
+        { "x": 3, "y": 1, "z": -1 }
+      ]
+    }
+  ],
+  "timeline": [
+    {
+      "id": "tls-server-hello-cue",
+      "track": "packet",
+      "startFrame": 54,
+      "duration": 45,
+      "easing": "linear",
+      "payload": {
+        "packetId": "packet-server-hello"
+      }
+    }
+  ],
+  "totalFrames": 240,
+  "capabilities": {
+    "postMvpCameraOverrides": false,
+    "postMvpPacketPhysics": false
+  }
+}

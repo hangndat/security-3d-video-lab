@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "1.0.0",
+  "seed": "tls-production-seed-001",
+  "sceneId": "tls-production-scene",
+  "actors": [
+    { "id": "actor-client", "label": "client" },
+    { "id": "actor-server", "label": "server" }
+  ],
+  "packets": [
+    {
+      "id": "packet-tls-main",
+      "route": [
+        { "x": -2, "y": 0, "z": 0 },
+        { "x": 0, "y": 0.5, "z": 0 },
+        { "x": 2, "y": 1, "z": 0 },
+        { "x": 3, "y": 1, "z": -1 },
+        { "x": 5, "y": 0, "z": -2 }
+      ]
+    }
+  ],
+  "timeline": [
+    {
+      "id": "tls-hook-cue",
+      "track": "packet",
+      "startFrame": 0,
+      "duration": 12,
+      "easing": "linear",
+      "payload": {
+        "packetId": "packet-tls-main",
+        "packetVariant": "threat"
+      }
+    },
+    {
+      "id": "tls-client-hello-beat-cue",
+      "track": "packet",
+      "startFrame": 12,
+      "duration": 42,
+      "easing": "linear",
+      "payload": {
+        "packetId": "packet-tls-main",
+        "packetVariant": "flow"
+      }
+    },
+    {
+      "id": "tls-server-hello-beat-cue",
+      "track": "packet",
+      "startFrame": 54,
+      "duration": 56,
+      "easing": "linear",
+      "payload": {
+        "packetId": "packet-tls-main",
+        "packetVariant": "flow"
+      }
+    },
+    {
+      "id": "tls-finished-beat-cue",
+      "track": "packet",
+      "startFrame": 110,
+      "duration": 60,
+      "easing": "linear",
+      "payload": {
+        "packetId": "packet-tls-main",
+        "packetVariant": "flow"
+      }
+    },
+    {
+      "id": "tls-app-data-beat-cue",
+      "track": "packet",
+      "startFrame": 170,
+      "duration": 66,
+      "easing": "linear",
+      "payload": {
+        "packetId": "packet-tls-main",
+        "packetVariant": "encrypted"
+      }
+    }
+  ],
+  "totalFrames": 236,
+  "capabilities": {
+    "postMvpCameraOverrides": false,
+    "postMvpPacketPhysics": false
+  }
+}

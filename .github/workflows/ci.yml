@@ -50,6 +50,8 @@ jobs:
           npm run verify:batch-quality
           npm run verify:content-depth -- --quick
           npm run verify:crew-skills -- --quick
+          npm run verify:tts-integration -- --quick
+          npm run verify:tls-production -- --quick
       - name: Run milestone audit tests
         run: npm run test -- tests/milestone-governance.test.ts
       - name: Run milestone governance gate

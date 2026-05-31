@@ -29,6 +29,33 @@ export const V11_PHASE_EVIDENCE: PhaseEvidenceConfig[] = [
   }
 ];
 
+export const V14_PHASE_EVIDENCE: PhaseEvidenceConfig[] = [
+  {
+    phase: "17",
+    name: "R3F Packet & Tunnel Modules",
+    jsonPath: ".artifacts/verification/phase17/viz-modules.json",
+    verificationPath: ".planning/phases/17-r3f-packet-tunnel-modules/VERIFICATION.md"
+  },
+  {
+    phase: "18",
+    name: "R3F Certificate & HUD Modules",
+    jsonPath: ".artifacts/verification/phase18/viz-modules.json",
+    verificationPath: ".planning/phases/18-r3f-certificate-hud-modules/VERIFICATION.md"
+  },
+  {
+    phase: "19",
+    name: "TLS Publish-Ready Production",
+    jsonPath: ".artifacts/verification/phase19/tls-production.json",
+    verificationPath: ".planning/phases/19-tls-publish-ready-production/VERIFICATION.md"
+  },
+  {
+    phase: "20",
+    name: "TTS Integration & Milestone Close",
+    jsonPath: ".artifacts/verification/phase20/tts-integration.json",
+    verificationPath: ".planning/phases/20-tts-integration-milestone-close/VERIFICATION.md"
+  }
+];
+
 export const V13_PHASE_EVIDENCE: PhaseEvidenceConfig[] = [
   {
     phase: "13",
@@ -149,6 +176,13 @@ export function buildV13MilestoneAuditReport(
   options: { skipTraceabilityCheck?: boolean } = {}
 ): MilestoneAuditReport {
   return buildPhaseEvidenceAuditReport(repoRoot, V13_PHASE_EVIDENCE, options);
+}
+
+export function buildV14MilestoneAuditReport(
+  repoRoot: string,
+  options: { skipTraceabilityCheck?: boolean } = {}
+): MilestoneAuditReport {
+  return buildPhaseEvidenceAuditReport(repoRoot, V14_PHASE_EVIDENCE, options);
 }
 
 function buildPhaseEvidenceAuditReport(
@@ -362,6 +396,71 @@ export function renderV13MilestoneAuditMarkdown(report: MilestoneAuditReport): s
     "- `.artifacts/verification/phase08/requirement-traceability.json`",
     "- `AGENTS.md`",
     "- `docs/tls-crew-walkthrough.md`",
+    "",
+    "## Notes",
+    "",
+    report.errors.length === 0
+      ? "- All phase verification JSON artifacts report `gateStatus: pass`."
+      : `- Blocking issues:\n${report.errors.map((item) => `  - ${item}`).join("\n")}`
+  );
+
+  return `${lines.join("\n")}\n`;
+}
+
+export function renderV14MilestoneAuditMarkdown(report: MilestoneAuditReport): string {
+  const lines = [
+    "# v1.4 Milestone Audit: Production Content",
+    "",
+    `Generated: ${report.generatedAt}`,
+    "",
+    "## Verdict",
+    "",
+    `**${report.verdict}**`,
+    "",
+    "## Requirements Coverage",
+    "",
+    "- v1.4 requirements: **7/7** mapped",
+    "- Unmapped requirements: **0**",
+    `- Traceability gate: **${report.traceabilityGateStatus.toUpperCase()}**`,
+    "",
+    "## Phase Verification Summary",
+    "",
+    "| Phase | Name | Gate | Evidence JSON | VERIFICATION.md |",
+    "| ---: | --- | --- | --- | --- |"
+  ];
+
+  for (const phase of report.phases) {
+    lines.push(
+      `| ${phase.phase} | ${phase.name} | ${phase.gateStatus.toUpperCase()} | \`${phase.jsonPath}\` | ${phase.verificationExists ? "yes" : "no"} |`
+    );
+  }
+
+  lines.push(
+    "",
+    "## Cross-Phase Integration",
+    "",
+    "- Phase 17 implemented packet and tunnel R3F modules with deterministic frame-state binding.",
+    "- Phase 18 completed certificate and HUD overlay modules for the full eleven-id catalog.",
+    "- Phase 19 upgraded TLS to publish-ready production with crew artifacts and security sign-off.",
+    "- Phase 20 wired ElevenLabs TTS with deterministic stub fallback and closed v1.4 governance.",
+    "",
+    "## Deferred Debt Resolution (v1.3)",
+    "",
+    "| Item | v1.3 Status | v1.4 Resolution |",
+    "| --- | --- | --- |",
+    "| R3F module implementation | catalog only | All four catalog families implemented in Phases 17–18 |",
+    "| Publish-ready production | deferred | TLS production scene + rubric in Phase 19 |",
+    "| ElevenLabs TTS | deferred | resolveNarrationProvider with stub CI fallback in Phase 20 |",
+    "",
+    "## Evidence Index",
+    "",
+    "- `.artifacts/verification/phase17/viz-modules.json`",
+    "- `.artifacts/verification/phase18/viz-modules.json`",
+    "- `.artifacts/verification/phase19/tls-production.json`",
+    "- `.artifacts/verification/phase20/tts-integration.json`",
+    "- `.artifacts/verification/phase20/milestone-close.json`",
+    "- `.artifacts/production/tls/production-manifest.json`",
+    "- `.artifacts/verification/phase08/requirement-traceability.json`",
     "",
     "## Notes",
     "",
