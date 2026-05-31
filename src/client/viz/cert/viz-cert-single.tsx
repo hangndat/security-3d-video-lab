@@ -1,15 +1,22 @@
 import { STYLE_TOKENS } from "../style-tokens.js";
+import {
+  CERT_LABEL_PANEL_OPACITY,
+  CERT_MESH_SPEC,
+  CERT_SINGLE_EMISSIVE
+} from "../viz-mesh-spec.js";
 
 export type VizCertProps = {
   actors: Array<{ id: string; label: string }>;
   visible: boolean;
 };
 
+const SPEC = CERT_MESH_SPEC["viz-cert-single"];
+
 export function VizCertSingle({ actors, visible }: VizCertProps) {
   if (!visible) {
     return null;
   }
-  const color = STYLE_TOKENS.colorAccentTrust;
+  const color = STYLE_TOKENS[SPEC.colorToken];
   const serverActor = actors.find(
     (actor) =>
       actor.label.toLowerCase().includes("server") || actor.id.toLowerCase().includes("server")
@@ -17,16 +24,23 @@ export function VizCertSingle({ actors, visible }: VizCertProps) {
   const label = serverActor?.label ?? actors[0]?.label ?? "cert";
 
   return (
-    <group position={[0, 0.5, 0]}>
+    <group position={[...SPEC.groupPosition]}>
       <mesh>
-        <boxGeometry args={[0.8, 1.1, 0.05]} />
-        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.35} />
+        <boxGeometry args={[...SPEC.boxSize!]} />
+        <meshStandardMaterial
+          color={color}
+          emissive={color}
+          emissiveIntensity={CERT_SINGLE_EMISSIVE}
+        />
       </mesh>
-      <mesh position={[0, 0, 0.04]}>
-        <planeGeometry args={[0.7, 0.15]} />
-        <meshBasicMaterial color={STYLE_TOKENS.colorBgPanel} transparent opacity={0.85} />
+      <mesh position={[...SPEC.labelPanelOffset!]}>
+        <planeGeometry args={[...SPEC.labelPanelSize!]} />
+        <meshBasicMaterial
+          color={STYLE_TOKENS[SPEC.panelColorToken!]}
+          transparent
+          opacity={CERT_LABEL_PANEL_OPACITY}
+        />
       </mesh>
-      {/* label prop consumed by HUD in Phase 19; mesh uses trust token only */}
       <group userData={{ certLabel: label }} />
     </group>
   );

@@ -22,6 +22,7 @@
     "verify:tls-production": "node scripts/verify-tls-production.mjs",
     "verify:tts-integration": "node scripts/verify-tts-integration.mjs",
     "verify:headless-capture": "node scripts/verify-headless-capture.mjs",
+    "verify:headless-scene-parity": "node scripts/verify-headless-scene-parity.mjs",
     "validate:requirements": "node scripts/validate-requirement-traceability.mjs",
     "verify:milestone-governance": "node scripts/verify-milestone-governance.mjs"
   },

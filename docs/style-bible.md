@@ -73,6 +73,8 @@ Canonical visual identity for Security Cinematic Lab modules. Agents must cite *
 | `--camera-orbit-damp` | `0.92` | Smooth damped orbit on tunnel/packet scenes |
 | `--camera-fov-default` | `45°` | Standard documentary FOV |
 | `--camera-fov-intimate` | `35°` | Certificate/HUD detail beats |
+| `--camera-position-default` | `[0, 2, 8]` | Headless/R3F default observational camera (lookAt origin) |
+| `--key-light-position` | `[5, 8, 5]` | Directional key light placement for headless capture |
 
 **Framing rules:**
 - **Hook (p25):** Wide shot — establish network topology and threat context
@@ -107,3 +109,4 @@ SceneSpec schema: `src/engine/contracts/scene-spec.ts` (v1.0.0). Phase 13 does *
 | Version | Date | Notes |
 |---------|------|-------|
 | 1.0.0 | 2026-05-31 | Initial dark sci-fi documentary tokens (Phase 13 / CREW-02) |
+| 1.1.0 | 2026-05-31 | Headless lighting/camera tokens in `STYLE_TOKENS` (Phase 22 / RENDER-02) |

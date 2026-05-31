@@ -3,8 +3,11 @@ import * as THREE from "three";
 import type { CaptionTimingMap } from "../../content/composition/generate-caption-timing-map.js";
 import type { SceneSpec } from "../../engine/contracts/scene-spec.js";
 import { getComposePlan, type ComposePlan } from "../../client/viz/compose-scene.js";
-import type { VizPacketRenderState } from "../../client/viz/build-viz-frame-state.js";
 import { STYLE_TOKENS } from "../../client/viz/style-tokens.js";
+import {
+  addHeadlessModuleMeshes,
+  type VizMeshBuildContext
+} from "../../client/viz/viz-mesh-spec.js";
 
 export type VizThreeSceneBundle = {
   scene: THREE.Scene;
@@ -16,119 +19,32 @@ function hexColor(hex: string): THREE.Color {
   return new THREE.Color(hex);
 }
 
-function addPacketSphere(
-  scene: THREE.Scene,
-  packet: VizPacketRenderState,
-  colorHex: string,
-  radius: number,
-  emissiveIntensity: number
-): void {
-  const mesh = new THREE.Mesh(
-    new THREE.SphereGeometry(radius, 16, 16),
-    new THREE.MeshStandardMaterial({
-      color: hexColor(colorHex),
-      emissive: hexColor(colorHex),
-      emissiveIntensity,
-      transparent: true,
-      opacity: packet.dimmed ? 0.35 : 1
-    })
+function applySceneLighting(scene: THREE.Scene): void {
+  scene.add(
+    new THREE.AmbientLight(
+      hexColor(STYLE_TOKENS.lightAmbientColor),
+      STYLE_TOKENS.lightAmbientIntensity
+    )
   );
-  mesh.position.set(packet.position.x, packet.position.y, packet.position.z);
-  scene.add(mesh);
-}
-
-function addTunnelTorus(
-  scene: THREE.Scene,
-  colorHex: string,
-  tube: number,
-  emissiveIntensity: number,
-  wireframe: boolean
-): void {
-  const mesh = new THREE.Mesh(
-    new THREE.TorusGeometry(1.2, tube, 16, 48),
-    new THREE.MeshStandardMaterial({
-      color: hexColor(colorHex),
-      emissive: hexColor(colorHex),
-      emissiveIntensity,
-      transparent: !wireframe,
-      opacity: wireframe ? 1 : 0.85,
-      wireframe
-    })
+  const keyLight = new THREE.DirectionalLight(
+    hexColor(STYLE_TOKENS.colorTextPrimary),
+    STYLE_TOKENS.lightKeyIntensity
   );
-  mesh.rotation.x = Math.PI / 2;
-  scene.add(mesh);
+  keyLight.position.set(
+    STYLE_TOKENS.keyLightPosition[0],
+    STYLE_TOKENS.keyLightPosition[1],
+    STYLE_TOKENS.keyLightPosition[2]
+  );
+  scene.add(keyLight);
 }
 
-function findPacketForModule(
-  packets: VizPacketRenderState[],
-  moduleId: string
-): VizPacketRenderState | undefined {
-  return packets.find((packet) => packet.moduleId === moduleId);
-}
-
-function addModuleMeshes(scene: THREE.Scene, plan: ComposePlan): void {
-  const { vizFrameState, renderOrder } = plan;
-
-  for (const moduleId of renderOrder) {
-    if (moduleId === "viz-packet-flow") {
-      const packet = findPacketForModule(vizFrameState.packets, moduleId);
-      if (packet) {
-        addPacketSphere(
-          scene,
-          packet,
-          STYLE_TOKENS.colorAccentData,
-          0.15,
-          STYLE_TOKENS.lightAccentGlowOpacity
-        );
-      }
-      continue;
-    }
-
-    if (moduleId === "viz-packet-threat") {
-      const packet = findPacketForModule(vizFrameState.packets, moduleId);
-      if (packet) {
-        addPacketSphere(
-          scene,
-          packet,
-          STYLE_TOKENS.colorAccentThreat,
-          0.18,
-          STYLE_TOKENS.lightThreatPulseOpacity
-        );
-      }
-      continue;
-    }
-
-    if (moduleId === "viz-packet-encrypted") {
-      const packet = findPacketForModule(vizFrameState.packets, moduleId);
-      if (packet) {
-        addPacketSphere(
-          scene,
-          packet,
-          STYLE_TOKENS.colorAccentCyan,
-          0.15,
-          STYLE_TOKENS.lightAccentGlowOpacity
-        );
-      }
-      continue;
-    }
-
-    if (moduleId === "viz-tunnel-secure") {
-      addTunnelTorus(scene, STYLE_TOKENS.colorAccentCyan, 0.12, STYLE_TOKENS.lightAccentGlowOpacity, false);
-      continue;
-    }
-
-    if (moduleId === "viz-tunnel-handshake") {
-      addTunnelTorus(
-        scene,
-        STYLE_TOKENS.colorAccentData,
-        0.08,
-        STYLE_TOKENS.lightRimIntensity * 0.5,
-        true
-      );
-    }
-
-    // Cert/HUD modules deferred to Phase 22 scene builder parity.
-  }
+function applySceneCamera(camera: THREE.PerspectiveCamera): void {
+  camera.position.set(
+    STYLE_TOKENS.cameraPositionDefault[0],
+    STYLE_TOKENS.cameraPositionDefault[1],
+    STYLE_TOKENS.cameraPositionDefault[2]
+  );
+  camera.lookAt(0, 0, 0);
 }
 
 export function buildVizThreeScene(
@@ -152,15 +68,21 @@ export function buildVizThreeScene(
     0.1,
     100
   );
-  camera.position.set(0, 2, 8);
-  camera.lookAt(0, 0, 0);
+  applySceneCamera(camera);
+  applySceneLighting(scene);
 
-  scene.add(new THREE.AmbientLight(0xffffff, 0.45));
-  const keyLight = new THREE.DirectionalLight(0xffffff, 1);
-  keyLight.position.set(5, 8, 5);
-  scene.add(keyLight);
-
-  addModuleMeshes(scene, plan);
+  const context: VizMeshBuildContext = { sceneSpec, frame, plan };
+  addHeadlessModuleMeshes(scene, context);
 
   return { scene, camera, plan };
+}
+
+export function countSceneMeshes(scene: THREE.Scene): number {
+  let count = 0;
+  scene.traverse((object) => {
+    if (object instanceof THREE.Mesh) {
+      count += 1;
+    }
+  });
+  return count;
 }

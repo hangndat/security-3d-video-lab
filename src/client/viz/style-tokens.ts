@@ -15,7 +15,12 @@ export const STYLE_TOKENS = {
   cameraFovIntimate: 35,
   lightRimIntensity: 0.85,
   lightAccentGlowOpacity: 0.4,
-  lightThreatPulseOpacity: 0.6
+  lightThreatPulseOpacity: 0.6,
+  lightKeyIntensity: 0.35,
+  lightAmbientColor: "#0a0e17",
+  lightAmbientIntensity: 0.15,
+  cameraPositionDefault: [0, 2, 8] as const,
+  keyLightPosition: [5, 8, 5] as const
 } as const;
 
 export type StyleTokenKey = keyof typeof STYLE_TOKENS;
