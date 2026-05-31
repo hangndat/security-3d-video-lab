@@ -20,12 +20,12 @@ progress:
 See `.planning/PROJECT.md` (updated 2026-05-31)
 
 **Core value:** cinematic, deterministic security/infrastructure visualization.
-**Current focus:** v1.2 Content Depth — narration pipeline complete; verification/governance close next.
+**Current focus:** v1.2 Content Depth — Phase 12 planned; final verification and governance close.
 
 ## Current Position
 
-Phase: 12 — v1.2 Verification and Governance (not started)
-Plan: —
+Phase: 12 — v1.2 Verification and Governance (planned)
+Plan: 12-01, 12-02 (2 plans, 2 waves)
 Status: Ready to execute
 Last activity: 2026-05-31 -- Phase 12 planning complete
 
