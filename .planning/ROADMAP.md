@@ -105,9 +105,9 @@
 
 ## Current Status
 
-**Active milestone:** v1.3 Cinematic Crew Skills — Phase 13 next.
+**Active milestone:** v1.3 Cinematic Crew Skills — Phase 14 ready to execute.
 
-Run `/gsd-discuss-phase 13` or `/gsd-plan-phase 13` to begin.
+Run `/gsd-execute-phase 14` to deliver Storyboard & 3D Motion skills.
 
 ## Status Rules
 
