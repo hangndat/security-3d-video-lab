@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.3
 milestone_name: Cinematic Crew Skills
-status: ready-to-execute
-last_updated: "2026-05-31T12:00:00.000Z"
-last_activity: 2026-05-31 — Phase 13 planned (Director & Art Director skills)
+status: planning
+last_updated: "2026-05-31T15:05:00.000Z"
+last_activity: 2026-05-31 — Phase 13 complete (Director & Art Director skills)
 progress:
   total_phases: 4
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 8
-  completed_plans: 0
-  percent: 0
+  completed_plans: 2
+  percent: 25
 ---
 
 # Project State
@@ -20,14 +20,14 @@ progress:
 See `.planning/PROJECT.md` (updated 2026-05-31)
 
 **Core value:** cinematic, deterministic security/infrastructure visualization.
-**Current focus:** v1.3 Cinematic Crew Skills — defining crew agent skills before production content.
+**Current focus:** v1.3 Cinematic Crew Skills — Phase 14 storyboard & motion skills next.
 
 ## Current Position
 
-Phase: 13 — Director & Art Director Skills (planned)
-Plan: 13-01, 13-02 (0/2 executed)
-Status: Ready to execute — run `/gsd-execute-phase 13`
-Last activity: 2026-05-31 — Phase 13 plans verified (13-PLAN-CHECK PASS)
+Phase: 14 — Storyboard & 3D Motion Skills (not started)
+Plan: —
+Status: Phase 13 complete — run `/gsd-plan-phase 14` or `/gsd-execute-phase 14` when planned
+Last activity: 2026-05-31 — Phase 13 executed (CREW-01, CREW-02)
 
 ## Accumulated Context
 
@@ -36,6 +36,8 @@ Last activity: 2026-05-31 — Phase 13 plans verified (13-PLAN-CHECK PASS)
 **v1.3 strategic choice:** Skills-first — six cinematic crew domains + orchestrator in `.cursor/skills/` before v1.4 publish-ready production.
 
 **Crew domains:** Director, Art Director, Technical Storyboard Artist, 3D Motion Designer, Creative Technologist, Security SME + Audio.
+
+**Phase 13 delivered:** First project skills at `.cursor/skills/cinematic-director/` and `.cursor/skills/cinematic-art-director/`; style bible at `docs/style-bible.md`.
 
 **v1.2 carry-forward:** Topic contracts, SceneSpec schema, narration pipeline, and export bundle are reference inputs for skills — not reimplemented.
 
@@ -56,5 +58,5 @@ Last activity: 2026-05-31 — Phase 13 plans verified (13-PLAN-CHECK PASS)
 ## Session Continuity
 
 - Last session: 2026-05-31
-- Stopped at: Milestone v1.3 requirements and roadmap defined
+- Stopped at: Phase 13 complete; ready for Phase 14 planning
 - Resume file: None

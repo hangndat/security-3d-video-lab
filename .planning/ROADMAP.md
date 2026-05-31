@@ -45,14 +45,14 @@
 
 ### Phase 13: Director & Art Director Skills
 
-- [ ] **Phase 13: Director & Art Director Skills** (0/2 plans)
+- [x] **Phase 13: Director & Art Director Skills** (2/2 plans) — completed 2026-05-31
   - **Goal:** Codify narrative direction and visual style as agent skills with repo-linked playbooks.
   - **Requirements:** `CREW-01`, `CREW-02`
   - **Depends on:** v1.2 topic contracts, assemblies, caption maps (reference material)
   - **Plans:** 2 plans, 1 wave
   - **Plan List:**
-    - [ ] `13-01-PLAN.md` — Director skill: beats, branch logic, retention pacing (CREW-01).
-    - [ ] `13-02-PLAN.md` — Art Director skill + `docs/style-bible.md` style tokens (CREW-02).
+    - [x] `13-01-PLAN.md` — Director skill: beats, branch logic, retention pacing (CREW-01).
+    - [x] `13-02-PLAN.md` — Art Director skill + `docs/style-bible.md` style tokens (CREW-02).
   - **Success Criteria:**
     1. `.cursor/skills/cinematic-director/` skill loads with beat sheet and pacing checklist templates.
     2. `.cursor/skills/cinematic-art-director/` skill references codifiable dark sci-fi documentary tokens.

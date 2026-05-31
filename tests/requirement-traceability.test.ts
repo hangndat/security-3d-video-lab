@@ -91,8 +91,8 @@ describe("requirement traceability validation", () => {
 
   it("fails when checkbox and traceability status are out of sync", () => {
     const requirements = loadRequirements().replace(
-      "| CREW-01 | Phase 13 | Pending |",
-      "| CREW-01 | Phase 13 | Complete |"
+      "| CREW-03 | Phase 14 | Pending |",
+      "| CREW-03 | Phase 14 | Complete |"
     );
     const result = validateRequirementTraceability({
       requirementsContent: requirements,

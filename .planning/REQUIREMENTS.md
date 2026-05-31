@@ -9,8 +9,8 @@ Requirements for the Cinematic Crew Skills milestone — codify six production r
 
 ### Director & Art Direction
 
-- [ ] **CREW-01**: Director skill guides narrative beats, branch logic, and retention pacing (p25/p50/p75) aligned to topic contracts and long-form assemblies.
-- [ ] **CREW-02**: Art Director skill and style bible codify dark sci-fi documentary look (color, typography, lighting, camera mood) as machine-readable tokens.
+- [x] **CREW-01**: Director skill guides narrative beats, branch logic, and retention pacing (p25/p50/p75) aligned to topic contracts and long-form assemblies.
+- [x] **CREW-02**: Art Director skill and style bible codify dark sci-fi documentary look (color, typography, lighting, camera mood) as machine-readable tokens.
 
 ### Storyboard & Motion
 
@@ -58,8 +58,8 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CREW-01 | Phase 13 | Pending |
-| CREW-02 | Phase 13 | Pending |
+| CREW-01 | Phase 13 | Complete |
+| CREW-02 | Phase 13 | Complete |
 | CREW-03 | Phase 14 | Pending |
 | CREW-04 | Phase 14 | Pending |
 | CREW-05 | Phase 15 | Pending |
@@ -74,4 +74,4 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 
 ---
 *Requirements defined: 2026-05-31*
-*Last updated: 2026-05-31 — Milestone v1.3 Cinematic Crew Skills started*
+*Last updated: 2026-05-31 — Phase 13 Director & Art Director skills complete*
