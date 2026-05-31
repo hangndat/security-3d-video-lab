@@ -7,8 +7,10 @@ import { describe, expect, it } from "vitest";
 import {
   buildMilestoneAuditReport,
   buildV12MilestoneAuditReport,
+  buildV13MilestoneAuditReport,
   renderMilestoneAuditMarkdown,
-  renderV12MilestoneAuditMarkdown
+  renderV12MilestoneAuditMarkdown,
+  renderV13MilestoneAuditMarkdown
 } from "../src/verification/milestone-audit.js";
 import { validateRequirementTraceability, parseTraceabilityTable } from "../src/verification/requirement-traceability.js";
 
@@ -70,6 +72,24 @@ describe("v1.2 milestone audit aggregation", () => {
   });
 });
 
+describe("v1.3 milestone audit aggregation", () => {
+  it("reports PASS when phase13–16 JSON gateStatus values are pass", () => {
+    const report = buildV13MilestoneAuditReport(REPO_ROOT, { skipTraceabilityCheck: true });
+    expect(report.phases).toHaveLength(4);
+    expect(report.phases.every((phase) => phase.passed)).toBe(true);
+    expect(report.verdict).toBe("PASS");
+  });
+
+  it("generated v1.3 audit markdown includes eight-requirement coverage", () => {
+    const markdown = renderV13MilestoneAuditMarkdown(
+      buildV13MilestoneAuditReport(REPO_ROOT, { skipTraceabilityCheck: true })
+    );
+    expect(markdown).toContain("8/8");
+    expect(markdown).toContain("Cinematic Crew Skills");
+    expect(markdown).toMatch(/\*\*PASS\*\*/);
+  });
+});
+
 describe("milestone governance policy", () => {
   it("requirement traceability milestone-close reflects Pending row count", () => {
     const result = validateRequirementTraceability();
@@ -93,6 +113,7 @@ describe("milestone governance policy", () => {
   it("package.json exposes governance scripts", () => {
     const pkg = readFileSync(resolve(REPO_ROOT, "package.json"), "utf-8");
     expect(pkg).toContain("validate:requirements");
+    expect(pkg).toContain("verify:crew-skills");
     expect(pkg).toContain("verify:milestone-governance");
   });
 });

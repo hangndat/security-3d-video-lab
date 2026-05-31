@@ -228,3 +228,84 @@ describe("cinematic-security-sme-audio skill (CREW-06)", () => {
     expect(existsSync(resolve(REPO_ROOT, audioHandoffPath))).toBe(true);
   });
 });
+
+describe("cinematic-production-orchestrator skill (CREW-07)", () => {
+  const skillPath = ".cursor/skills/cinematic-production-orchestrator/SKILL.md";
+  const checklistPath =
+    ".cursor/skills/cinematic-production-orchestrator/templates/pipeline-checklist.md";
+
+  const domainSkillNames = [
+    "cinematic-director",
+    "cinematic-art-director",
+    "cinematic-storyboard-artist",
+    "cinematic-3d-motion-designer",
+    "cinematic-creative-technologist",
+    "cinematic-security-sme-audio"
+  ];
+
+  it("SKILL.md exists with cinematic-production-orchestrator frontmatter name", () => {
+    const content = readRepoFile(skillPath);
+    const frontmatter = parseSkillFrontmatter(content);
+    expect(frontmatter.name).toBe("cinematic-production-orchestrator");
+    expect(frontmatter.description).toBeTruthy();
+  });
+
+  it("SKILL.md lists all six domain skill directory names in pipeline context", () => {
+    const content = readRepoFile(skillPath);
+    for (const name of domainSkillNames) {
+      expect(content).toContain(name);
+    }
+  });
+
+  it("pipeline-checklist.md template exists", () => {
+    expect(existsSync(resolve(REPO_ROOT, checklistPath))).toBe(true);
+  });
+
+  it("SKILL.md references pipeline-checklist or ordered handoff steps", () => {
+    const content = readRepoFile(skillPath);
+    expect(content).toMatch(/pipeline-checklist|Pipeline Order/i);
+  });
+});
+
+const CREW_SKILL_NAMES = [
+  "cinematic-director",
+  "cinematic-art-director",
+  "cinematic-storyboard-artist",
+  "cinematic-3d-motion-designer",
+  "cinematic-creative-technologist",
+  "cinematic-security-sme-audio",
+  "cinematic-production-orchestrator"
+];
+
+const WALKTHROUGH_SECTIONS = [
+  "## Step 1: Director",
+  "## Step 2: Art Director",
+  "## Step 3: Storyboard Artist",
+  "## Step 4: 3D Motion Designer",
+  "## Step 5: Creative Technologist",
+  "## Step 6: Security SME + Audio",
+  "## Step 7: Orchestrator Review",
+  "## Verification Commands"
+];
+
+describe("crew skills verification (VER-06)", () => {
+  it("AGENTS.md exists and references all seven cinematic-* skill names", () => {
+    const content = readRepoFile("AGENTS.md");
+    for (const name of CREW_SKILL_NAMES) {
+      expect(content).toContain(name);
+    }
+  });
+
+  it("tls-crew-walkthrough.md contains steps 1–7 and tls/contract.json path", () => {
+    const content = readRepoFile("docs/tls-crew-walkthrough.md");
+    for (const section of WALKTHROUGH_SECTIONS) {
+      expect(content).toContain(section);
+    }
+    expect(content).toContain("tls/contract.json");
+    expect(content).toContain("tls-hook");
+  });
+
+  it("verify-crew-skills.mjs exists at scripts/", () => {
+    expect(existsSync(resolve(REPO_ROOT, "scripts/verify-crew-skills.mjs"))).toBe(true);
+  });
+});

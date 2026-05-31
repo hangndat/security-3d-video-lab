@@ -47,7 +47,7 @@ describe("requirement traceability validation", () => {
   });
 
   it("fails when a v1.3 requirement row is missing from traceability table", () => {
-    const requirements = loadRequirements().replace("| VER-06 | Phase 16 | Pending |", "");
+    const requirements = loadRequirements().replace("| VER-06 | Phase 16 | Complete |", "");
     const result = validateRequirementTraceability({
       requirementsContent: requirements,
       roadmapContent: loadRoadmap()
@@ -91,8 +91,8 @@ describe("requirement traceability validation", () => {
 
   it("fails when checkbox and traceability status are out of sync", () => {
     const requirements = loadRequirements().replace(
-      "| CREW-07 | Phase 16 | Pending |",
-      "| CREW-07 | Phase 16 | Complete |"
+      "| VER-06 | Phase 16 | Complete |",
+      "| VER-06 | Phase 16 | Pending |"
     );
     const result = validateRequirementTraceability({
       requirementsContent: requirements,
@@ -101,7 +101,7 @@ describe("requirement traceability validation", () => {
 
     expect(
       result.errors.some((issue) =>
-        issue.reason.includes("Checkbox is unchecked but traceability status is Complete")
+        issue.reason.includes("Checkbox is checked but traceability status is")
       )
     ).toBe(true);
   });

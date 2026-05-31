@@ -1,5 +1,32 @@
 # Project Milestones: Security Cinematic Lab
 
+## v1.3 Cinematic Crew Skills (Shipped: 2026-05-31)
+
+**Delivered:** Seven cinematic crew Agent Skills with orchestrated pipeline, agent discovery index, and TLS full-chain walkthrough verification.
+
+**Phases completed:** 13-16 (8 plans total)
+
+**Key accomplishments:**
+- Director and Art Director skills with beat sheets and `docs/style-bible.md` tokens.
+- Storyboard and 3D Motion skills bridging beats to SceneSpec and `docs/r3f-module-catalog.md`.
+- Creative Technologist and Security SME + Audio skills for render/export and accuracy layers.
+- Production orchestrator routing all six domain skills with pipeline checklist.
+- `AGENTS.md` skills index and `docs/tls-crew-walkthrough.md` proving full chain on TLS contract.
+
+**Stats:**
+- 4 phases, 8 plans, 8/8 v1.3 requirements complete with zero unmapped traceability rows
+- 180+ automated tests passing at close
+- R3F implementation and publish-ready content deferred to v1.4
+
+**Verification:**
+- `.planning/milestones/v1.3-MILESTONE-AUDIT.md`
+- `.planning/milestones/v1.3-ROADMAP.md`
+- `.artifacts/verification/phase16/crew-skills.json`
+
+**What's next:** Plan v1.4 Production Content via `/gsd-new-milestone`.
+
+---
+
 ## v1.2 Content Depth (Shipped: 2026-05-31)
 
 **Delivered:** Advanced security modules, branching narratives, narration-ready exports, and restored CI governance with full nine-topic export verification.

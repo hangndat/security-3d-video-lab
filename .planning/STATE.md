@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.3
 milestone_name: Cinematic Crew Skills
-status: ready-to-execute
-last_updated: "2026-05-31T20:00:00.000Z"
-last_activity: 2026-05-31 — Phase 16 planned (Orchestrator & Skills Verification)
+status: between-milestones
+last_updated: "2026-05-31T22:00:00.000Z"
+last_activity: 2026-05-31 — v1.3 Cinematic Crew Skills milestone closed
 progress:
   total_phases: 4
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 8
-  completed_plans: 6
-  percent: 75
+  completed_plans: 8
+  percent: 100
 ---
 
 # Project State
@@ -20,24 +20,24 @@ progress:
 See `.planning/PROJECT.md` (updated 2026-05-31)
 
 **Core value:** cinematic, deterministic security/infrastructure visualization.
-**Current focus:** v1.3 — Phase 16 orchestrator + VER-06 TLS walkthrough next.
+**Current focus:** Between milestones — plan v1.4 Production Content via `/gsd-new-milestone`.
 
 ## Current Position
 
-Phase: 16 — Production Orchestrator & Skills Verification (planned)
-Plan: 16-01, 16-02 (0/2 executed)
-Status: Ready to execute — run `/gsd-execute-phase 16` to close v1.3 milestone
-Last activity: 2026-05-31 — Phase 16 plans verified (16-PLAN-CHECK PASS)
+Phase: — (milestone complete)
+Plan: —
+Status: Between milestones — v1.3 shipped 2026-05-31
+Last activity: 2026-05-31 — Phase 16 executed; v1.3 audit PASS
 
 ## Accumulated Context
 
 ### Decisions
 
-**All six domain crew skills delivered (Phases 13–15):** Director, Art Director, Storyboard, Motion, Creative Technologist, Security SME + Audio.
+**v1.3 Cinematic Crew Skills shipped:** Seven project skills (six domain + orchestrator), shared docs (style bible, R3F catalog, security checklist), TLS walkthrough, AGENTS.md index.
 
-**Phase 15 delivered:** Render/export playbook, security accuracy checklist, audio layer handoff; stub TTS only (ElevenLabs v1.4).
+**Full handoff chain:** Director → Art Director → Storyboard → Motion → Creative Technologist → Security SME + Audio → Orchestrator sign-off.
 
-**Full handoff chain:** beat-sheet → shot-list → SceneSpec → render/bundle → accuracy + narration alignment → (Phase 16) orchestrator.
+**Deferred to v1.4:** R3F component implementation, publish-ready production content, real TTS (ElevenLabs).
 
 ### Pending Todos
 
@@ -51,10 +51,10 @@ Last activity: 2026-05-31 — Phase 16 plans verified (16-PLAN-CHECK PASS)
 
 - ElevenLabs TTS (PROD-02) → v1.4
 - R3F components → v1.4
-- Publish-ready production → v1.4
+- Publish-ready production (PROD-01) → v1.4
 
 ## Session Continuity
 
 - Last session: 2026-05-31
-- Stopped at: Phase 15 complete; ready for Phase 16
+- Stopped at: v1.3 milestone closed
 - Resume file: None
