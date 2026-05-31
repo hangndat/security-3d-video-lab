@@ -20,9 +20,11 @@ Project Agent Skills for Security Cinematic Lab production pipeline. Skills live
 
 | Document | Purpose |
 |----------|---------|
+| [docs/tls-crew-walkthrough.md](docs/tls-crew-walkthrough.md) | TLS crew pipeline + spatial visual story |
+| [src/content/topics/tls/KICH-BAN.md](src/content/topics/tls/KICH-BAN.md) | TLS shot list, phụ đề, voice (engineer) |
 | [docs/style-bible.md](docs/style-bible.md) | Visual identity tokens |
-| [docs/r3f-module-catalog.md](docs/r3f-module-catalog.md) | `viz-*` module ids |
-| [docs/security-accuracy-checklist.md](docs/security-accuracy-checklist.md) | Beat → claim verification |
+| [docs/r3f-module-catalog.md](docs/r3f-module-catalog.md) | `viz-*` module ids + TLS bindings |
+| [docs/security-accuracy-checklist.md](docs/security-accuracy-checklist.md) | Beat → claim + spatial verification |
 
 ## Pipeline Order
 
@@ -36,5 +38,6 @@ Start with **cinematic-production-orchestrator** for end-to-end module productio
 
 ```bash
 npm run test -- tests/cinematic-crew-skills.test.ts
+npm run test -- tests/tls-visual-story.test.ts
 npm run verify:crew-skills
 ```

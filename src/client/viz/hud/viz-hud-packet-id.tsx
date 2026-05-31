@@ -1,9 +1,12 @@
 import { STYLE_TOKENS } from "../style-tokens.js";
+import { HUD_MESH_SPEC } from "../viz-mesh-spec.js";
 
 export type VizHudPacketIdProps = {
   packetIds: string[];
   visible: boolean;
 };
+
+const SPEC = HUD_MESH_SPEC["viz-hud-packet-id"];
 
 export function VizHudPacketId({ packetIds, visible }: VizHudPacketIdProps) {
   if (!visible || packetIds.length === 0) {
@@ -13,10 +16,18 @@ export function VizHudPacketId({ packetIds, visible }: VizHudPacketIdProps) {
   return (
     <group userData={{ hudFont: STYLE_TOKENS.fontHudSm, hudColor: STYLE_TOKENS.colorTextMuted }}>
       {packetIds.map((packetId, index) => (
-        <group key={packetId} position={[1.4, 0.8 - index * 0.2, 0]} userData={{ packetId }}>
+        <group
+          key={packetId}
+          position={[
+            SPEC.origin![0],
+            SPEC.origin![1] - index * SPEC.rowStep!,
+            SPEC.origin![2]
+          ]}
+          userData={{ packetId }}
+        >
           <mesh>
-            <planeGeometry args={[0.01, 0.01]} />
-            <meshBasicMaterial color={STYLE_TOKENS.colorTextMuted} transparent opacity={0} />
+            <planeGeometry args={[...SPEC.planeSize]} />
+            <meshBasicMaterial color={STYLE_TOKENS[SPEC.colorToken]} transparent opacity={0} />
           </mesh>
         </group>
       ))}

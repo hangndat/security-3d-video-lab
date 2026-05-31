@@ -6,6 +6,7 @@
 |----------|------|
 | SceneSpec handoff | `.cursor/skills/cinematic-storyboard-artist/templates/scenespec-handoff.md` |
 | Storyboard skill | `.cursor/skills/cinematic-storyboard-artist/SKILL.md` |
+| TLS KICH-BAN | `src/content/topics/tls/KICH-BAN.md` |
 | Long-form stitch | `src/content/composition/build-long-form-scene-spec.ts` |
 | Manifest fixtures | `src/fixtures/manifest-scene-fixtures.ts` |
 
@@ -14,9 +15,11 @@
 | Artifact | Path |
 |----------|------|
 | Render composition | `src/render/remotion/render-composition.tsx` |
+| TLS production artifacts | `src/render/export/generate-tls-production-artifacts.ts` |
+| Headless PNG capture | `src/render/headless/capture-viz-frame-png.ts` |
 | Export bundle builder | `src/render/export/build-long-form-export-bundle.ts` |
-| Fingerprint / manifest | `src/render/export/fingerprint.ts` |
 | Export quality | `src/verification/export-quality.ts` |
+| TLS rubric | `src/verification/tls-production-rubric.ts` |
 
 ## Engine
 
@@ -24,6 +27,7 @@
 |----------|------|
 | SceneSpec validation | `src/engine/contracts/validate-scene-spec.ts` |
 | Timeline scheduler | `src/engine/timeline/scheduler.ts` |
+| Viz three scene | `src/render/headless/build-viz-three-scene.ts` |
 
 ## Narration (bundle linkage)
 
@@ -33,13 +37,15 @@
 | Narration track | `src/content/narration/generate-narration-track.ts` |
 | Stub provider | `src/content/narration/providers/deterministic-stub-provider.ts` |
 
-## Verify Scripts
+## Verify Scripts / Tests
 
-| Script | npm alias |
-|--------|-----------|
-| `scripts/verify-content-depth.mjs` | `verify:content-depth` |
-| `scripts/verify-narration-pipeline.mjs` | `verify:narration-pipeline` |
-| `scripts/verify-batch-quality.mjs` | `verify:batch-quality` |
+| Script / test | Purpose |
+|---------------|---------|
+| `tests/tls-production-export.test.ts` | Production MP4 + rubric |
+| `tests/tls-visual-story.test.ts` | Spatial story regression |
+| `tests/headless-scene-parity.test.ts` | Headless GL mesh parity |
+| `npm run verify:tls-3d-production` | Quick production gate |
+| `scripts/verify-narration-pipeline.mjs` | Caption + narration |
 
 ## Downstream
 
@@ -50,8 +56,10 @@
 
 ## Artifact Roots
 
-| Output | Typical path |
-|--------|--------------|
-| Short MP4 | `.artifacts/export/phase12/` or test temp dirs |
+| Output | Path |
+|--------|------|
+| TLS production MP4 | `.artifacts/production/tls/tls-production.mp4` |
+| TLS manifest | `.artifacts/production/tls/production-manifest.json` |
+| Debug caption frame | `.artifacts/production/tls/debug-frame-150-caption.png` |
+| Short CI MP4 | `.artifacts/export/phase12/` or test temp dirs |
 | Export bundle | `.artifacts/export/<assembly-slug>/export-bundle.json` |
-| Verification JSON | `.artifacts/verification/phase11/narration-pipeline.json` |

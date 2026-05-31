@@ -1,17 +1,26 @@
 import type { VizPacketRenderState } from "../build-viz-frame-state.js";
 import { STYLE_TOKENS } from "../style-tokens.js";
+import { PACKET_DIMMED_OPACITY, PACKET_MESH_SPEC } from "../viz-mesh-spec.js";
 
 export type VizPacketThreatProps = {
   packet: VizPacketRenderState;
 };
 
+const SPEC = PACKET_MESH_SPEC["viz-packet-threat"];
+
 export function VizPacketThreat({ packet }: VizPacketThreatProps) {
-  const color = STYLE_TOKENS.colorAccentThreat;
-  const opacity = packet.dimmed ? 0.35 : 1;
+  const color = STYLE_TOKENS[SPEC.colorToken];
+  const opacity = packet.dimmed ? PACKET_DIMMED_OPACITY : 1;
   return (
     <mesh position={[packet.position.x, packet.position.y, packet.position.z]}>
-      <sphereGeometry args={[0.18, 16, 16]} />
-      <meshStandardMaterial color={color} emissive={color} emissiveIntensity={STYLE_TOKENS.lightThreatPulseOpacity} transparent opacity={opacity} />
+      <sphereGeometry args={[SPEC.radius, SPEC.widthSegments, SPEC.heightSegments]} />
+      <meshStandardMaterial
+        color={color}
+        emissive={color}
+        emissiveIntensity={STYLE_TOKENS[SPEC.emissiveToken]}
+        transparent
+        opacity={opacity}
+      />
     </mesh>
   );
 }

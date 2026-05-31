@@ -5,6 +5,8 @@
 | Topic | Contract path |
 |-------|---------------|
 | tls | `src/content/topics/tls/contract.json` |
+| tls KICH-BAN | `src/content/topics/tls/KICH-BAN.md` |
+| tls publish SceneSpec | `src/fixtures/tls-production-scene-spec.json` |
 | ssh | `src/content/topics/ssh/contract.json` |
 | dns | `src/content/topics/dns/contract.json` |
 | auth-session | `src/content/topics/auth-session/contract.json` |

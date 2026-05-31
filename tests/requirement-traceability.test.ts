@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 import {
-  EXPECTED_V14_REQUIREMENT_IDS,
+  EXPECTED_V15_REQUIREMENT_IDS,
   isBetweenMilestones,
   parseRoadmapPhaseRequirements,
   parseTraceabilityTable,
@@ -25,29 +25,33 @@ function loadRoadmap(): string {
 }
 
 describe("requirement traceability validation", () => {
-  it("does not skip when active REQUIREMENTS.md exists", () => {
-    expect(isBetweenMilestones()).toBe(false);
-  });
-
-  it("valid v1.4 REQUIREMENTS.md and ROADMAP.md return zero errors and unmappedCount 0", () => {
-    const result = validateRequirementTraceability({
-      requirementsContent: loadRequirements(),
-      roadmapContent: loadRoadmap()
-    });
-
-    expect(result.skipped).toBeUndefined();
+  it("skips when between milestones with no active requirement ids", () => {
+    expect(isBetweenMilestones()).toBe(true);
+    const result = validateRequirementTraceability();
+    expect(result.skipped).toBe(true);
     expect(result.errors).toEqual([]);
-    expect(result.unmappedCount).toBe(0);
-    expect(result.pendingCount).toBe(
-      parseTraceabilityTable(loadRequirements()).filter((row) => row.status === "Pending").length
-    );
-    expect(parseTraceabilityTable(loadRequirements())).toHaveLength(
-      EXPECTED_V14_REQUIREMENT_IDS.length
-    );
   });
 
-  it("fails when a v1.4 requirement row is missing from traceability table", () => {
-    const requirements = loadRequirements().replace("| VER-07 | Phase 20 | Complete |", "");
+  it("valid archived v1.5 requirements pass milestone-close when all Complete", () => {
+    const archived = readFileSync(
+      resolve(REPO_ROOT, ".planning/milestones/v1.5-REQUIREMENTS.md"),
+      "utf-8"
+    );
+    const result = validateRequirementTraceability({
+      requirementsContent: archived,
+      roadmapContent: loadRoadmap(),
+      milestoneClose: true
+    });
+    expect(result.errors).toEqual([]);
+    expect(result.pendingCount).toBe(0);
+  });
+
+  it("fails when a v1.5 requirement row is missing from traceability table", () => {
+    const archived = readFileSync(
+      resolve(REPO_ROOT, ".planning/milestones/v1.5-REQUIREMENTS.md"),
+      "utf-8"
+    );
+    const requirements = archived.replace("| VER-08 | Phase 24 | Complete |", "");
     const result = validateRequirementTraceability({
       requirementsContent: requirements,
       roadmapContent: loadRoadmap()
@@ -60,23 +64,25 @@ describe("requirement traceability validation", () => {
 
   it("fails when ROADMAP phase requirement list drifts from expected mapping", () => {
     const roadmap = loadRoadmap().replace(
-      "**Requirements:** `VIZ-01`, `VIZ-02`",
-      "**Requirements:** `VIZ-01`"
+      "**Requirements:** `RENDER-01`",
+      "**Requirements:** `RENDER-02`"
     );
     const result = validateRequirementTraceability({
       requirementsContent: loadRequirements(),
       roadmapContent: roadmap
     });
 
-    expect(result.errors.some((issue) => issue.path.includes("ROADMAP.md#phase-17"))).toBe(true);
+    expect(result.errors.some((issue) => issue.path.includes("ROADMAP.md#phase-21"))).toBe(true);
   });
 
   it("milestone-close mode enforces zero Pending requirements", () => {
-    const pendingRows = parseTraceabilityTable(loadRequirements()).filter(
-      (row) => row.status === "Pending"
+    const archived = readFileSync(
+      resolve(REPO_ROOT, ".planning/milestones/v1.5-REQUIREMENTS.md"),
+      "utf-8"
     );
+    const pendingRows = parseTraceabilityTable(archived).filter((row) => row.status === "Pending");
     const result = validateRequirementTraceability({
-      requirementsContent: loadRequirements(),
+      requirementsContent: archived,
       roadmapContent: loadRoadmap(),
       milestoneClose: true
     });
@@ -90,9 +96,13 @@ describe("requirement traceability validation", () => {
   });
 
   it("fails when checkbox and traceability status are out of sync", () => {
-    const requirements = loadRequirements().replace(
-      "- [x] **VER-07**:",
-      "- [ ] **VER-07**:"
+    const archived = readFileSync(
+      resolve(REPO_ROOT, ".planning/milestones/v1.5-REQUIREMENTS.md"),
+      "utf-8"
+    );
+    const requirements = archived.replace(
+      "- [x] **VER-08**:",
+      "- [ ] **VER-08**:"
     );
     const result = validateRequirementTraceability({
       requirementsContent: requirements,
@@ -106,9 +116,9 @@ describe("requirement traceability validation", () => {
     ).toBe(true);
   });
 
-  it("parses roadmap phase requirements for phases 17 through 20", () => {
+  it("parses roadmap phase requirements for phases 21 through 24", () => {
     const phases = parseRoadmapPhaseRequirements(loadRoadmap());
-    expect(phases["17"]).toEqual(["VIZ-01", "VIZ-02"]);
-    expect(phases["20"]).toEqual(["PROD-02", "VER-07"]);
+    expect(phases["21"]).toEqual(["RENDER-01"]);
+    expect(phases["24"]).toEqual(["RENDER-04", "VER-08"]);
   });
 });

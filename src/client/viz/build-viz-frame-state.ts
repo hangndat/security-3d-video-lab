@@ -16,9 +16,27 @@ export type VizPacketRenderState = {
   position: { x: number; y: number; z: number };
   progress: number;
   moduleId: PacketModuleId;
+  messageLabel?: string;
   trailActive: boolean;
   dimmed: boolean;
 };
+
+function resolvePacketMessageLabel(
+  sceneSpec: SceneSpec,
+  packetId: string,
+  frame: number
+): string | undefined {
+  const activeCues = sceneSpec.timeline.filter(
+    (cue) =>
+      cue.track === "packet" &&
+      cue.payload.packetId === packetId &&
+      frame >= cue.startFrame &&
+      frame < cue.startFrame + cue.duration
+  );
+  const cue = activeCues.at(-1);
+  const messageType = cue?.payload.messageType;
+  return typeof messageType === "string" && messageType.length > 0 ? messageType : undefined;
+}
 
 export type VizFrameState = {
   frame: number;
@@ -101,6 +119,7 @@ export function buildVizFrameState(
       position: interpolateRoutePosition(packet.route, packet.progress),
       progress: packet.progress,
       moduleId: resolvePacketModuleId(sceneSpec, packet.id, frame),
+      messageLabel: resolvePacketMessageLabel(sceneSpec, packet.id, frame),
       trailActive: packet.visual.trailActive,
       dimmed: packet.visual.dimmed
     }));

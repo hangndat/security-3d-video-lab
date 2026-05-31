@@ -8,7 +8,11 @@ const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const JSON_OUT = resolve(REPO_ROOT, ".artifacts/verification/phase20/tts-integration.json");
 
 const quickMode = process.argv.includes("--quick");
-const gateEnv = { ...process.env, ELEVENLABS_API_KEY: "" };
+const gateEnv = {
+  ...process.env,
+  ELEVENLABS_API_KEY: "",
+  SECURITY_LAB_INCLUDE_NARRATION: "true"
+};
 
 function runSuite(label, command, args) {
   const startedAt = new Date().toISOString();

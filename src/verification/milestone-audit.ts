@@ -56,6 +56,33 @@ export const V14_PHASE_EVIDENCE: PhaseEvidenceConfig[] = [
   }
 ];
 
+export const V15_PHASE_EVIDENCE: PhaseEvidenceConfig[] = [
+  {
+    phase: "21",
+    name: "Headless Capture Foundation",
+    jsonPath: ".artifacts/verification/phase21/headless-capture.json",
+    verificationPath: ".planning/phases/21-headless-capture-foundation/VERIFICATION.md"
+  },
+  {
+    phase: "22",
+    name: "Scene Builder Parity",
+    jsonPath: ".artifacts/verification/phase22/scene-parity.json",
+    verificationPath: ".planning/phases/22-scene-builder-parity/VERIFICATION.md"
+  },
+  {
+    phase: "23",
+    name: "TLS 3D Production Export",
+    jsonPath: ".artifacts/verification/phase23/tls-3d-production.json",
+    verificationPath: ".planning/phases/23-tls-3d-production-export/VERIFICATION.md"
+  },
+  {
+    phase: "24",
+    name: "Render CI & Milestone Close",
+    jsonPath: ".artifacts/verification/phase24/3d-render.json",
+    verificationPath: ".planning/phases/24-render-ci-milestone-close/VERIFICATION.md"
+  }
+];
+
 export const V13_PHASE_EVIDENCE: PhaseEvidenceConfig[] = [
   {
     phase: "13",
@@ -183,6 +210,13 @@ export function buildV14MilestoneAuditReport(
   options: { skipTraceabilityCheck?: boolean } = {}
 ): MilestoneAuditReport {
   return buildPhaseEvidenceAuditReport(repoRoot, V14_PHASE_EVIDENCE, options);
+}
+
+export function buildV15MilestoneAuditReport(
+  repoRoot: string,
+  options: { skipTraceabilityCheck?: boolean } = {}
+): MilestoneAuditReport {
+  return buildPhaseEvidenceAuditReport(repoRoot, V15_PHASE_EVIDENCE, options);
 }
 
 function buildPhaseEvidenceAuditReport(
@@ -459,6 +493,70 @@ export function renderV14MilestoneAuditMarkdown(report: MilestoneAuditReport): s
     "- `.artifacts/verification/phase19/tls-production.json`",
     "- `.artifacts/verification/phase20/tts-integration.json`",
     "- `.artifacts/verification/phase20/milestone-close.json`",
+    "- `.artifacts/production/tls/production-manifest.json`",
+    "- `.artifacts/verification/phase08/requirement-traceability.json`",
+    "",
+    "## Notes",
+    "",
+    report.errors.length === 0
+      ? "- All phase verification JSON artifacts report `gateStatus: pass`."
+      : `- Blocking issues:\n${report.errors.map((item) => `  - ${item}`).join("\n")}`
+  );
+
+  return `${lines.join("\n")}\n`;
+}
+
+export function renderV15MilestoneAuditMarkdown(report: MilestoneAuditReport): string {
+  const lines = [
+    "# v1.5 Milestone Audit: Real 3D Render",
+    "",
+    `Generated: ${report.generatedAt}`,
+    "",
+    "## Verdict",
+    "",
+    `**${report.verdict}**`,
+    "",
+    "## Requirements Coverage",
+    "",
+    "- v1.5 requirements: **5/5** mapped",
+    "- Unmapped requirements: **0**",
+    `- Traceability gate: **${report.traceabilityGateStatus.toUpperCase()}**`,
+    "",
+    "## Phase Verification Summary",
+    "",
+    "| Phase | Name | Gate | Evidence JSON | VERIFICATION.md |",
+    "| ---: | --- | --- | --- | --- |"
+  ];
+
+  for (const phase of report.phases) {
+    lines.push(
+      `| ${phase.phase} | ${phase.name} | ${phase.gateStatus.toUpperCase()} | \`${phase.jsonPath}\` | ${phase.verificationExists ? "yes" : "no"} |`
+    );
+  }
+
+  lines.push(
+    "",
+    "## Cross-Phase Integration",
+    "",
+    "- Phase 21 restored headless Three.js PNG capture with env-gated render backend selection.",
+    "- Phase 22 unified R3F catalog geometry with the headless scene builder for all eleven modules.",
+    "- Phase 23 exported TLS production MP4 as video-only 3D with manifest v1.1.0.",
+    "- Phase 24 enforced CI trace-hash policy and closed v1.5 governance with verify:3d-render.",
+    "",
+    "## Deferred Debt Resolution (v1.4)",
+    "",
+    "| Item | v1.4 Status | v1.5 Resolution |",
+    "| --- | --- | --- |",
+    "| Real GL pixel export | trace-hash placeholder default | r3f-headless PNG path for local publish |",
+    "| Narration on 3D export | required in v1.4 | video-only default; PROD-04 deferred |",
+    "",
+    "## Evidence Index",
+    "",
+    "- `.artifacts/verification/phase21/headless-capture.json`",
+    "- `.artifacts/verification/phase22/scene-parity.json`",
+    "- `.artifacts/verification/phase23/tls-3d-production.json`",
+    "- `.artifacts/verification/phase24/3d-render.json`",
+    "- `.artifacts/verification/phase24/milestone-close.json`",
     "- `.artifacts/production/tls/production-manifest.json`",
     "- `.artifacts/verification/phase08/requirement-traceability.json`",
     "",

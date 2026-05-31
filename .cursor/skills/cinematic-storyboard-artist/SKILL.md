@@ -36,10 +36,11 @@ Codifies the **Technical Storyboard Artist** crew role. Bridge Director beat she
 
 - **One shot per beat id** — ids from contract only (e.g. `tls-hook`, not "opening shot").
 - **Framing** — Derive from Art Director camera tokens: wide (p25 hook), medium (p50), intimate (p75 cert/HUD).
-- **Actors** — Network entities visible in shot (`actor-client`, `actor-server`, `actor-attacker`). Minimum one actor per SceneSpec.
-- **Packets** — Each flow needs `id` and `route` with **≥2** points `{ x, y, z }`.
-- **Timeline** — Cue `startFrame` aligns to beat `startFrame`; `duration = endFrame - startFrame` (minimum 1). `payload.packetId` must reference an existing packet id.
-- **totalFrames** — ≥ max beat `endFrame`; match contract/fixture convention (e.g. TLS golden: 360).
+- **Actors** — Network entities visible in shot (`actor-client`, `actor-server`, `actor-attacker` for TLS hook). Minimum one actor per SceneSpec.
+- **Packets** — Each flow needs `id` and `route` with **≥2** points `{ x, y, z }`. On TLS publish, **Y axis carries meaning**: cleartext above link, handshake on link, app data below wire in tunnel.
+- **Timeline** — Cue `startFrame` aligns to beat `startFrame`; `duration` covers beat window. Payload: `packetId`, `packetVariant` (`threat`|`flow`|`encrypted`), `messageType` (protocol label).
+- **totalFrames** — ≥ max beat `endFrame` + 1. TLS **publish**: 600 frames (`tls-production-scene-spec.json`). TLS **CI short**: 360 (`golden-scene-spec.json`).
+- **TLS spatial reference** — `src/content/topics/tls/KICH-BAN.md`, `src/client/viz/actor-anchors.ts`, `docs/tls-crew-walkthrough.md`.
 
 ## SceneSpec Field Mapping
 
@@ -75,7 +76,7 @@ if (!result.ok) {
 }
 ```
 
-Reference fixture: `src/fixtures/golden-scene-spec.json` (TLS canonical structure).
+Reference fixtures: `src/fixtures/tls-production-scene-spec.json` (TLS publish), `src/fixtures/golden-scene-spec.json` (CI short demo).
 
 Run existing tests: `npm run test -- tests/content-contracts.test.ts` or import golden fixture in validation scripts.
 

@@ -32,10 +32,6 @@ function actorLabelMatchesRole(label: string, role: string): boolean {
 }
 
 function hasChainTrustActors(actors: SceneSpec["actors"]): boolean {
-  if (actors.length >= 3) {
-    return true;
-  }
-
   const labels = actors.map((actor) => actor.label.toLowerCase());
   const matchedRoles = CHAIN_ROLE_KEYWORDS.filter((role) =>
     labels.some((label) => actorLabelMatchesRole(label, role))
@@ -45,13 +41,6 @@ function hasChainTrustActors(actors: SceneSpec["actors"]): boolean {
 
 function hasServerHelloCue(vizFrameState: VizFrameState): boolean {
   return vizFrameState.activeTimelineIds.some((cueId) => cueId.toLowerCase().includes("server-hello"));
-}
-
-function hasServerActor(actors: SceneSpec["actors"]): boolean {
-  return actors.some(
-    (actor) =>
-      actor.label.toLowerCase().includes("server") || actor.id.toLowerCase().includes("server")
-  );
 }
 
 export function resolveTunnelModuleId(
@@ -94,28 +83,30 @@ export function resolveCertModuleId(
   const serverHelloActive = hasServerHelloCue(vizFrameState);
   const chainActors = hasChainTrustActors(sceneSpec.actors);
 
-  if (chainActors && (serverHelloActive || sceneSpec.actors.length >= 3)) {
+  if (chainActors && serverHelloActive) {
     return "viz-cert-chain";
   }
 
-  if (serverHelloActive || hasServerActor(sceneSpec.actors)) {
+  if (serverHelloActive) {
     return "viz-cert-single";
   }
 
   return null;
 }
 
+const PACKET_MODULE_PRIORITY = [
+  "viz-packet-threat",
+  "viz-packet-encrypted",
+  "viz-packet-flow"
+] as const;
+
+function resolveActivePacketModuleIds(vizFrameState: VizFrameState): string[] {
+  const present = new Set(vizFrameState.packets.map((packet) => packet.moduleId));
+  return PACKET_MODULE_PRIORITY.filter((moduleId) => present.has(moduleId));
+}
+
 function resolveSelectedPacketModuleId(vizFrameState: VizFrameState): string | null {
-  const packetModuleIds = [...new Set(vizFrameState.packets.map((packet) => packet.moduleId))];
-  let selectedPacketId = packetModuleIds[0] ?? null;
-  const hasThreat = packetModuleIds.includes("viz-packet-threat");
-  const hasEncrypted = packetModuleIds.includes("viz-packet-encrypted");
-  if (hasThreat && hasEncrypted) {
-    selectedPacketId = vizFrameState.activeTimelineIds.some((id) => id.toLowerCase().includes("threat"))
-      ? "viz-packet-threat"
-      : "viz-packet-encrypted";
-  }
-  return selectedPacketId;
+  return resolveActivePacketModuleIds(vizFrameState)[0] ?? null;
 }
 
 function hasActivePacketTimeline(vizFrameState: VizFrameState, sceneSpec: SceneSpec): boolean {
@@ -181,7 +172,8 @@ export function resolveVizModuleStack(
 ): VizModuleStack {
   const tunnelId = resolveTunnelModuleId(vizFrameState, sceneSpec);
   const certId = resolveCertModuleId(vizFrameState, sceneSpec);
-  const selectedPacketId = resolveSelectedPacketModuleId(vizFrameState);
+  const packetModuleIds = resolveActivePacketModuleIds(vizFrameState);
+  const selectedPacketId = packetModuleIds[0] ?? null;
   const hud = resolveHudModules(vizFrameState, sceneSpec, options);
 
   const primary = buildPrimaryModules(tunnelId, certId, selectedPacketId);
@@ -190,9 +182,7 @@ export function resolveVizModuleStack(
   if (tunnelId) {
     zOrder.push(tunnelId);
   }
-  if (selectedPacketId) {
-    zOrder.push(selectedPacketId);
-  }
+  zOrder.push(...packetModuleIds);
   if (certId) {
     zOrder.push(certId);
   }

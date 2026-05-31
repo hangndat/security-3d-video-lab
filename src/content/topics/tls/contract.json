@@ -2,76 +2,81 @@
   "schemaVersion": "1.0.0",
   "topic": "tls",
   "slug": "tls-short-v1",
-  "hook": "Public networks are unsafe for credentials without encryption.",
-  "cta": "Explain why HTTPS trust indicators matter.",
+  "hook": "On untrusted networks, cleartext is path-visible. TLS negotiates versions and cipher suites, presents certificates, derives session keys, then carries HTTP and APIs inside encrypted records.",
+  "cta": "The padlock means transport encryption—not automatic trust in hostname, CA validation, or application security.",
   "durationBudget": {
-    "minSeconds": 7,
-    "targetSeconds": 8,
-    "maxSeconds": 9
+    "minSeconds": 18,
+    "targetSeconds": 20,
+    "maxSeconds": 22
   },
   "storyboardBeats": [
-    { "id": "tls-hook", "startFrame": 0, "endFrame": 30, "objective": "Show attacker visibility risk." },
+    {
+      "id": "tls-hook",
+      "startFrame": 0,
+      "endFrame": 89,
+      "objective": "Unencrypted traffic on untrusted networks can be passively observed before TLS protects the session."
+    },
     {
       "id": "tls-client-hello-beat",
-      "startFrame": 12,
-      "endFrame": 48,
-      "objective": "Client proposes cryptographic capabilities."
+      "startFrame": 90,
+      "endFrame": 209,
+      "objective": "Client sends ClientHello with supported versions and cipher suites; no application secrets yet."
     },
     {
       "id": "tls-server-hello-beat",
-      "startFrame": 54,
-      "endFrame": 98,
-      "objective": "Server presents certificate and selected ciphers."
+      "startFrame": 210,
+      "endFrame": 329,
+      "objective": "Server responds with ServerHello and presents the certificate chain; trust requires client-side validation."
     },
     {
       "id": "tls-finished-beat",
-      "startFrame": 110,
-      "endFrame": 168,
-      "objective": "Key exchange finalizes a secure channel."
+      "startFrame": 330,
+      "endFrame": 449,
+      "objective": "Key exchange and Finished messages establish session keys and a confidential, integrity-protected record layer."
     },
     {
       "id": "tls-app-data-beat",
-      "startFrame": 170,
-      "endFrame": 236,
-      "objective": "Encrypted application data flows."
+      "startFrame": 450,
+      "endFrame": 599,
+      "objective": "Application payloads travel inside the encrypted TLS record layer where outsiders cannot read content."
     }
   ],
   "narrationPlaceholders": [
     {
       "beatId": "tls-hook",
       "analyticKey": "tls:tls-hook",
-      "scriptIntent": "Show attacker visibility risk.",
-      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+      "scriptIntent": "Chưa TLS — cleartext trên mạng không tin cậy có thể bị sniff.",
+      "timing": { "minSeconds": 2, "targetSeconds": 3, "maxSeconds": 5 }
     },
     {
       "beatId": "tls-client-hello-beat",
       "analyticKey": "tls:tls-client-hello-beat",
-      "scriptIntent": "Client proposes cryptographic capabilities.",
-      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+      "scriptIntent": "ClientHello: version, cipher suites, extensions — chưa gửi secret ứng dụng.",
+      "timing": { "minSeconds": 3, "targetSeconds": 4, "maxSeconds": 6 }
     },
     {
       "beatId": "tls-server-hello-beat",
       "analyticKey": "tls:tls-server-hello-beat",
-      "scriptIntent": "Server presents certificate and selected ciphers.",
-      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+      "scriptIntent": "ServerHello + certificate — trust do client validate, chưa khẳng định trên hình.",
+      "timing": { "minSeconds": 3, "targetSeconds": 4, "maxSeconds": 6 }
     },
     {
       "beatId": "tls-finished-beat",
       "analyticKey": "tls:tls-finished-beat",
-      "scriptIntent": "Key exchange finalizes a secure channel.",
-      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+      "scriptIntent": "Finished — khóa phiên và record layer AEAD; kênh bí mật sẵn sàng.",
+      "timing": { "minSeconds": 3, "targetSeconds": 4, "maxSeconds": 6 }
     },
     {
       "beatId": "tls-app-data-beat",
       "analyticKey": "tls:tls-app-data-beat",
-      "scriptIntent": "Encrypted application data flows.",
-      "timing": { "minSeconds": 4, "targetSeconds": 7, "maxSeconds": 12 }
+      "scriptIntent": "Application Data — HTTP/API trong tunnel; ngoài path không đọc được payload.",
+      "timing": { "minSeconds": 4, "targetSeconds": 5, "maxSeconds": 7 }
     }
   ],
   "pacingPresetId": "documentary-standard",
   "transitionToNext": {
     "toTopic": "ssh",
     "presetId": "secure-channel-to-remote-shell",
-    "rationale": "Encrypted transport enables secure remote administration."
+    "rationale": "After TLS on the web, SSH applies the same handshake-and-trust pattern to remote shells—a natural next module for engineers."
   }
 }

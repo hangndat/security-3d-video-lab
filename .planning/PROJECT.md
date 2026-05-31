@@ -9,19 +9,11 @@ Build a code-driven cinematic visualization platform that explains security and 
 ## Problem
 Most technical education is slide-heavy and weakly visual, while modern systems (TLS, SSH, DNS, cloud infrastructure, AI agents) are dynamic and better explained through animated flows.
 
-## Current Milestone: v1.4 Production Content (Shipped 2026-05-31)
+## Current Milestone: Between Milestones
 
-**Goal:** Upgrade the canonical TLS module from export-gate fixtures to publish-ready cinematic production using implemented R3F visual modules and TTS integration.
+**Last shipped:** v1.5 Real 3D Render (2026-05-31) — headless Three.js TLS video-only 3D MP4, CI trace-hash policy, milestone governance close.
 
-**Delivered:**
-- R3F components for all four catalog families (packet, tunnel, cert, HUD) bound to engine frame state
-- TLS publish-ready scene exceeding export-gate quality rubric with crew pipeline artifacts
-- ElevenLabs TTS provider with deterministic stub fallback for CI
-- v1.4 milestone verification and governance close
-
-**Strategic choice:** TLS-first canonical module — proves the v1.3 crew pipeline end-to-end before scaling to other nine topics. Platform UI (PLAT-01/02) still deferred.
-
-**What's next:** Plan next milestone via `/gsd-new-milestone`.
+**What's next:** `/gsd-new-milestone` to define the next release cycle.
 
 ## Success Signals
 - Deterministic scene/timeline architecture is defined and followed.
@@ -37,7 +29,8 @@ Most technical education is slide-heavy and weakly visual, while modern systems 
 - **v1.2** shipped 2026-05-31: nine topics, branch variants, narration pipeline, export verification, CI governance.
 - **v1.3** shipped 2026-05-31: seven cinematic crew skills, style bible, R3F catalog, TLS walkthrough, orchestrator.
 - **v1.4** shipped 2026-05-31: eleven R3F modules, TLS publish-ready production, ElevenLabs TTS with stub CI fallback.
-- **235 tests** passing at v1.4 close.
+- **v1.5** shipped 2026-05-31: headless Three.js capture, scene builder parity, TLS video-only 3D MP4, `verify:3d-render` CI policy.
+- **264+ tests** passing at v1.5 close.
 
 ## Validated Requirements
 
@@ -67,11 +60,16 @@ Most technical education is slide-heavy and weakly visual, while modern systems 
 - ✓ PROD-01, PROD-02 — TLS publish-ready production and TTS integration
 - ✓ VER-07 — v1.4 milestone audit and governance close
 
+### v1.5
+- ✓ RENDER-01 through RENDER-04 — headless capture, scene parity, TLS 3D export, CI backend policy
+- ✓ VER-08 — v1.5 milestone audit and governance close
+
 ## Out of Scope
 
 | Feature | Reason |
 |---------|--------|
-| Multi-topic publish-ready rollout | TLS canonical first; other eight topics deferred to v1.5+ |
+| Multi-topic publish-ready rollout | TLS 3D render first; PROD-03 deferred to v6 |
+| TTS / audio mux on 3D exports | Deferred to PROD-04; v1.5 is video-only |
 | Visual storyboard UI (PLAT-01) | Platform milestone; after production content |
 | Publish portal with analytics (PLAT-02) | Platform milestone; after production content |
 | New security topics in manifest | Content scale deferred; apply crew pipeline to existing nine |
@@ -88,4 +86,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-31 — v1.4 Production Content milestone shipped*
+*Last updated: 2026-05-31 — v1.5 Real 3D Render milestone shipped*

@@ -2,41 +2,63 @@
 
 > Input: validated SceneSpec from [Storyboard scenespec-handoff](../../cinematic-storyboard-artist/templates/scenespec-handoff.md). Output: MP4 + optional export bundle for Security SME + Audio review.
 
-## Input SceneSpec
+## Input SceneSpec (TLS publish)
 
 | Field | Value |
 |-------|-------|
 | Topic | `tls` |
-| Fixture reference | `src/fixtures/golden-scene-spec.json` |
+| Fixture reference | `src/fixtures/tls-production-scene-spec.json` |
+| Kịch bản | `src/content/topics/tls/KICH-BAN.md` |
 | Validation | `validateSceneSpec` passed |
-| sceneId | `tls-golden-scene` |
-| totalFrames | 360 |
+| sceneId | `tls-production-scene` |
+| seed | `tls-production-seed-005` |
+| totalFrames | 600 |
 
-## Short MP4 Export
+## Production MP4 Export
 
 | Field | Value |
 |-------|-------|
+| Generator | `generateTlsProductionArtifacts()` |
+| Function | `renderCompositionProductionMp4` (640×360, full frames) |
+| Output path | `.artifacts/production/tls/tls-production.mp4` |
+| Backend (local) | `r3f-headless` — PNG frames + caption burn-in |
+| Backend (CI) | `SECURITY_LAB_RENDER_BACKEND=trace-hash` |
+| Manifest | `.artifacts/production/tls/production-manifest.json` |
+
+```bash
+unset SECURITY_LAB_RENDER_BACKEND
+unset SECURITY_LAB_INCLUDE_NARRATION
+npm run test -- tests/tls-production-export.test.ts --testNamePattern="default env export"
+```
+
+## CI Short MP4 (legacy demo)
+
+| Field | Value |
+|-------|-------|
+| Fixture | `src/fixtures/golden-scene-spec.json` |
 | Function | `renderCompositionDemoMp4(sceneSpec, outputPath)` |
-| Output path | `.artifacts/export/phase15/tls-golden-scene-short.mp4` |
-| Profile | CI short — 320×180, 30 frames, 30 fps |
-| Pre-check | `deriveRenderFrameState(sceneSpec, 0)` succeeds |
+| Profile | 320×180, 30 frames — **not** spatial publish story |
 
 ## Export Quality Assertions
 
-Run after MP4 write:
-
 ```typescript
-import { assertExportQuality, DEFAULT_EXPORT_QUALITY_POLICY } from "src/verification/export-quality.js";
+import {
+  assertExportQuality,
+  productionPolicyForScene
+} from "src/verification/export-quality.js";
+import { assertTlsProductionRubric } from "src/verification/tls-production-rubric.js";
 
-assertExportQuality(outputPath, DEFAULT_EXPORT_QUALITY_POLICY);
+assertExportQuality(outputPath, productionPolicyForScene(sceneSpec));
+assertTlsProductionRubric(sceneSpec, captionMap);
 ```
 
-| Check | Expected |
-|-------|----------|
+| Check | Expected (production) |
+|-------|----------------------|
 | Codec | h264 |
 | Container | mp4 |
-| Duration | 900–1200 ms (short profile) |
-| File size | > 0 bytes |
+| Duration | ~20s (600 frames @ 30 fps) |
+| Module rubric | All five TLS beats pass |
+| Visual story | `tests/tls-visual-story.test.ts` pass |
 
 ## Long-Form Bundle (optional)
 
@@ -48,29 +70,26 @@ For assemblies (e.g. `content-depth-long-v1`):
 | Writer | `writeExportBundleArtifacts(bundle, repoRoot)` |
 | captionTimingMapPath | `.artifacts/export/<slug>/caption-timing-map.json` |
 | narrationTrackPath | `.artifacts/export/<slug>/narration-track.json` |
-| bundlePath | `.artifacts/export/<slug>/export-bundle.json` |
-| bundleHash | Record in handoff — must be stable across two identical runs |
-
-Branched assemblies: pass `branchId: "attack-path"` or `"defense-path"`.
 
 ## Verify Commands
 
 ```bash
-npm run test -- tests/render-composition.test.ts
-npm run test -- tests/v12-content-depth-export.test.ts
-node scripts/verify-content-depth.mjs --quick
+npm run test -- tests/tls-production-export.test.ts
+npm run test -- tests/tls-visual-story.test.ts
+npm run test -- tests/headless-scene-parity.test.ts
+npm run verify:tls-3d-production -- --quick
 node scripts/verify-narration-pipeline.mjs --quick
 ```
 
 ## Determinism Checklist
 
-- [ ] Same SceneSpec → identical `timelineTraceInput` for sample frames
-- [ ] Long-form bundle: `bundleHash` stable on repeat build
-- [ ] Export paths under `.artifacts/export/`
+- [ ] Same SceneSpec → identical `vizRenderTraceInput` for sample frames
+- [ ] `bundleHash` stable on repeat long-form build (if applicable)
+- [ ] Export paths under `.artifacts/production/tls/` or `.artifacts/export/`
 
 ## Handoff to Security SME + Audio
 
 - [ ] MP4 path documented
-- [ ] Export bundle paths (if long-form) documented
-- [ ] Caption map + narration track available for `validateNarrationAlignment`
-- [ ] Ready for accuracy checklist review
+- [ ] Debug frame `debug-frame-150-caption.png` available (ClientHello)
+- [ ] Caption map: `buildTlsOnlyCaptionMap`
+- [ ] Ready for `docs/security-accuracy-checklist.md` spatial review

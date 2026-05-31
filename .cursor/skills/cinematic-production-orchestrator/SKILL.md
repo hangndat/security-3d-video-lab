@@ -49,7 +49,7 @@ Codifies the **Production Orchestrator** crew role. Single entry point for full-
 - **Fixed order** — never run Storyboard before Director beat sheet exists.
 - **No role merging** — orchestrator routes; domain skills execute their playbooks.
 - **No schema invention** — contracts and SceneSpec v1.0.0 only.
-- **TLS reference module** — use `docs/tls-crew-walkthrough.md` as worked example.
+- **TLS reference module** — use `docs/tls-crew-walkthrough.md`, `src/content/topics/tls/KICH-BAN.md`, and `tls-production-scene-spec.json` as worked example.
 
 ## Discovery
 

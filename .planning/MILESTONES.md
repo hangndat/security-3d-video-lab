@@ -1,5 +1,32 @@
 # Project Milestones: Security Cinematic Lab
 
+## v1.5 Real 3D Render (Shipped: 2026-05-31)
+
+**Delivered:** Headless Three.js PNG capture, unified scene builder parity, TLS video-only 3D MP4 export, and CI render backend policy with v1.5 milestone governance close.
+
+**Phases completed:** 21-24 (8 plans total)
+
+**Key accomplishments:**
+- Headless capture via `@headless-three/renderer` with env-gated `r3f-headless` vs `trace-hash` backends.
+- Single source of truth mesh spec shared between R3F components and headless scene builder (eleven `viz-*` modules).
+- TLS production MP4 as video-only 3D export with manifest v1.1.0 (`videoOnly`, `frameSource`, `renderBackend`).
+- `verify:3d-render` umbrella gate orchestrating headless-capture, scene-parity, and tls-3d-production in CI.
+
+**Stats:**
+- 4 phases, 8 plans, 5/5 v1.5 requirements complete with zero unmapped traceability rows
+- 264+ automated tests passing at close
+- First real 3D pixel export path for TLS production scene
+
+**Verification:**
+- `.planning/milestones/v1.5-MILESTONE-AUDIT.md`
+- `.planning/milestones/v1.5-ROADMAP.md`
+- `.artifacts/verification/phase24/milestone-close.json`
+- `.artifacts/verification/phase24/3d-render.json`
+
+**What's next:** Plan next milestone via `/gsd-new-milestone`.
+
+---
+
 ## v1.4 Production Content (Shipped: 2026-05-31)
 
 **Delivered:** Eleven-id R3F catalog, TLS publish-ready cinematic scene, ElevenLabs TTS with deterministic stub fallback, and v1.4 milestone governance close.

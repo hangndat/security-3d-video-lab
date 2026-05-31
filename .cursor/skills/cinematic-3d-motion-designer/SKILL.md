@@ -41,11 +41,13 @@ Do not paste full module tables into agent output — cite catalog ids.
 
 | Narrative moment | Typical modules |
 |------------------|-----------------|
-| Threat hook (p25) | `viz-packet-threat`, `viz-hud-actor-label` |
-| Handshake mechanism | `viz-packet-flow`, `viz-tunnel-handshake` |
-| Certificate proof | `viz-cert-single` or `viz-cert-chain` |
-| Secure channel established | `viz-tunnel-secure`, `viz-packet-encrypted` |
-| HUD / labels | `viz-hud-*` stack on any shot |
+| Threat hook (p25) | `viz-packet-threat`, sniffer actor, cleartext **above** link |
+| Handshake mechanism | `viz-packet-flow`, `viz-tunnel-handshake`, `messageType` label |
+| Certificate proof | `viz-cert-single` at server (chain only when CA/intermediate/leaf labels) |
+| Secure channel established | `viz-tunnel-secure`, `viz-packet-encrypted` **inside** tunnel |
+| HUD / labels | `viz-hud-actor-label` at anchors, `viz-hud-beat-caption`, packet `messageType` |
+
+TLS publish layout: `docs/r3f-module-catalog.md` v1.1, `actor-anchors.ts`, `tests/tls-visual-story.test.ts`.
 
 ## Coordination
 

@@ -2,7 +2,8 @@
 
 Canonical visual module vocabulary for Security Cinematic Lab. Agents cite **module ids** from this document in shot lists and motion handoffs.
 
-**Scope:** v1.3 defined catalog and conventions. R3F `.tsx` implementations live under `src/client/viz/` (v1.4 Production Content).
+**Scope:** v1.3+ catalog; R3F/headless implementations under `src/client/viz/`.  
+**TLS spatial story:** [tls-crew-walkthrough.md](tls-crew-walkthrough.md), [src/content/topics/tls/KICH-BAN.md](../src/content/topics/tls/KICH-BAN.md)
 
 Style tokens: [style-bible.md](style-bible.md). SceneSpec inputs: [scene-spec.ts](../src/engine/contracts/scene-spec.ts).
 
@@ -28,11 +29,13 @@ Rules:
 
 | Module id | Variant | SceneSpec inputs | Style tokens | Beat affinity |
 |-----------|---------|------------------|--------------|---------------|
-| `viz-packet-flow` | default | `packets[]`, timeline `track: "packet"` | `--color-accent-data`, `--light-accent-glow` | mechanism (p50) |
-| `viz-packet-encrypted` | secure | `packets[]`, timeline after handshake | `--color-accent-cyan` | app-data, completion |
-| `viz-packet-threat` | exposed | `packets[]`, hook beats | `--color-accent-threat`, `--light-threat-pulse` | hook (p25) |
+| `viz-packet-flow` | default | `packets[]`, timeline `track: "packet"`, `payload.packetVariant: "flow"` | `--color-accent-data`, `--light-accent-glow` | mechanism (p50) |
+| `viz-packet-encrypted` | secure | `packets[]`, `payload.packetVariant: "encrypted"` | `--color-accent-cyan` | app-data, completion |
+| `viz-packet-threat` | exposed | `packets[]`, `payload.packetVariant: "threat"` | `--color-accent-threat`, `--light-threat-pulse` | hook (p25) |
 
-**Binding:** `src/engine/packet/packet-state.ts` interpolates position along `packets[].route` for active timeline cues. `src/engine/timeline/scheduler.ts` determines active cues per frame.
+**Binding:** `src/engine/packet/packet-state.ts` interpolates position along `packets[].route` for active timeline cues. `resolvePacketModuleId` in `src/client/viz/build-viz-frame-state.ts` reads `packetVariant` and cue id keywords.
+
+**TLS production labels:** Set `payload.messageType` on each timeline cue (e.g. `ClientHello`, `ApplicationData`). Headless render attaches a billboard via `createHudLabelTexture` on the active packet sphere.
 
 ---
 
@@ -40,10 +43,10 @@ Rules:
 
 | Module id | Variant | SceneSpec inputs | Style tokens | Beat affinity |
 |-----------|---------|------------------|--------------|---------------|
-| `viz-tunnel-secure` | encrypted channel | timeline during finished-beat | `--color-accent-cyan`, `--color-bg-deep` | tls-finished-beat, SSH session |
-| `viz-tunnel-handshake` | in-progress | timeline during kex/hello beats | `--color-accent-data`, `--light-rim-intensity` | client-hello, server-hello |
+| `viz-tunnel-secure` | encrypted channel | timeline during finished/app beats | `--color-accent-cyan`, `--color-bg-deep` | tls-finished-beat, app-data |
+| `viz-tunnel-handshake` | in-progress | timeline during hello beats | `--color-accent-data`, `--light-rim-intensity` | client-hello, server-hello |
 
-**Binding:** Tunnel renders as environment wrapper around active packet routes; no separate SceneSpec field — composed at R3F layer from timeline window + packet routes.
+**Binding:** Composed at R3F/headless layer from active timeline cues. On **tls-production-scene**, torus is scaled along the browser→origin axis (X) between link endpoints from `resolveTlsLinkEndpoints`.
 
 ---
 
@@ -51,10 +54,12 @@ Rules:
 
 | Module id | Variant | SceneSpec inputs | Style tokens | Beat affinity |
 |-----------|---------|------------------|--------------|---------------|
-| `viz-cert-chain` | multi-link | actors (CA, intermediate, leaf) | `--color-accent-trust`, `--camera-fov-intimate` | PKI topics, server-hello |
-| `viz-cert-single` | server cert | actor-server focus | `--color-accent-trust`, `--font-hud` | tls-server-hello-beat |
+| `viz-cert-chain` | multi-link | actors with CA / intermediate / leaf **labels** | `--color-accent-trust`, `--camera-fov-intimate` | PKI topics |
+| `viz-cert-single` | server cert | server-hello cue active | `--color-accent-trust`, `--font-hud` | tls-server-hello-beat |
 
-**Binding:** `src/engine/camera/preset-registry.ts` — cert/HUD shots use intimate FOV presets and `focus` on packet or actor ids when camera track cues are added post-MVP.
+**Binding:** `resolveCertModuleId` in `src/client/viz/resolve-modules.ts` — chain only when ≥2 PKI role keywords match actor labels. A third actor such as `sniffer` does **not** select chain.
+
+**TLS production:** `viz-cert-single` group positioned near origin (`x≈3.5`) with `Certificate` billboard.
 
 ---
 
@@ -62,12 +67,15 @@ Rules:
 
 | Module id | Variant | SceneSpec inputs | Style tokens | Beat affinity |
 |-----------|---------|------------------|--------------|---------------|
-| `viz-hud-actor-label` | name plate | `actors[].label` | `--font-hud-md`, `--color-text-primary` | all beats |
+| `viz-hud-actor-label` | name plate + marker | `actors[]` via `resolveVisibleActors` | `--font-hud`, role semantic colors | all beats |
 | `viz-hud-beat-caption` | narration overlay | `CaptionTimingMap.scriptIntent` | `--font-size-narration`, `--color-text-primary` | beat windows |
-| `viz-hud-packet-id` | debug label | `packets[].id` | `--font-hud-sm`, `--color-text-muted` | mechanism beats |
+| `viz-hud-packet-id` | protocol label | active packet `messageLabel` (from `messageType`) | `--font-hud-sm`, `--color-text-muted` | mechanism beats |
 | `viz-hud-frame-counter` | timeline debug | scheduler frame index | `--font-hud-sm`, `--color-text-muted` | optional QA overlay |
 
-**Binding:** HUD overlays read SceneSpec actors/packets and caption timing maps; frame counter reads `scheduleFrame(sceneSpec, frame)` from scheduler.
+**Binding:**
+- Actor labels: world anchors from `src/client/viz/actor-anchors.ts` (TLS production: browser x=-4, origin x=4, sniffer x=0 elevated, sniffer hidden after hook).
+- Beat caption: 3D texture in scene + bottom PNG burn-in in `capture-viz-frame-png.ts`.
+- Packet id HUD: displays `messageType`, not raw `packets[].id`.
 
 ---
 
@@ -81,6 +89,7 @@ Rules:
 | Deterministic seed | SceneSpec `seed` required; module randomness derives from seed |
 | Capability gate | `postMvpCameraOverrides: false` — use preset-registry defaults |
 | Capability gate | `postMvpPacketPhysics: false` — route interpolation only |
+| TLS spatial | One active packet per beat; cleartext above link; app data below wire inside tunnel |
 
 Do not combine `viz-packet-threat` and `viz-packet-encrypted` in the same beat window without narrative transition.
 
@@ -91,12 +100,14 @@ Do not combine `viz-packet-threat` and `viz-packet-encrypted` in the same beat w
 | Engine module | Path | Catalog usage |
 |---------------|------|---------------|
 | Packet interpolation | `src/client/packet/packet-interpolator.ts` | All `viz-packet-*` modules |
+| Viz frame state | `src/client/viz/build-viz-frame-state.ts` | Module id + `messageLabel` |
+| Actor anchors | `src/client/viz/actor-anchors.ts` | TLS link layout, visible actors |
+| Module stack | `src/client/viz/resolve-modules.ts` | Tunnel/cert/HUD resolution |
+| Headless meshes | `src/client/viz/viz-mesh-spec.ts` | Labels, link wire, cert position |
 | Timeline scheduler | `src/engine/timeline/scheduler.ts` | Active cue windows per frame |
-| Camera presets | `src/engine/camera/preset-registry.ts` | `viz-cert-*`, `viz-hud-*` framing |
-| SceneSpec validation | `src/engine/contracts/validate-scene-spec.ts` | Pre-render gate for all modules |
-| Render (deterministic) | `src/render/remotion/render-composition.tsx` | Color trace MVP; R3F binding v1.4+ |
-
-**v1.4:** Each catalog id maps to one R3F component under `src/client/viz/` (Phase 17–18).
+| SceneSpec validation | `src/engine/contracts/validate-scene-spec.ts` | Pre-render gate |
+| Headless capture | `src/render/headless/capture-viz-frame-png.ts` | PNG + caption burn-in |
+| Production rubric | `src/verification/tls-production-rubric.ts` | Per-beat module expectations |
 
 ---
 
@@ -105,3 +116,4 @@ Do not combine `viz-packet-threat` and `viz-packet-encrypted` in the same beat w
 | Version | Date | Notes |
 |---------|------|-------|
 | 1.0.0 | 2026-05-31 | Initial four-family catalog (Phase 14 / CREW-04) |
+| 1.1.0 | 2026-05-31 | TLS production spatial story, messageType labels, actor anchors |
