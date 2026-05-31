@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -9,6 +9,19 @@ const DEFAULT_ROADMAP_PATH = resolve(REPO_ROOT, ".planning/ROADMAP.md");
 export const V11_REQUIREMENT_ID_PATTERN =
   /^(CONT|AUTHR|CINE|VER)-\d+$/;
 
+export const EXPECTED_V12_REQUIREMENT_IDS = [
+  "CONT-04",
+  "CONT-05",
+  "CONT-06",
+  "NARR-01",
+  "NARR-02",
+  "VOIC-01",
+  "VOIC-02",
+  "VER-04",
+  "VER-05"
+] as const;
+
+/** @deprecated Use EXPECTED_V12_REQUIREMENT_IDS for active milestone validation. */
 export const EXPECTED_V11_REQUIREMENT_IDS = [
   "CONT-01",
   "CONT-02",
@@ -25,10 +38,10 @@ export const EXPECTED_V11_REQUIREMENT_IDS = [
 ] as const;
 
 export const EXPECTED_PHASE_REQUIREMENTS: Record<string, readonly string[]> = {
-  "05": ["CONT-01", "CONT-03", "AUTHR-01", "AUTHR-02"],
-  "06": ["CONT-02", "AUTHR-03", "CINE-01", "CINE-03"],
-  "07": ["CINE-02", "VER-01", "VER-03"],
-  "08": ["VER-02"]
+  "09": ["CONT-04", "CONT-05", "CONT-06"],
+  "10": ["NARR-01", "NARR-02"],
+  "11": ["VOIC-01", "VOIC-02"],
+  "12": ["VER-04", "VER-05"]
 };
 
 export interface TraceabilityRow {
@@ -54,6 +67,12 @@ export interface TraceabilityValidationResult {
   unmappedCount: number;
   pendingCount: number;
   rows: TraceabilityRow[];
+  skipped?: boolean;
+  skipReason?: string;
+}
+
+export function isBetweenMilestones(repoRoot: string = REPO_ROOT): boolean {
+  return !existsSync(resolve(repoRoot, ".planning/REQUIREMENTS.md"));
 }
 
 export interface ValidateTraceabilityOptions {
@@ -62,6 +81,21 @@ export interface ValidateTraceabilityOptions {
   milestoneClose?: boolean;
 }
 
+export function parseV12RequirementIds(content: string): string[] {
+  const ids = new Set<string>();
+  const boldMatches = content.matchAll(/\*\*([A-Z]+-\d+)\*\*/g);
+  for (const match of boldMatches) {
+    const id = match[1]!;
+    if (V11_REQUIREMENT_ID_PATTERN.test(id) && !id.startsWith("PLAT-")) {
+      ids.add(id);
+    }
+  }
+  return [...ids].filter((id) =>
+    EXPECTED_V12_REQUIREMENT_IDS.includes(id as (typeof EXPECTED_V12_REQUIREMENT_IDS)[number])
+  );
+}
+
+/** @deprecated Use parseV12RequirementIds for active milestone validation. */
 export function parseV11RequirementIds(content: string): string[] {
   const ids = new Set<string>();
   const boldMatches = content.matchAll(/\*\*([A-Z]+-\d+)\*\*/g);
@@ -162,6 +196,24 @@ function parseCoverageUnmappedCount(content: string): number | null {
 export function validateRequirementTraceability(
   options: ValidateTraceabilityOptions = {}
 ): TraceabilityValidationResult {
+  if (options.requirementsContent === undefined && isBetweenMilestones()) {
+    return {
+      errors: [],
+      warnings: [
+        {
+          path: ".planning/REQUIREMENTS.md",
+          reason:
+            "Between milestones: no active requirements file; traceability validation skipped until v1.2 REQUIREMENTS.md is created."
+        }
+      ],
+      unmappedCount: 0,
+      pendingCount: 0,
+      rows: [],
+      skipped: true,
+      skipReason: "between_milestones"
+    };
+  }
+
   const requirementsContent =
     options.requirementsContent ?? readFileSync(DEFAULT_REQUIREMENTS_PATH, "utf-8");
   const roadmapContent = options.roadmapContent ?? readFileSync(DEFAULT_ROADMAP_PATH, "utf-8");
@@ -189,7 +241,7 @@ export function validateRequirementTraceability(
     });
   }
 
-  for (const requirementId of EXPECTED_V11_REQUIREMENT_IDS) {
+  for (const requirementId of EXPECTED_V12_REQUIREMENT_IDS) {
     if (!rowById.has(requirementId)) {
       errors.push({
         path: ".planning/REQUIREMENTS.md#traceability",
@@ -233,7 +285,7 @@ export function validateRequirementTraceability(
   }
 
   let pendingCount = 0;
-  for (const requirementId of EXPECTED_V11_REQUIREMENT_IDS) {
+  for (const requirementId of EXPECTED_V12_REQUIREMENT_IDS) {
     const row = rowById.get(requirementId);
     if (!row) {
       continue;
@@ -272,20 +324,20 @@ export function validateRequirementTraceability(
     }
   }
 
-  const v11IdsInTable = rows
+  const v12IdsInTable = rows
     .map((row) => row.requirementId)
-    .filter((id) => EXPECTED_V11_REQUIREMENT_IDS.includes(id as (typeof EXPECTED_V11_REQUIREMENT_IDS)[number]));
-  if (unmappedCount === 0 && v11IdsInTable.length !== EXPECTED_V11_REQUIREMENT_IDS.length) {
+    .filter((id) => EXPECTED_V12_REQUIREMENT_IDS.includes(id as (typeof EXPECTED_V12_REQUIREMENT_IDS)[number]));
+  if (unmappedCount === 0 && v12IdsInTable.length !== EXPECTED_V12_REQUIREMENT_IDS.length) {
     errors.push({
       path: ".planning/REQUIREMENTS.md#traceability",
-      reason: `Expected ${EXPECTED_V11_REQUIREMENT_IDS.length} v1.1 rows, found ${v11IdsInTable.length}.`
+      reason: `Expected ${EXPECTED_V12_REQUIREMENT_IDS.length} v1.2 rows, found ${v12IdsInTable.length}.`
     });
   }
 
   return {
     errors,
     warnings,
-    unmappedCount: unmappedCount === -1 ? EXPECTED_V11_REQUIREMENT_IDS.length : unmappedCount,
+    unmappedCount: unmappedCount === -1 ? EXPECTED_V12_REQUIREMENT_IDS.length : unmappedCount,
     pendingCount,
     rows
   };

@@ -4,6 +4,7 @@
 
 - ✅ **v1.0 Milestone** — Phases 1-4 (shipped 2026-05-28) — [archive](milestones/v1.0-ROADMAP.md)
 - ✅ **v1.1 Content Expansion** — Phases 5-8 (shipped 2026-05-29) — [archive](milestones/v1.1-ROADMAP.md)
+- 🚧 **v1.2 Content Depth** — Phases 9-12 (in progress)
 
 ## Phases
 
@@ -27,9 +28,60 @@
 
 </details>
 
+### Phase 09: Advanced Security Topics
+
+- [ ] **Phase 09: Advanced Security Topics** (0/0 plans)
+  - **Goal:** Add three advanced security modules and integrate them into the content manifest and long-form assemblies.
+  - **Requirements:** `CONT-04`, `CONT-05`, `CONT-06`
+  - **Depends on:** v1.1 Phase 05 (topic contracts, manifest lock, scaffold workflow)
+  - **Plans:** TBD
+  - **Success Criteria:**
+    1. Topic contracts for zero-trust-access, oauth-jwt-session, and api-gateway-waf validate in CI.
+    2. manifest.json includes all nine topics with deterministic ordering rules preserved.
+    3. At least one new long-form assembly profile stitches new modules with transition presets.
+    4. Beat-level narration placeholders pass validation for every new module.
+
+### Phase 10: Narrative Branch Variants
+
+- [ ] **Phase 10: Narrative Branch Variants** (0/0 plans)
+  - **Goal:** Enable alternate narrative paths in assembly profiles with deterministic replay per branch.
+  - **Requirements:** `NARR-01`, `NARR-02`
+  - **Depends on:** Phase 09 (new modules available for branch sequences)
+  - **Plans:** TBD
+  - **Success Criteria:**
+    1. Assembly JSON schema supports branch variants with named paths and explicit module sequences.
+    2. At least two branch variants (e.g., attack-path, defense-path) render without core engine changes.
+    3. Deterministic replay tests pass independently for each declared branch variant.
+
+### Phase 11: Narration Pipeline
+
+- [ ] **Phase 11: Narration Pipeline** (0/0 plans)
+  - **Goal:** Generate narration-ready audio from caption timing maps and attach metadata to exports.
+  - **Requirements:** `VOIC-01`, `VOIC-02`
+  - **Depends on:** Phase 06 caption timing maps (v1.1); Phase 09 beat coverage
+  - **Plans:** TBD
+  - **Success Criteria:**
+    1. Narration generator produces audio segments aligned to beat timing windows within tolerance.
+    2. Long-form exports include narration track metadata linked to caption timing map beats.
+    3. Pipeline runs deterministically in CI with stable artifact naming conventions.
+
+### Phase 12: v1.2 Verification and Governance
+
+- [ ] **Phase 12: v1.2 Verification and Governance** (0/0 plans)
+  - **Goal:** Close v1.2 with full E2E coverage for new content and restored CI governance gates.
+  - **Requirements:** `VER-04`, `VER-05`
+  - **Depends on:** Phases 09–11 (content, branches, narration deliverables)
+  - **Plans:** TBD
+  - **Success Criteria:**
+    1. Every v1.2 module and branch variant has automated E2E and KPI acceptance tests.
+    2. Requirement traceability validator covers v1.2 IDs and passes milestone-close mode.
+    3. CI governance gates (traceability, milestone audit) are re-enabled and green.
+
 ## Current Status
 
-All phases in v1.1 are complete and archived in milestone records. Run `/gsd-new-milestone` to define v1.2 scope.
+**Active milestone:** v1.2 Content Depth — Phase 09 not started.
+
+Run `/gsd-discuss-phase 09` or `/gsd-plan-phase 09` to begin.
 
 ## Status Rules
 

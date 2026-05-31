@@ -9,9 +9,17 @@ Build a code-driven cinematic visualization platform that explains security and 
 ## Problem
 Most technical education is slide-heavy and weakly visual, while modern systems (TLS, SSH, DNS, cloud infrastructure, AI agents) are dynamic and better explained through animated flows.
 
-## Current Milestone
+## Current Milestone: v1.2 Content Depth
 
-**Between milestones** — v1.1 Content Expansion shipped 2026-05-29. Use `/gsd-new-milestone` to start v1.2.
+**Goal:** Deepen the content library with advanced security topics, branching narratives, and narration-ready exports — without platform UI work.
+
+**Target features:**
+- Three new security modules (zero-trust access, OAuth/JWT sessions, API gateway/WAF)
+- Assembly branch variants with deterministic replay per path
+- Narration pipeline driven by existing caption timing maps
+- Full verification and restored v1.2 governance traceability at milestone close
+
+**Strategic choice:** Content-first — platform features (storyboard UI, publish portal) deferred to a later milestone.
 
 ## Success Signals
 - Deterministic scene/timeline architecture is defined and followed.
@@ -23,18 +31,9 @@ Most technical education is slide-heavy and weakly visual, while modern systems 
 
 - **v1.0** shipped 2026-05-28: deterministic engine, TLS/SSH/DNS first batch, canonical E2E verification.
 - **v1.1** shipped 2026-05-29: six-topic content manifest, JSON authoring contracts, long-form composition, batch quality gates, governance hardening.
-- **101 tests** passing; CI runs content, composition, batch quality, and governance gates.
+- **102 tests** passing; CI runs content, composition, and batch quality gates (governance temporarily excluded between milestones).
 - **Six security modules:** TLS, SSH, DNS, auth-session, pki-trust-chain, mitm-defense.
 - **Two long-form assemblies:** network-foundations-long-v1, security-expansion-long-v1.
-
-## Next Milestone Goals
-
-Candidate directions for v1.2 (to be defined in `/gsd-new-milestone`):
-
-- Visual storyboard UI (PLAT-01) — move beyond file-only authoring.
-- Publish portal with viewer analytics (PLAT-02).
-- Automated voice synthesis pipeline once caption/timing maps are stable.
-- Additional security domains and interactive narrative branches.
 
 ## Validated Requirements
 
@@ -54,9 +53,10 @@ Candidate directions for v1.2 (to be defined in `/gsd-new-milestone`):
 
 | Feature | Reason |
 |---------|--------|
-| Full SaaS multi-tenant platform | Not required for current content pipeline milestones |
-| Real-time collaborative editor | File-driven authoring sufficient through v1.1 |
-| Automated voice synthesis pipeline | Deferred until caption/timing map is stable |
+| Visual storyboard UI (PLAT-01) | Platform milestone; content-first for v1.2 |
+| Publish portal with analytics (PLAT-02) | Platform milestone; content-first for v1.2 |
+| Full SaaS multi-tenant platform | Not required for content pipeline milestones |
+| Real-time collaborative editor | File-driven authoring sufficient through v1.2 |
 
 ## Evolution
 
@@ -69,4 +69,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-29 after v1.1 milestone archive*
+*Last updated: 2026-05-31 — v1.2 Content Depth milestone started*

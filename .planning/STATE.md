@@ -1,9 +1,10 @@
 ---
 gsd_state_version: 1.0
-milestone: none
-milestone_name: between milestones
-status: v1.1 archived — planning v1.2
-last_updated: "2026-05-29T12:00:00.000Z"
+milestone: v1.2
+milestone_name: Content Depth
+status: planning
+last_updated: "2026-05-31T07:28:22.596Z"
+last_activity: 2026-05-31
 progress:
   total_phases: 0
   completed_phases: 0
@@ -16,20 +17,23 @@ progress:
 
 ## Project Reference
 
-See `.planning/PROJECT.md` (updated 2026-05-29)
+See `.planning/PROJECT.md` (updated 2026-05-31)
 
 **Core value:** cinematic, deterministic security/infrastructure visualization.
-**Current focus:** v1.1 archived; run `/gsd-new-milestone` to define v1.2.
+**Current focus:** v1.2 Content Depth — content-first milestone (advanced topics, narrative branches, narration pipeline).
 
 ## Current Position
 
-- Milestone: v1.1 Content Expansion — **archived** 2026-05-29
-- Phases 05–08 complete; requirements archived to `.planning/milestones/v1.1-REQUIREMENTS.md`
-- Next: define v1.2 requirements and roadmap
+Phase: 09 — Advanced Security Topics (not started)
+Plan: —
+Status: Requirements and roadmap defined
+Last activity: 2026-05-31 — Milestone v1.2 Content Depth initialized
 
 ## Accumulated Context
 
 ### Decisions
+
+**v1.2 strategic choice:** Content-first — platform features (PLAT-01 storyboard UI, PLAT-02 publish portal) deferred to a later milestone.
 
 Key decisions from v1.0–v1.1 are recorded in phase summaries and `.planning/MILESTONES.md`. Governance decisions from Phase 08:
 
