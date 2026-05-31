@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.3
 milestone_name: Cinematic Crew Skills
-status: planning
-last_updated: "2026-05-31T08:00:00.000Z"
-last_activity: 2026-05-31 — Milestone v1.3 Cinematic Crew Skills initialized
+status: ready-to-execute
+last_updated: "2026-05-31T12:00:00.000Z"
+last_activity: 2026-05-31 — Phase 13 planned (Director & Art Director skills)
 progress:
   total_phases: 4
   completed_phases: 0
@@ -24,10 +24,10 @@ See `.planning/PROJECT.md` (updated 2026-05-31)
 
 ## Current Position
 
-Phase: 13 — Director & Art Director Skills (not started)
-Plan: —
-Status: Defining requirements complete; ready for phase 13 planning
-Last activity: 2026-05-31 — Milestone v1.3 initialized
+Phase: 13 — Director & Art Director Skills (planned)
+Plan: 13-01, 13-02 (0/2 executed)
+Status: Ready to execute — run `/gsd-execute-phase 13`
+Last activity: 2026-05-31 — Phase 13 plans verified (13-PLAN-CHECK PASS)
 
 ## Accumulated Context
 
