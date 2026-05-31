@@ -1,0 +1,311 @@
+import { readFileSync, existsSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+import { describe, expect, it } from "vitest";
+
+const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+
+function readRepoFile(relativePath: string): string {
+  const absolutePath = resolve(REPO_ROOT, relativePath);
+  expect(existsSync(absolutePath), `${relativePath} should exist`).toBe(true);
+  return readFileSync(absolutePath, "utf-8");
+}
+
+function parseSkillFrontmatter(content: string): Record<string, string> {
+  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  expect(match, "SKILL.md should have YAML frontmatter").not.toBeNull();
+  const frontmatter: Record<string, string> = {};
+  for (const line of match![1].split("\n")) {
+    const kv = line.match(/^(\w+):\s*(.+)$/);
+    if (kv) {
+      frontmatter[kv[1]] = kv[2].trim();
+    }
+  }
+  return frontmatter;
+}
+
+describe("cinematic-director skill (CREW-01)", () => {
+  const skillPath = ".cursor/skills/cinematic-director/SKILL.md";
+  const beatSheetPath = ".cursor/skills/cinematic-director/templates/beat-sheet.md";
+
+  it("SKILL.md exists with cinematic-director frontmatter name", () => {
+    const content = readRepoFile(skillPath);
+    const frontmatter = parseSkillFrontmatter(content);
+    expect(frontmatter.name).toBe("cinematic-director");
+    expect(frontmatter.description).toBeTruthy();
+  });
+
+  it("SKILL.md references storyboardBeats and content-depth-branched-v1", () => {
+    const content = readRepoFile(skillPath);
+    expect(content).toContain("storyboardBeats");
+    expect(content).toContain("content-depth-branched-v1");
+  });
+
+  it("SKILL.md references retention checkpoints p25, p50, p75", () => {
+    const content = readRepoFile(skillPath);
+    expect(content).toContain("p25");
+    expect(content).toContain("p50");
+    expect(content).toContain("p75");
+  });
+
+  it("beat-sheet template exists under cinematic-director/templates/", () => {
+    expect(existsSync(resolve(REPO_ROOT, beatSheetPath))).toBe(true);
+  });
+});
+
+describe("cinematic-art-director skill (CREW-02)", () => {
+  const skillPath = ".cursor/skills/cinematic-art-director/SKILL.md";
+  const styleBiblePath = "docs/style-bible.md";
+
+  const requiredStyleSections = [
+    "## Color Palette",
+    "## Typography",
+    "## Lighting",
+    "## Camera Mood",
+    "## SceneSpec Mapping Notes"
+  ];
+
+  it("SKILL.md exists with cinematic-art-director frontmatter name", () => {
+    const content = readRepoFile(skillPath);
+    const frontmatter = parseSkillFrontmatter(content);
+    expect(frontmatter.name).toBe("cinematic-art-director");
+    expect(frontmatter.description).toBeTruthy();
+  });
+
+  it("docs/style-bible.md contains all five required H2 sections", () => {
+    const content = readRepoFile(styleBiblePath);
+    for (const section of requiredStyleSections) {
+      expect(content).toContain(section);
+    }
+  });
+
+  it("style bible includes at least three named color tokens", () => {
+    const content = readRepoFile(styleBiblePath);
+    const colorTokens = content.match(/--color-[a-z0-9-]+/g) ?? [];
+    expect(new Set(colorTokens).size).toBeGreaterThanOrEqual(3);
+  });
+
+  it("art director SKILL.md links to docs/style-bible.md", () => {
+    const content = readRepoFile(skillPath);
+    expect(content).toContain("style-bible.md");
+  });
+});
+
+describe("cinematic-storyboard-artist skill (CREW-03)", () => {
+  const skillPath = ".cursor/skills/cinematic-storyboard-artist/SKILL.md";
+  const shotListPath = ".cursor/skills/cinematic-storyboard-artist/templates/shot-list.md";
+  const handoffPath = ".cursor/skills/cinematic-storyboard-artist/templates/scenespec-handoff.md";
+
+  it("SKILL.md exists with cinematic-storyboard-artist frontmatter name", () => {
+    const content = readRepoFile(skillPath);
+    const frontmatter = parseSkillFrontmatter(content);
+    expect(frontmatter.name).toBe("cinematic-storyboard-artist");
+    expect(frontmatter.description).toBeTruthy();
+  });
+
+  it("SKILL.md references validateSceneSpec and scene-spec.ts", () => {
+    const content = readRepoFile(skillPath);
+    expect(content).toContain("validateSceneSpec");
+    expect(content).toContain("scene-spec.ts");
+  });
+
+  it("shot-list.md and scenespec-handoff.md exist under templates/", () => {
+    expect(existsSync(resolve(REPO_ROOT, shotListPath))).toBe(true);
+    expect(existsSync(resolve(REPO_ROOT, handoffPath))).toBe(true);
+  });
+
+  it("SKILL.md references beat-sheet handoff from Director skill", () => {
+    const content = readRepoFile(skillPath);
+    expect(content).toContain("beat-sheet");
+  });
+});
+
+describe("cinematic-3d-motion-designer skill (CREW-04)", () => {
+  const skillPath = ".cursor/skills/cinematic-3d-motion-designer/SKILL.md";
+  const catalogPath = "docs/r3f-module-catalog.md";
+
+  const requiredCatalogSections = [
+    "## Module Naming Convention",
+    "## Packet Modules",
+    "## Tunnel Modules",
+    "## Certificate Modules",
+    "## HUD Modules",
+    "## Composition Rules",
+    "## Engine Binding Notes"
+  ];
+
+  it("SKILL.md exists with cinematic-3d-motion-designer frontmatter name", () => {
+    const content = readRepoFile(skillPath);
+    const frontmatter = parseSkillFrontmatter(content);
+    expect(frontmatter.name).toBe("cinematic-3d-motion-designer");
+    expect(frontmatter.description).toBeTruthy();
+  });
+
+  it("docs/r3f-module-catalog.md contains all seven required H2 sections", () => {
+    const content = readRepoFile(catalogPath);
+    for (const section of requiredCatalogSections) {
+      expect(content).toContain(section);
+    }
+  });
+
+  it("catalog includes all four module families via viz- module ids", () => {
+    const content = readRepoFile(catalogPath);
+    expect(content).toMatch(/viz-packet-/);
+    expect(content).toMatch(/viz-tunnel-/);
+    expect(content).toMatch(/viz-cert-/);
+    expect(content).toMatch(/viz-hud-/);
+  });
+
+  it("motion designer SKILL.md links to docs/r3f-module-catalog.md", () => {
+    const content = readRepoFile(skillPath);
+    expect(content).toContain("r3f-module-catalog.md");
+  });
+});
+
+describe("cinematic-creative-technologist skill (CREW-05)", () => {
+  const skillPath = ".cursor/skills/cinematic-creative-technologist/SKILL.md";
+  const renderHandoffPath =
+    ".cursor/skills/cinematic-creative-technologist/templates/render-handoff.md";
+
+  it("SKILL.md exists with cinematic-creative-technologist frontmatter name", () => {
+    const content = readRepoFile(skillPath);
+    const frontmatter = parseSkillFrontmatter(content);
+    expect(frontmatter.name).toBe("cinematic-creative-technologist");
+    expect(frontmatter.description).toBeTruthy();
+  });
+
+  it("SKILL.md references deriveRenderFrameState and assertExportQuality", () => {
+    const content = readRepoFile(skillPath);
+    expect(content).toContain("deriveRenderFrameState");
+    expect(content).toContain("assertExportQuality");
+  });
+
+  it("render-handoff.md template exists", () => {
+    expect(existsSync(resolve(REPO_ROOT, renderHandoffPath))).toBe(true);
+  });
+
+  it("SKILL.md references buildLongFormExportBundle or export bundle", () => {
+    const content = readRepoFile(skillPath);
+    expect(content).toMatch(/buildLongFormExportBundle|export bundle/i);
+  });
+});
+
+describe("cinematic-security-sme-audio skill (CREW-06)", () => {
+  const skillPath = ".cursor/skills/cinematic-security-sme-audio/SKILL.md";
+  const checklistPath = "docs/security-accuracy-checklist.md";
+  const audioHandoffPath =
+    ".cursor/skills/cinematic-security-sme-audio/templates/audio-layer-handoff.md";
+
+  const requiredChecklistSections = [
+    "## Claim Verification Process",
+    "## Per-Beat Checklist Table",
+    "## Common Failure Modes",
+    "## Sign-Off"
+  ];
+
+  it("SKILL.md exists with cinematic-security-sme-audio frontmatter name", () => {
+    const content = readRepoFile(skillPath);
+    const frontmatter = parseSkillFrontmatter(content);
+    expect(frontmatter.name).toBe("cinematic-security-sme-audio");
+    expect(frontmatter.description).toBeTruthy();
+  });
+
+  it("security-accuracy-checklist.md contains required H2 sections", () => {
+    const content = readRepoFile(checklistPath);
+    for (const section of requiredChecklistSections) {
+      expect(content).toContain(section);
+    }
+  });
+
+  it("SKILL.md links to security-accuracy-checklist.md and validateNarrationAlignment", () => {
+    const content = readRepoFile(skillPath);
+    expect(content).toContain("security-accuracy-checklist.md");
+    expect(content).toContain("validateNarrationAlignment");
+  });
+
+  it("audio-layer-handoff.md template exists", () => {
+    expect(existsSync(resolve(REPO_ROOT, audioHandoffPath))).toBe(true);
+  });
+});
+
+describe("cinematic-production-orchestrator skill (CREW-07)", () => {
+  const skillPath = ".cursor/skills/cinematic-production-orchestrator/SKILL.md";
+  const checklistPath =
+    ".cursor/skills/cinematic-production-orchestrator/templates/pipeline-checklist.md";
+
+  const domainSkillNames = [
+    "cinematic-director",
+    "cinematic-art-director",
+    "cinematic-storyboard-artist",
+    "cinematic-3d-motion-designer",
+    "cinematic-creative-technologist",
+    "cinematic-security-sme-audio"
+  ];
+
+  it("SKILL.md exists with cinematic-production-orchestrator frontmatter name", () => {
+    const content = readRepoFile(skillPath);
+    const frontmatter = parseSkillFrontmatter(content);
+    expect(frontmatter.name).toBe("cinematic-production-orchestrator");
+    expect(frontmatter.description).toBeTruthy();
+  });
+
+  it("SKILL.md lists all six domain skill directory names in pipeline context", () => {
+    const content = readRepoFile(skillPath);
+    for (const name of domainSkillNames) {
+      expect(content).toContain(name);
+    }
+  });
+
+  it("pipeline-checklist.md template exists", () => {
+    expect(existsSync(resolve(REPO_ROOT, checklistPath))).toBe(true);
+  });
+
+  it("SKILL.md references pipeline-checklist or ordered handoff steps", () => {
+    const content = readRepoFile(skillPath);
+    expect(content).toMatch(/pipeline-checklist|Pipeline Order/i);
+  });
+});
+
+const CREW_SKILL_NAMES = [
+  "cinematic-director",
+  "cinematic-art-director",
+  "cinematic-storyboard-artist",
+  "cinematic-3d-motion-designer",
+  "cinematic-creative-technologist",
+  "cinematic-security-sme-audio",
+  "cinematic-production-orchestrator"
+];
+
+const WALKTHROUGH_SECTIONS = [
+  "## Step 1: Director",
+  "## Step 2: Art Director",
+  "## Step 3: Storyboard Artist",
+  "## Step 4: 3D Motion Designer",
+  "## Step 5: Creative Technologist",
+  "## Step 6: Security SME + Audio",
+  "## Step 7: Orchestrator Review",
+  "## Verification Commands"
+];
+
+describe("crew skills verification (VER-06)", () => {
+  it("AGENTS.md exists and references all seven cinematic-* skill names", () => {
+    const content = readRepoFile("AGENTS.md");
+    for (const name of CREW_SKILL_NAMES) {
+      expect(content).toContain(name);
+    }
+  });
+
+  it("tls-crew-walkthrough.md contains steps 1–7 and tls/contract.json path", () => {
+    const content = readRepoFile("docs/tls-crew-walkthrough.md");
+    for (const section of WALKTHROUGH_SECTIONS) {
+      expect(content).toContain(section);
+    }
+    expect(content).toContain("tls/contract.json");
+    expect(content).toContain("tls-hook");
+  });
+
+  it("verify-crew-skills.mjs exists at scripts/", () => {
+    expect(existsSync(resolve(REPO_ROOT, "scripts/verify-crew-skills.mjs"))).toBe(true);
+  });
+});

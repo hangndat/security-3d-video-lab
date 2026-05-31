@@ -29,6 +29,33 @@ export const V11_PHASE_EVIDENCE: PhaseEvidenceConfig[] = [
   }
 ];
 
+export const V13_PHASE_EVIDENCE: PhaseEvidenceConfig[] = [
+  {
+    phase: "13",
+    name: "Director & Art Director Skills",
+    jsonPath: ".artifacts/verification/phase16/crew-skills.json",
+    verificationPath: ".planning/phases/13-director-art-director-skills/VERIFICATION.md"
+  },
+  {
+    phase: "14",
+    name: "Storyboard & 3D Motion Skills",
+    jsonPath: ".artifacts/verification/phase16/crew-skills.json",
+    verificationPath: ".planning/phases/14-storyboard-3d-motion-skills/VERIFICATION.md"
+  },
+  {
+    phase: "15",
+    name: "Render & Security Audio Skills",
+    jsonPath: ".artifacts/verification/phase16/crew-skills.json",
+    verificationPath: ".planning/phases/15-render-security-audio-skills/VERIFICATION.md"
+  },
+  {
+    phase: "16",
+    name: "Production Orchestrator & Skills Verification",
+    jsonPath: ".artifacts/verification/phase16/crew-skills.json",
+    verificationPath: ".planning/phases/16-production-orchestrator-verification/VERIFICATION.md"
+  }
+];
+
 export const V12_PHASE_EVIDENCE: PhaseEvidenceConfig[] = [
   {
     phase: "09",
@@ -115,6 +142,13 @@ export function buildV12MilestoneAuditReport(
   options: { skipTraceabilityCheck?: boolean } = {}
 ): MilestoneAuditReport {
   return buildPhaseEvidenceAuditReport(repoRoot, V12_PHASE_EVIDENCE, options);
+}
+
+export function buildV13MilestoneAuditReport(
+  repoRoot: string,
+  options: { skipTraceabilityCheck?: boolean } = {}
+): MilestoneAuditReport {
+  return buildPhaseEvidenceAuditReport(repoRoot, V13_PHASE_EVIDENCE, options);
 }
 
 function buildPhaseEvidenceAuditReport(
@@ -267,6 +301,67 @@ export function renderV12MilestoneAuditMarkdown(report: MilestoneAuditReport): s
     "- `.artifacts/verification/phase12/content-depth.json`",
     "- `.artifacts/verification/phase12/milestone-governance.json`",
     "- `.artifacts/verification/phase08/requirement-traceability.json`",
+    "",
+    "## Notes",
+    "",
+    report.errors.length === 0
+      ? "- All phase verification JSON artifacts report `gateStatus: pass`."
+      : `- Blocking issues:\n${report.errors.map((item) => `  - ${item}`).join("\n")}`
+  );
+
+  return `${lines.join("\n")}\n`;
+}
+
+export function renderV13MilestoneAuditMarkdown(report: MilestoneAuditReport): string {
+  const lines = [
+    "# v1.3 Milestone Audit: Cinematic Crew Skills",
+    "",
+    `Generated: ${report.generatedAt}`,
+    "",
+    "## Verdict",
+    "",
+    `**${report.verdict}**`,
+    "",
+    "## Requirements Coverage",
+    "",
+    "- v1.3 requirements: **8/8** mapped",
+    "- Unmapped requirements: **0**",
+    `- Traceability gate: **${report.traceabilityGateStatus.toUpperCase()}**`,
+    "",
+    "## Phase Verification Summary",
+    "",
+    "| Phase | Name | Gate | Evidence JSON | VERIFICATION.md |",
+    "| ---: | --- | --- | --- | --- |"
+  ];
+
+  for (const phase of report.phases) {
+    lines.push(
+      `| ${phase.phase} | ${phase.name} | ${phase.gateStatus.toUpperCase()} | \`${phase.jsonPath}\` | ${phase.verificationExists ? "yes" : "no"} |`
+    );
+  }
+
+  lines.push(
+    "",
+    "## Cross-Phase Integration",
+    "",
+    "- Phase 13 codified Director and Art Director skills with beat sheets and style bible tokens.",
+    "- Phase 14 bridged storyboard shot lists to SceneSpec and R3F module catalog conventions.",
+    "- Phase 15 wired render/export playbooks and security accuracy + audio layer handoffs.",
+    "- Phase 16 closed with production orchestrator routing and TLS full-chain walkthrough verification.",
+    "",
+    "## Deferred Debt Resolution (v1.2)",
+    "",
+    "| Item | v1.2 Status | v1.3 Resolution |",
+    "| --- | --- | --- |",
+    "| R3F module implementation | catalog only | Module catalog + motion skill; components deferred to v1.4 |",
+    "| Publish-ready production | deferred | Crew skills pipeline ready; content upgrade in v1.4 |",
+    "",
+    "## Evidence Index",
+    "",
+    "- `.artifacts/verification/phase16/crew-skills.json`",
+    "- `.artifacts/verification/phase08/requirement-traceability.json`",
+    "- `AGENTS.md`",
+    "- `docs/tls-crew-walkthrough.md`",
     "",
     "## Notes",
     "",

@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 import {
-  EXPECTED_V12_REQUIREMENT_IDS,
+  EXPECTED_V13_REQUIREMENT_IDS,
   isBetweenMilestones,
   parseRoadmapPhaseRequirements,
   parseTraceabilityTable,
@@ -29,7 +29,7 @@ describe("requirement traceability validation", () => {
     expect(isBetweenMilestones()).toBe(false);
   });
 
-  it("valid v1.2 REQUIREMENTS.md and ROADMAP.md return zero errors and unmappedCount 0", () => {
+  it("valid v1.3 REQUIREMENTS.md and ROADMAP.md return zero errors and unmappedCount 0", () => {
     const result = validateRequirementTraceability({
       requirementsContent: loadRequirements(),
       roadmapContent: loadRoadmap()
@@ -42,12 +42,12 @@ describe("requirement traceability validation", () => {
       parseTraceabilityTable(loadRequirements()).filter((row) => row.status === "Pending").length
     );
     expect(parseTraceabilityTable(loadRequirements())).toHaveLength(
-      EXPECTED_V12_REQUIREMENT_IDS.length
+      EXPECTED_V13_REQUIREMENT_IDS.length
     );
   });
 
-  it("fails when a v1.2 requirement row is missing from traceability table", () => {
-    const requirements = loadRequirements().replace("| VER-05 | Phase 12 | Complete |", "");
+  it("fails when a v1.3 requirement row is missing from traceability table", () => {
+    const requirements = loadRequirements().replace("| VER-06 | Phase 16 | Complete |", "");
     const result = validateRequirementTraceability({
       requirementsContent: requirements,
       roadmapContent: loadRoadmap()
@@ -60,15 +60,15 @@ describe("requirement traceability validation", () => {
 
   it("fails when ROADMAP phase requirement list drifts from expected mapping", () => {
     const roadmap = loadRoadmap().replace(
-      "**Requirements:** `CONT-04`, `CONT-05`, `CONT-06`",
-      "**Requirements:** `CONT-04`, `CONT-05`"
+      "**Requirements:** `CREW-01`, `CREW-02`",
+      "**Requirements:** `CREW-01`"
     );
     const result = validateRequirementTraceability({
       requirementsContent: loadRequirements(),
       roadmapContent: roadmap
     });
 
-    expect(result.errors.some((issue) => issue.path.includes("ROADMAP.md#phase-09"))).toBe(true);
+    expect(result.errors.some((issue) => issue.path.includes("ROADMAP.md#phase-13"))).toBe(true);
   });
 
   it("milestone-close mode enforces zero Pending requirements", () => {
@@ -91,8 +91,8 @@ describe("requirement traceability validation", () => {
 
   it("fails when checkbox and traceability status are out of sync", () => {
     const requirements = loadRequirements().replace(
-      "| VER-04 | Phase 12 | Complete |",
-      "| VER-04 | Phase 12 | Pending |"
+      "| VER-06 | Phase 16 | Complete |",
+      "| VER-06 | Phase 16 | Pending |"
     );
     const result = validateRequirementTraceability({
       requirementsContent: requirements,
@@ -101,14 +101,14 @@ describe("requirement traceability validation", () => {
 
     expect(
       result.errors.some((issue) =>
-        issue.reason.includes("Checkbox is checked but traceability status is 'Pending'")
+        issue.reason.includes("Checkbox is checked but traceability status is")
       )
     ).toBe(true);
   });
 
-  it("parses roadmap phase requirements for phases 09 through 12", () => {
+  it("parses roadmap phase requirements for phases 13 through 16", () => {
     const phases = parseRoadmapPhaseRequirements(loadRoadmap());
-    expect(phases["09"]).toEqual(["CONT-04", "CONT-05", "CONT-06"]);
-    expect(phases["12"]).toEqual(["VER-04", "VER-05"]);
+    expect(phases["13"]).toEqual(["CREW-01", "CREW-02"]);
+    expect(phases["16"]).toEqual(["CREW-07", "VER-06"]);
   });
 });

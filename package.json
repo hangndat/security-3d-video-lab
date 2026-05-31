@@ -18,6 +18,7 @@
     "verify:narration-pipeline": "node scripts/verify-narration-pipeline.mjs",
     "verify:batch-quality": "node scripts/verify-batch-quality.mjs",
     "verify:content-depth": "node scripts/verify-content-depth.mjs",
+    "verify:crew-skills": "node scripts/verify-crew-skills.mjs",
     "validate:requirements": "node scripts/validate-requirement-traceability.mjs",
     "verify:milestone-governance": "node scripts/verify-milestone-governance.mjs"
   },
