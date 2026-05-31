@@ -15,6 +15,7 @@
     "export:demo": "vitest run tests/render-export-demo.test.ts",
     "verify:content-authoring": "node scripts/verify-content-authoring.mjs",
     "verify:narrative-composition": "node scripts/verify-narrative-composition.mjs",
+    "verify:narration-pipeline": "node scripts/verify-narration-pipeline.mjs",
     "verify:batch-quality": "node scripts/verify-batch-quality.mjs",
     "validate:requirements": "node scripts/validate-requirement-traceability.mjs",
     "verify:milestone-governance": "node scripts/verify-milestone-governance.mjs"
