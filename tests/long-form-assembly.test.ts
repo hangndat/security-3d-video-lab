@@ -12,7 +12,7 @@ import {
   loadLongFormAssembly,
   validateLongFormTransitionCoherence
 } from "../src/content/composition/build-long-form-scene-spec.js";
-import { loadLongFormAssemblyProfile } from "../src/content/composition/load-long-form-assembly.js";
+import { loadLongFormAssemblyProfile, resolveBranch } from "../src/content/composition/load-long-form-assembly.js";
 import { validateLongFormAssemblyProfile } from "../src/content/composition/validate-long-form-assembly.js";
 import {
   isKnownPacingPreset,
@@ -166,5 +166,185 @@ describe("assembly-driven long-form stitch", () => {
         ssh: sshSceneSpec
       })
     ).toThrow(/Missing scene for required topic 'dns'/);
+  });
+});
+
+describe("branch assembly schema and validation", () => {
+  const branchedProfile = {
+    schemaVersion: "1.0.0" as const,
+    slug: "content-depth-branched-v1",
+    defaultBranchId: "defense-path",
+    targetWindowMinutes: { min: 8, max: 12 },
+    defaultPacingPresetId: "documentary-standard",
+    branches: [
+      {
+        id: "attack-path",
+        label: "Attack path narrative",
+        sequence: [
+          "tls",
+          "ssh",
+          "dns",
+          "auth-session",
+          "mitm-defense",
+          "oauth-jwt-session",
+          "api-gateway-waf"
+        ],
+        transitionOverrides: [
+          {
+            fromTopic: "auth-session",
+            toTopic: "mitm-defense",
+            presetId: "auth-session-to-mitm-defense",
+            rationale: "Attack path skips PKI and jumps to interception narrative."
+          },
+          {
+            fromTopic: "mitm-defense",
+            toTopic: "oauth-jwt-session",
+            presetId: "mitm-defense-to-oauth-jwt-session",
+            rationale: "Attack path abuses OAuth tokens after interception."
+          }
+        ]
+      },
+      {
+        id: "defense-path",
+        label: "Defense path narrative",
+        sequence: [
+          "tls",
+          "ssh",
+          "dns",
+          "auth-session",
+          "pki-trust-chain",
+          "zero-trust-access",
+          "oauth-jwt-session",
+          "api-gateway-waf"
+        ],
+        transitionOverrides: [
+          {
+            fromTopic: "pki-trust-chain",
+            toTopic: "zero-trust-access",
+            presetId: "pki-trust-chain-to-zero-trust-access",
+            rationale: "Defense path skips MITM and reinforces trust boundaries."
+          }
+        ]
+      }
+    ]
+  };
+
+  it("schema accepts branched profile without top-level sequence", () => {
+    const result = validateLongFormAssemblyProfile(
+      branchedProfile,
+      `${ASSEMBLIES_ROOT}/content-depth-branched-v1.json`
+    );
+    expect(result.errors).toEqual([]);
+  });
+
+  it("schema rejects profile with both sequence and branches", () => {
+    const invalid = {
+      ...branchedProfile,
+      sequence: ["tls", "ssh", "dns"]
+    };
+    const result = validateLongFormAssemblyProfile(
+      invalid,
+      `${ASSEMBLIES_ROOT}/invalid-both.json`
+    );
+    expect(result.errors.length).toBeGreaterThan(0);
+  });
+
+  it("schema rejects branches without defaultBranchId", () => {
+    const invalid = {
+      ...branchedProfile,
+      defaultBranchId: undefined
+    };
+    const result = validateLongFormAssemblyProfile(
+      invalid,
+      `${ASSEMBLIES_ROOT}/invalid-no-default.json`
+    );
+    expect(result.errors.length).toBeGreaterThan(0);
+  });
+
+  it("linear network-foundations profile still validates", () => {
+    const profile = loadLongFormAssemblyProfile("network-foundations-long-v1", ASSEMBLIES_ROOT);
+    const result = validateLongFormAssemblyProfile(
+      profile,
+      `${ASSEMBLIES_ROOT}/network-foundations-long-v1.json`
+    );
+    expect(result.errors).toEqual([]);
+    expect(profile.sequence).toEqual(["tls", "ssh", "dns"]);
+  });
+
+  it("validator rejects branch sequence that breaks manifest rank", () => {
+    const invalid = {
+      ...branchedProfile,
+      branches: [
+        {
+          ...branchedProfile.branches[0]!,
+          sequence: ["mitm-defense", "auth-session", "tls"]
+        },
+        branchedProfile.branches[1]!
+      ]
+    };
+    const result = validateLongFormAssemblyProfile(
+      invalid,
+      `${ASSEMBLIES_ROOT}/invalid-rank.json`
+    );
+    expect(result.errors.some((item) => item.reason.includes("manifest-locked ordering"))).toBe(true);
+  });
+
+  it("validator rejects override preset not whitelisted for pair", () => {
+    const invalid = {
+      ...branchedProfile,
+      branches: [
+        {
+          ...branchedProfile.branches[0]!,
+          transitionOverrides: [
+            {
+              fromTopic: "auth-session",
+              toTopic: "mitm-defense",
+              presetId: "dns-to-auth-boundary",
+              rationale: "Wrong preset for this pair."
+            }
+          ]
+        },
+        branchedProfile.branches[1]!
+      ]
+    };
+    const result = validateLongFormAssemblyProfile(
+      invalid,
+      `${ASSEMBLIES_ROOT}/invalid-override.json`
+    );
+    expect(result.errors.some((item) => item.reason.includes("does not allow"))).toBe(true);
+  });
+
+  it("resolveBranch throws for unknown branchId", () => {
+    expect(() => resolveBranch(branchedProfile, "unknown-branch")).toThrow(/Unknown branch id/);
+  });
+
+  it("fork presets allow attack-path and defense-path transition pairs", () => {
+    expect(
+      validateTransitionPresetPair("auth-session-to-mitm-defense", "auth-session", "mitm-defense")
+    ).toBeNull();
+    expect(
+      validateTransitionPresetPair(
+        "mitm-defense-to-oauth-jwt-session",
+        "mitm-defense",
+        "oauth-jwt-session"
+      )
+    ).toBeNull();
+    expect(
+      validateTransitionPresetPair(
+        "pki-trust-chain-to-zero-trust-access",
+        "pki-trust-chain",
+        "zero-trust-access"
+      )
+    ).toBeNull();
+  });
+
+  it("attack-path and defense-path produce different transition chains", () => {
+    const attack = resolveBranch(branchedProfile, "attack-path");
+    const defense = resolveBranch(branchedProfile, "defense-path");
+    expect(attack.sequence).toHaveLength(7);
+    expect(defense.sequence).toHaveLength(8);
+    expect(attack.sequence).not.toEqual(defense.sequence);
+    expect(attack.transitionOverrides).toHaveLength(2);
+    expect(defense.transitionOverrides).toHaveLength(1);
   });
 });

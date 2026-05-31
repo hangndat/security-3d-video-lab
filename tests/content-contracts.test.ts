@@ -70,7 +70,7 @@ describe("content contracts schema and preset validation", () => {
   });
 
   it("v1.2 transition presets validate mitm-defense through api-gateway-waf chain", () => {
-    expect(REQUIRED_TRANSITION_PRESET_IDS).toHaveLength(8);
+    expect(REQUIRED_TRANSITION_PRESET_IDS).toHaveLength(11);
     expect(
       validateTransitionPresetPair("mitm-defense-to-zero-trust-access", "mitm-defense", "zero-trust-access")
     ).toBeNull();

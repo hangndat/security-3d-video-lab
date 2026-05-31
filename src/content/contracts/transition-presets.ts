@@ -14,8 +14,11 @@ export const REQUIRED_TRANSITION_PRESET_IDS = [
   "remote-shell-to-name-resolution",
   "dns-to-auth-boundary",
   "auth-session-to-pki-trust-chain",
+  "auth-session-to-mitm-defense",
   "pki-trust-chain-to-mitm-defense",
+  "pki-trust-chain-to-zero-trust-access",
   "mitm-defense-to-zero-trust-access",
+  "mitm-defense-to-oauth-jwt-session",
   "zero-trust-access-to-oauth-jwt-session",
   "oauth-jwt-session-to-api-gateway-waf"
 ] as const;
@@ -41,15 +44,30 @@ export const TRANSITION_PRESETS: Record<string, TransitionPreset> = {
     label: "Authentication session to PKI trust chain",
     allowedPairs: [{ fromTopic: "auth-session", toTopic: "pki-trust-chain" }]
   },
+  "auth-session-to-mitm-defense": {
+    id: "auth-session-to-mitm-defense",
+    label: "Authentication session to MITM attack narrative",
+    allowedPairs: [{ fromTopic: "auth-session", toTopic: "mitm-defense" }]
+  },
   "pki-trust-chain-to-mitm-defense": {
     id: "pki-trust-chain-to-mitm-defense",
     label: "PKI trust chain to MITM defense narrative",
     allowedPairs: [{ fromTopic: "pki-trust-chain", toTopic: "mitm-defense" }]
   },
+  "pki-trust-chain-to-zero-trust-access": {
+    id: "pki-trust-chain-to-zero-trust-access",
+    label: "PKI trust chain to zero-trust access boundary",
+    allowedPairs: [{ fromTopic: "pki-trust-chain", toTopic: "zero-trust-access" }]
+  },
   "mitm-defense-to-zero-trust-access": {
     id: "mitm-defense-to-zero-trust-access",
     label: "MITM defense to zero-trust access boundary",
     allowedPairs: [{ fromTopic: "mitm-defense", toTopic: "zero-trust-access" }]
+  },
+  "mitm-defense-to-oauth-jwt-session": {
+    id: "mitm-defense-to-oauth-jwt-session",
+    label: "MITM attack path to OAuth/JWT session abuse",
+    allowedPairs: [{ fromTopic: "mitm-defense", toTopic: "oauth-jwt-session" }]
   },
   "zero-trust-access-to-oauth-jwt-session": {
     id: "zero-trust-access-to-oauth-jwt-session",

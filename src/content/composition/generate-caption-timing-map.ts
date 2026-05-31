@@ -2,7 +2,7 @@ import type { SceneSpec } from "../../engine/contracts/scene-spec.js";
 import { loadTopicContracts } from "../contracts/load-topic-contracts.js";
 import type { TopicContract, TopicId } from "../contracts/types.js";
 import { computeAssemblyFrameOffsets, computeTopicFrameSpan } from "./frame-offsets.js";
-import { loadLongFormAssemblyProfile } from "./load-long-form-assembly.js";
+import { loadLongFormAssemblyProfile, resolveBranch } from "./load-long-form-assembly.js";
 
 export const CAPTION_FPS = 30;
 
@@ -37,10 +37,11 @@ export function generateCaptionTimingMap(
   topicScenes: Partial<Record<TopicId, SceneSpec>> = {}
 ): CaptionTimingMap {
   const profile = loadLongFormAssemblyProfile(assemblySlug);
+  const { sequence } = resolveBranch(profile);
   const contracts = contractByTopic(loadTopicContracts());
   const spansByTopic: Record<string, number> = {};
 
-  for (const topic of profile.sequence) {
+  for (const topic of sequence) {
     const contract = contracts.get(topic);
     if (!contract) {
       throw new Error(`Missing topic contract for '${topic}' while generating caption map.`);
@@ -48,10 +49,10 @@ export function generateCaptionTimingMap(
     spansByTopic[topic] = computeTopicFrameSpan(contract, topicScenes[topic as TopicId]);
   }
 
-  const offsets = computeAssemblyFrameOffsets(profile.sequence, spansByTopic);
+  const offsets = computeAssemblyFrameOffsets(sequence, spansByTopic);
   const entries: CaptionTimingEntry[] = [];
 
-  for (const topic of profile.sequence) {
+  for (const topic of sequence) {
     const contract = contracts.get(topic)!;
     const frameOffset = offsets.get(topic) ?? 0;
     const placeholders = new Map(
