@@ -105,9 +105,9 @@
 
 ## Current Status
 
-**Active milestone:** v1.3 Cinematic Crew Skills — Phase 15 next.
+**Active milestone:** v1.3 Cinematic Crew Skills — Phase 15 ready to execute.
 
-Run `/gsd-plan-phase 15` or `/gsd-execute-phase 15` when planned.
+Run `/gsd-execute-phase 15` to deliver Creative Technologist and Security SME + Audio skills.
 
 ## Status Rules
 
