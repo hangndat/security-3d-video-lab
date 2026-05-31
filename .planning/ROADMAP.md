@@ -76,11 +76,14 @@
 
 ### Phase 12: v1.2 Verification and Governance
 
-- [ ] **Phase 12: v1.2 Verification and Governance** (0/0 plans)
+- [ ] **Phase 12: v1.2 Verification and Governance** (0/2 plans)
   - **Goal:** Close v1.2 with full E2E coverage for new content and restored CI governance gates.
   - **Requirements:** `VER-04`, `VER-05`
   - **Depends on:** Phases 09–11 (content, branches, narration deliverables)
-  - **Plans:** TBD
+  - **Plans:** 2 plans, 2 waves
+  - **Plan List:**
+    - [ ] `12-01-PLAN.md` — Nine-topic export fixtures, depth/branched export E2E, verify-content-depth (VER-04).
+    - [ ] `12-02-PLAN.md` — Governance re-enable, v1.2 milestone audit, archive and close (VER-05).
   - **Success Criteria:**
     1. Every v1.2 module and branch variant has automated E2E and KPI acceptance tests.
     2. Requirement traceability validator covers v1.2 IDs and passes milestone-close mode.
@@ -88,9 +91,9 @@
 
 ## Current Status
 
-**Active milestone:** v1.2 Content Depth — Phase 11 complete; Phase 12 next.
+**Active milestone:** v1.2 Content Depth — Phase 12 planned; ready to execute (final v1.2 phase).
 
-Run `/gsd-plan-phase 12` or `/gsd-execute-phase 12` to continue.
+Run `/gsd-execute-phase 12` to close the milestone.
 
 ## Status Rules
 
