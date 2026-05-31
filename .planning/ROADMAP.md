@@ -97,11 +97,11 @@
 
 ### Phase 23: TLS 3D Production Export
 
-- [ ] **Phase 23: TLS 3D Production Export** (0/2 plans — planned)
+- [ ] **Phase 23: TLS 3D Production Export** (0/2 plans — ready to execute)
   - **Goal:** TLS production bundle exports real 3D MP4 (video-only) replacing trace-hash placeholder as default local output.
   - **Requirements:** `RENDER-03`
   - **Depends on:** Phases 21–22, `tls-production-scene-spec.json`, Phase 19 crew artifacts
-  - **Plans:** 2 plans, 1 wave
+  - **Plans:** 2 plans, 1 wave — PLAN-CHECK PASS
   - **Plan List:**
     - [ ] `23-01-PLAN.md` — Wire `generateTlsProductionArtifacts` to r3f-headless default; video-only manifest (RENDER-03).
     - [ ] `23-02-PLAN.md` — 3D production rubric, visual smoke tests, updated crew handoffs (RENDER-03).
@@ -127,9 +127,9 @@
 
 ## Current Status
 
-**Active milestone:** v1.5 Real 3D Render — Phase 23 next.
+**Active milestone:** v1.5 Real 3D Render — Phase 23 ready to execute.
 
-Run `/gsd-plan-phase 23` to begin TLS 3D production export.
+Run `/gsd-execute-phase 23` to begin TLS 3D production export.
 
 ## Status Rules
 
