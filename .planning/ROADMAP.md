@@ -61,11 +61,14 @@
 
 ### Phase 11: Narration Pipeline
 
-- [ ] **Phase 11: Narration Pipeline** (0/0 plans)
+- [ ] **Phase 11: Narration Pipeline** (0/2 plans)
   - **Goal:** Generate narration-ready audio from caption timing maps and attach metadata to exports.
   - **Requirements:** `VOIC-01`, `VOIC-02`
-  - **Depends on:** Phase 06 caption timing maps (v1.1); Phase 09 beat coverage
-  - **Plans:** TBD
+  - **Depends on:** Phase 06 caption timing maps (v1.1); Phase 09 beat coverage; Phase 10 branch naming
+  - **Plans:** 2 plans, 2 waves
+  - **Plan List:**
+    - [ ] `11-01-PLAN.md` — Branch-aware caption maps, narration schema, stub provider, alignment validator (VOIC-01).
+    - [ ] `11-02-PLAN.md` — Export bundle linkage, verify script, CI hook (VOIC-01 + VOIC-02).
   - **Success Criteria:**
     1. Narration generator produces audio segments aligned to beat timing windows within tolerance.
     2. Long-form exports include narration track metadata linked to caption timing map beats.
@@ -85,9 +88,9 @@
 
 ## Current Status
 
-**Active milestone:** v1.2 Content Depth — Phase 10 complete; Phase 11 next.
+**Active milestone:** v1.2 Content Depth — Phase 11 planned; ready to execute.
 
-Run `/gsd-plan-phase 11` or `/gsd-execute-phase 11` to continue.
+Run `/gsd-execute-phase 11` to continue.
 
 ## Status Rules
 
