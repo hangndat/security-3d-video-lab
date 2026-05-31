@@ -20,14 +20,14 @@ progress:
 See `.planning/PROJECT.md` (updated 2026-05-31)
 
 **Core value:** cinematic, deterministic security/infrastructure visualization.
-**Current focus:** v1.5 Phase 21 — Headless Capture Foundation.
+**Current focus:** v1.5 Phase 21 — Headless Capture Foundation (planned).
 
 ## Current Position
 
 Phase: 21 — Headless Capture Foundation (planned)
-Plan: 21-01, 21-02 not yet written
-Status: Requirements and roadmap defined — ready for `/gsd-plan-phase 21`
-Last activity: 2026-05-31 — v1.5 Real 3D Render milestone initialized
+Plan: 21-01, 21-02 ready — PLAN-CHECK PASS
+Status: Ready to execute — `/gsd-execute-phase 21`
+Last activity: 2026-05-31 — Phase 21 planned (RENDER-01)
 
 ## Accumulated Context
 

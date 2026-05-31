@@ -67,14 +67,14 @@
 
 ### Phase 21: Headless Capture Foundation
 
-- [ ] **Phase 21: Headless Capture Foundation** (0/2 plans — planned)
+- [ ] **Phase 21: Headless Capture Foundation** (0/2 plans — ready to execute)
   - **Goal:** Restore and harden headless Three.js PNG capture wired to compose plan and production render backend selection.
   - **Requirements:** `RENDER-01`
   - **Depends on:** v1.4 R3F catalog, `renderCompositionProductionMp4`, `@headless-three/renderer` dep
-  - **Plans:** 2 plans, 1 wave
+  - **Plans:** 2 plans, 1 wave — PLAN-CHECK PASS
   - **Plan List:**
     - [ ] `21-01-PLAN.md` — Headless capture module: `captureVizFramePng`, backend resolver, frame PNG tests (RENDER-01).
-    - [ ] `21-02-PLAN.md` — Production render path integration and verify script (RENDER-01).
+    - [ ] `21-02-PLAN.md` — Production render path integration, CI backend policy, verify script (RENDER-01).
   - **Success Criteria:**
     1. Single-frame PNG capture returns non-empty buffer with stable hash for TLS fixture frame.
     2. `SECURITY_LAB_RENDER_BACKEND` switches between `r3f-headless` and `trace-hash`.
