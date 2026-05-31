@@ -259,7 +259,16 @@ function main() {
   writeFileSync(JSON_OUT, `${JSON.stringify(report, null, 2)}\n`, "utf-8");
   writeFileSync(MARKDOWN_OUT, buildMarkdown(report), "utf-8");
 
+  const phase09Json = resolve(REPO_ROOT, ".artifacts/verification/phase09/advanced-security-topics.json");
+  mkdirSync(dirname(phase09Json), { recursive: true });
+  writeFileSync(
+    phase09Json,
+    `${JSON.stringify({ ...report, phase: "09-advanced-security-topics", jsonArtifact: phase09Json }, null, 2)}\n`,
+    "utf-8"
+  );
+
   process.stdout.write(`Wrote ${JSON_OUT}\n`);
+  process.stdout.write(`Wrote ${phase09Json}\n`);
   process.stdout.write(`Wrote ${MARKDOWN_OUT}\n`);
 
   if (gateStatus !== "pass") {

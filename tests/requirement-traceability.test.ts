@@ -47,7 +47,7 @@ describe("requirement traceability validation", () => {
   });
 
   it("fails when a v1.2 requirement row is missing from traceability table", () => {
-    const requirements = loadRequirements().replace("| VER-05 | Phase 12 | Pending |", "");
+    const requirements = loadRequirements().replace("| VER-05 | Phase 12 | Complete |", "");
     const result = validateRequirementTraceability({
       requirementsContent: requirements,
       roadmapContent: loadRoadmap()
@@ -71,21 +71,28 @@ describe("requirement traceability validation", () => {
     expect(result.errors.some((issue) => issue.path.includes("ROADMAP.md#phase-09"))).toBe(true);
   });
 
-  it("milestone-close mode fails when any v1.2 requirement is still Pending", () => {
+  it("milestone-close mode enforces zero Pending requirements", () => {
+    const pendingRows = parseTraceabilityTable(loadRequirements()).filter(
+      (row) => row.status === "Pending"
+    );
     const result = validateRequirementTraceability({
       requirementsContent: loadRequirements(),
       roadmapContent: loadRoadmap(),
       milestoneClose: true
     });
 
-    expect(result.pendingCount).toBeGreaterThan(0);
-    expect(result.errors.some((issue) => issue.reason.includes("still Pending"))).toBe(true);
+    expect(result.pendingCount).toBe(pendingRows.length);
+    if (pendingRows.length > 0) {
+      expect(result.errors.some((issue) => issue.reason.includes("still Pending"))).toBe(true);
+    } else {
+      expect(result.errors).toEqual([]);
+    }
   });
 
   it("fails when checkbox and traceability status are out of sync", () => {
     const requirements = loadRequirements().replace(
-      "| VOIC-01 | Phase 11 | Pending |",
-      "| VOIC-01 | Phase 11 | Complete |"
+      "| VER-04 | Phase 12 | Complete |",
+      "| VER-04 | Phase 12 | Pending |"
     );
     const result = validateRequirementTraceability({
       requirementsContent: requirements,
@@ -94,7 +101,7 @@ describe("requirement traceability validation", () => {
 
     expect(
       result.errors.some((issue) =>
-        issue.reason.includes("Checkbox is unchecked but traceability status is Complete")
+        issue.reason.includes("Checkbox is checked but traceability status is 'Pending'")
       )
     ).toBe(true);
   });

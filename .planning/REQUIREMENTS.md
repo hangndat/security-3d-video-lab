@@ -25,8 +25,8 @@ Requirements for the Content Depth milestone.
 
 ### Verification & Governance
 
-- [ ] **VER-04**: Every v1.2 module and branch variant has automated tests covering contract completeness, assembly linkage, and export artifacts.
-- [ ] **VER-05**: v1.2 requirement traceability is machine-validated in CI and passes milestone-close with zero unmapped requirements.
+- [x] **VER-04**: Every v1.2 module and branch variant has automated tests covering contract completeness, assembly linkage, and export artifacts.
+- [x] **VER-05**: v1.2 requirement traceability is machine-validated in CI and passes milestone-close with zero unmapped requirements.
 
 ## v3 Requirements
 
@@ -59,8 +59,8 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 | NARR-02 | Phase 10 | Complete |
 | VOIC-01 | Phase 11 | Complete |
 | VOIC-02 | Phase 11 | Complete |
-| VER-04 | Phase 12 | Pending |
-| VER-05 | Phase 12 | Pending |
+| VER-04 | Phase 12 | Complete |
+| VER-05 | Phase 12 | Complete |
 
 **Coverage:**
 - v1.2 requirements: 9 total

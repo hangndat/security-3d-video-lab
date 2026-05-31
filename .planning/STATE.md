@@ -1,16 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.2
-milestone_name: Content Depth
-status: executing
-last_updated: "2026-05-31T07:42:28.927Z"
-last_activity: 2026-05-31 -- Phase 12 planning complete
+milestone: between
+milestone_name: null
+status: between-milestones
+last_updated: "2026-05-31T14:50:00.000Z"
+last_activity: 2026-05-31 -- Phase 12 complete; v1.2 shipped
 progress:
-  total_phases: 1
+  total_phases: 0
   completed_phases: 0
-  total_plans: 2
+  total_plans: 0
   completed_plans: 0
-  percent: 0
+  percent: 100
 ---
 
 # Project State
@@ -20,14 +20,14 @@ progress:
 See `.planning/PROJECT.md` (updated 2026-05-31)
 
 **Core value:** cinematic, deterministic security/infrastructure visualization.
-**Current focus:** v1.2 Content Depth — Phase 12 planned; final verification and governance close.
+**Current focus:** Between milestones — v1.2 Content Depth shipped.
 
 ## Current Position
 
-Phase: 12 — v1.2 Verification and Governance (planned)
-Plan: 12-01, 12-02 (2 plans, 2 waves)
-Status: Ready to execute
-Last activity: 2026-05-31 -- Phase 12 planning complete
+Phase: none (between milestones)
+Plan: none
+Status: Ready for `/gsd-new-milestone`
+Last activity: 2026-05-31 -- Phase 12 complete; v1.2 archived
 
 ## Accumulated Context
 
@@ -35,7 +35,7 @@ Last activity: 2026-05-31 -- Phase 12 planning complete
 
 **v1.2 strategic choice:** Content-first — platform features (PLAT-01 storyboard UI, PLAT-02 publish portal) deferred to a later milestone.
 
-**Phase 11:** Narration via caption-map-driven stub provider; export bundles at `.artifacts/exports/<slug>[-branchId]/`.
+**Phase 12:** Nine-topic export fixtures, branched E2E tests, CI governance re-enabled, v1.2 milestone audit PASS.
 
 ### Pending Todos
 
@@ -47,10 +47,10 @@ Last activity: 2026-05-31 -- Phase 12 planning complete
 
 ## Deferred Items
 
-- CI governance gates re-enable at Phase 12 (VER-05).
+- None — v1.1 governance debt cleared in Phase 12.
 
 ## Session Continuity
 
 - Last session: 2026-05-31
-- Stopped at: Phase 11 complete
+- Stopped at: v1.2 milestone close
 - Resume file: None

@@ -1,6 +1,6 @@
 # Phase 05 Content Authoring Foundation Verification
 
-Generated: 2026-05-29T02:51:54.242Z
+Generated: 2026-05-31T07:46:08.229Z
 
 ## Gate Status
 
@@ -29,12 +29,18 @@ Generated: 2026-05-29T02:51:54.242Z
 | auth-session | auth-session-short-v1 | yes | valid | 5 | 5 |
 | pki-trust-chain | pki-trust-chain-short-v1 | yes | valid | 5 | 5 |
 | mitm-defense | mitm-defense-short-v1 | yes | valid | 5 | 5 |
+| zero-trust-access | zero-trust-access-short-v1 | yes | valid | 5 | 5 |
+| oauth-jwt-session | oauth-jwt-session-short-v1 | yes | valid | 5 | 5 |
+| api-gateway-waf | api-gateway-waf-short-v1 | yes | valid | 5 | 5 |
 
-## New Draft Modules (CONT-01)
+## Expansion Modules (CONT-04)
 
 - auth-session: valid (auth-session-short-v1)
 - pki-trust-chain: valid (pki-trust-chain-short-v1)
 - mitm-defense: valid (mitm-defense-short-v1)
+- zero-trust-access: valid (zero-trust-access-short-v1)
+- oauth-jwt-session: valid (oauth-jwt-session-short-v1)
+- api-gateway-waf: valid (api-gateway-waf-short-v1)
 
 ## Machine Evidence
 

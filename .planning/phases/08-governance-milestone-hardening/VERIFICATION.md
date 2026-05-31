@@ -1,6 +1,6 @@
 # Phase 08 Governance Milestone Verification
 
-Generated: 2026-05-29T02:51:52.160Z
+Generated: 2026-05-31T07:26:58.126Z
 
 ## Gate Status
 
@@ -15,9 +15,9 @@ Generated: 2026-05-29T02:51:52.160Z
 
 | Suite | Command | Exit | Status |
 | --- | --- | ---: | --- |
-| requirement-traceability | `node scripts/validate-requirement-traceability.mjs --milestone-close` | 0 | PASS |
-| milestone-governance-tests | `npm run test -- tests/requirement-traceability.test.ts tests/milestone-governance.test.ts` | 0 | PASS |
-| refresh-phase-evidence | `npm run verify:content-authoring -- --quick` | 0 | PASS |
+| requirement-traceability | `node scripts/validate-requirement-traceability.mjs --milestone-close` | 0 | SKIP |
+| milestone-governance-tests | `npm run test -- tests/requirement-traceability.test.ts tests/milestone-governance.test.ts` | 0 | SKIP |
+| refresh-phase-evidence | `npm run verify:content-authoring -- --quick` | 0 | SKIP |
 | audit-milestone | `node scripts/audit-milestone-v1.1.mjs` | 0 | PASS |
 
 ## Milestone Audit

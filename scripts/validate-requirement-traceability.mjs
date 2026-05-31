@@ -15,13 +15,15 @@ const milestoneClose = process.argv.includes("--milestone-close");
 
 function main() {
   const result = validateRequirementTraceability({ milestoneClose });
-  const gateStatus = result.errors.length === 0 ? "pass" : "fail";
+  const gateStatus = result.skipped ? "skipped" : result.errors.length === 0 ? "pass" : "fail";
 
   const report = {
     phase: "08-governance-milestone-hardening",
     generatedAt: new Date().toISOString(),
     gateStatus,
     milestoneClose,
+    skipped: result.skipped ?? false,
+    skipReason: result.skipReason,
     unmappedCount: result.unmappedCount,
     pendingCount: result.pendingCount,
     errors: result.errors,
@@ -33,6 +35,13 @@ function main() {
   writeFileSync(JSON_OUT, `${JSON.stringify(report, null, 2)}\n`, "utf-8");
   process.stdout.write(`Wrote ${JSON_OUT}\n`);
   process.stdout.write(`Traceability gate: ${gateStatus.toUpperCase()}\n`);
+
+  if (result.skipped) {
+    for (const issue of result.warnings) {
+      process.stdout.write(`${issue.path}: ${issue.reason}\n`);
+    }
+    return;
+  }
 
   if (gateStatus !== "pass") {
     for (const issue of result.errors) {

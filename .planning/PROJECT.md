@@ -9,17 +9,11 @@ Build a code-driven cinematic visualization platform that explains security and 
 ## Problem
 Most technical education is slide-heavy and weakly visual, while modern systems (TLS, SSH, DNS, cloud infrastructure, AI agents) are dynamic and better explained through animated flows.
 
-## Current Milestone: v1.2 Content Depth
+## Current Milestone: Between Milestones
 
-**Goal:** Deepen the content library with advanced security topics, branching narratives, and narration-ready exports — without platform UI work.
+**Status:** v1.2 Content Depth shipped 2026-05-31. Run `/gsd-new-milestone` to define the next scope.
 
-**Target features:**
-- Three new security modules (zero-trust access, OAuth/JWT sessions, API gateway/WAF)
-- Assembly branch variants with deterministic replay per path
-- Narration pipeline driven by existing caption timing maps
-- Full verification and restored v1.2 governance traceability at milestone close
-
-**Strategic choice:** Content-first — platform features (storyboard UI, publish portal) deferred to a later milestone.
+**Last shipped:** Nine-topic content library with branching narratives, narration exports, and restored CI governance.
 
 ## Success Signals
 - Deterministic scene/timeline architecture is defined and followed.
@@ -31,9 +25,8 @@ Most technical education is slide-heavy and weakly visual, while modern systems 
 
 - **v1.0** shipped 2026-05-28: deterministic engine, TLS/SSH/DNS first batch, canonical E2E verification.
 - **v1.1** shipped 2026-05-29: six-topic content manifest, JSON authoring contracts, long-form composition, batch quality gates, governance hardening.
-- **102 tests** passing; CI runs content, composition, and batch quality gates (governance temporarily excluded between milestones).
-- **Six security modules:** TLS, SSH, DNS, auth-session, pki-trust-chain, mitm-defense.
-- **Two long-form assemblies:** network-foundations-long-v1, security-expansion-long-v1.
+- **v1.2** shipped 2026-05-31: three advanced security modules, branch variants, narration pipeline, nine-topic export verification, CI governance restored.
+- **156+ tests** passing; CI runs content, composition, batch quality, content depth, and governance gates.
 
 ## Validated Requirements
 
@@ -49,12 +42,18 @@ Most technical education is slide-heavy and weakly visual, while modern systems 
 - ✓ VER-01 through VER-03 — module tests and KPI verification
 - ✓ VER-02 — auditable requirement traceability
 
+### v1.2
+- ✓ CONT-04 through CONT-06 — advanced security modules and manifest integration
+- ✓ NARR-01, NARR-02 — branch variants with deterministic replay
+- ✓ VOIC-01, VOIC-02 — narration pipeline and export bundle metadata
+- ✓ VER-04, VER-05 — export E2E coverage and CI governance
+
 ## Out of Scope
 
 | Feature | Reason |
 |---------|--------|
-| Visual storyboard UI (PLAT-01) | Platform milestone; content-first for v1.2 |
-| Publish portal with analytics (PLAT-02) | Platform milestone; content-first for v1.2 |
+| Visual storyboard UI (PLAT-01) | Platform milestone; content-first through v1.2 |
+| Publish portal with analytics (PLAT-02) | Platform milestone; content-first through v1.2 |
 | Full SaaS multi-tenant platform | Not required for content pipeline milestones |
 | Real-time collaborative editor | File-driven authoring sufficient through v1.2 |
 
@@ -69,4 +68,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-31 — v1.2 Content Depth milestone started*
+*Last updated: 2026-05-31 — v1.2 Content Depth milestone shipped*

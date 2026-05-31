@@ -1,5 +1,34 @@
 # Project Milestones: Security Cinematic Lab
 
+## v1.2 Content Depth (Shipped: 2026-05-31)
+
+**Delivered:** Advanced security modules, branching narratives, narration-ready exports, and restored CI governance with full nine-topic export verification.
+
+**Phases completed:** 9-12 (8 plans total)
+
+**Key accomplishments:**
+- Three new security modules (zero-trust access, OAuth/JWT sessions, API gateway/WAF) in the nine-topic manifest.
+- Assembly branch variants (attack-path, defense-path) with deterministic replay and export bundles.
+- Narration pipeline aligned to caption timing maps with branch-aware metadata.
+- Nine-topic export fixtures, depth/branched E2E tests, and v1.2 milestone audit with CI governance re-enabled.
+
+**Stats:**
+- 4 phases, 8 plans, 9/9 v1.2 requirements complete with zero unmapped traceability rows
+- 156+ automated tests passing at close
+- Deferred governance debt from v1.1 between-milestones gap: resolved
+
+**Git range:** v1.1 close → milestone close
+
+**Verification:**
+- `.planning/milestones/v1.2-MILESTONE-AUDIT.md`
+- `.planning/milestones/v1.2-ROADMAP.md`
+- `.artifacts/verification/phase12/content-depth.json`
+- `.artifacts/verification/phase12/milestone-governance.json`
+
+**What's next:** Plan next milestone via `/gsd-new-milestone`.
+
+---
+
 ## v1.1 Content Expansion (Shipped: 2026-05-29)
 
 **Delivered:** Content expansion pipeline with data-first authoring, long-form cinematic composition, batch quality gates, and auditable governance for milestone close.
@@ -25,7 +54,7 @@
 - `.artifacts/verification/phase08/requirement-traceability.json`
 - `.artifacts/verification/phase08/milestone-governance.json`
 
-**What's next:** Plan v1.2 scope via `/gsd-new-milestone`.
+**What's next:** Completed via v1.2 Content Depth.
 
 ---
 

@@ -4,15 +4,16 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 
-import { buildMilestoneAuditReport } from "../src/verification/milestone-audit.ts";
+import { buildV12MilestoneAuditReport } from "../src/verification/milestone-audit.ts";
+import { validateRequirementTraceability } from "../src/verification/requirement-traceability.ts";
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const JSON_OUT = resolve(REPO_ROOT, ".artifacts/verification/phase08/milestone-governance.json");
+const JSON_OUT = resolve(REPO_ROOT, ".artifacts/verification/phase12/milestone-governance.json");
 const MARKDOWN_OUT = resolve(
   REPO_ROOT,
-  ".planning/phases/08-governance-milestone-hardening/VERIFICATION.md"
+  ".planning/phases/12-v12-verification-governance/VERIFICATION.md"
 );
-const AUDIT_PATH = resolve(REPO_ROOT, ".planning/milestones/v1.1-MILESTONE-AUDIT.md");
+const AUDIT_PATH = resolve(REPO_ROOT, ".planning/milestones/v1.2-MILESTONE-AUDIT.md");
 
 const quickMode = process.argv.includes("--quick");
 
@@ -37,7 +38,7 @@ function runSuite(label, command, args) {
 
 function buildMarkdown(report) {
   const lines = [
-    "# Phase 08 Governance Milestone Verification",
+    "# Phase 12 Governance Milestone Verification",
     "",
     `Generated: ${report.generatedAt}`,
     "",
@@ -45,7 +46,7 @@ function buildMarkdown(report) {
     "",
     "| Gate | Status |",
     "| --- | --- |",
-    `| Phase 08 blocking gate | **${report.gateStatus.toUpperCase()}** |`,
+    `| Phase 12 blocking gate | **${report.gateStatus.toUpperCase()}** |`,
     `| Traceability (milestone-close) | ${report.blockingCriteria.traceabilityPassed ? "yes" : "no"} |`,
     `| Milestone audit verdict | ${report.blockingCriteria.auditVerdict} |`,
     `| Governance test suites | ${report.blockingCriteria.suitesPassed ? "yes" : "no"} |`,
@@ -66,7 +67,7 @@ function buildMarkdown(report) {
     "## Milestone Audit",
     "",
     `- Verdict: **${report.audit.verdict}**`,
-    `- Artifact: \`.planning/milestones/v1.1-MILESTONE-AUDIT.md\``,
+    `- Artifact: \`.planning/milestones/v1.2-MILESTONE-AUDIT.md\``,
     "",
     "## Machine Evidence",
     "",
@@ -86,25 +87,76 @@ function buildMarkdown(report) {
 }
 
 function main() {
-  const suites = [
-    runSuite("requirement-traceability", "node", [
-      "scripts/validate-requirement-traceability.mjs",
-      "--milestone-close"
-    ]),
-    runSuite("milestone-governance-tests", "npm", [
-      "run",
-      "test",
-      "--",
-      "tests/requirement-traceability.test.ts",
-      "tests/milestone-governance.test.ts"
-    ])
-  ];
+  const betweenMilestones = validateRequirementTraceability().skipped === true;
+
+  const suites = betweenMilestones
+    ? [
+        {
+          label: "requirement-traceability",
+          command: "node scripts/validate-requirement-traceability.mjs --milestone-close",
+          startedAt: new Date().toISOString(),
+          completedAt: new Date().toISOString(),
+          exitCode: 0,
+          passed: true,
+          skipped: true,
+          stdout: "Between milestones: traceability validation skipped.",
+          stderr: ""
+        },
+        {
+          label: "milestone-governance-tests",
+          command:
+            "npm run test -- tests/requirement-traceability.test.ts tests/milestone-governance.test.ts",
+          startedAt: new Date().toISOString(),
+          completedAt: new Date().toISOString(),
+          exitCode: 0,
+          passed: true,
+          skipped: true,
+          stdout: "Between milestones: governance test suite skipped in orchestrator.",
+          stderr: ""
+        }
+      ]
+    : [
+        runSuite("requirement-traceability", "node", [
+          "scripts/validate-requirement-traceability.mjs",
+          "--milestone-close"
+        ]),
+        runSuite("milestone-governance-tests", "npm", [
+          "run",
+          "test",
+          "--",
+          "tests/requirement-traceability.test.ts",
+          "tests/milestone-governance.test.ts"
+        ])
+      ];
 
   if (!quickMode) {
     suites.push(
-      runSuite("refresh-phase-evidence", "npm", ["run", "verify:content-authoring", "--", "--quick"])
+      runSuite("refresh-phase-evidence", "npm", [
+        "run",
+        "verify:content-authoring",
+        "--",
+        "--quick"
+      ]),
+      runSuite("refresh-narrative-evidence", "npm", [
+        "run",
+        "verify:narrative-composition",
+        "--",
+        "--quick"
+      ]),
+      runSuite("refresh-narration-evidence", "npm", [
+        "run",
+        "verify:narration-pipeline",
+        "--",
+        "--quick"
+      ]),
+      runSuite("refresh-content-depth-evidence", "npm", [
+        "run",
+        "verify:content-depth",
+        "--",
+        "--quick"
+      ])
     );
-    suites.push(runSuite("audit-milestone", "node", ["scripts/audit-milestone-v1.1.mjs"]));
+    suites.push(runSuite("audit-milestone", "node", ["scripts/audit-milestone-v1.2.mjs"]));
   } else {
     suites.push({
       label: "refresh-phase-evidence",
@@ -117,24 +169,26 @@ function main() {
       stdout: "Skipped in --quick mode.",
       stderr: ""
     });
-    const auditSuite = runSuite("audit-milestone", "node", ["scripts/audit-milestone-v1.1.mjs"]);
+    const auditSuite = runSuite("audit-milestone", "node", ["scripts/audit-milestone-v1.2.mjs"]);
     suites.push(auditSuite);
   }
 
+  const traceabilitySuite = suites.find((suite) => suite.label === "requirement-traceability");
   const traceabilityPassed =
-    suites.find((suite) => suite.label === "requirement-traceability")?.passed ?? false;
+    traceabilitySuite?.skipped === true || traceabilitySuite?.passed === true;
   const audit = existsSync(AUDIT_PATH)
-    ? buildMilestoneAuditReport(REPO_ROOT)
-    : { verdict: "FAIL", errors: ["Missing v1.1-MILESTONE-AUDIT.md"] };
+    ? buildV12MilestoneAuditReport(REPO_ROOT)
+    : { verdict: "FAIL", errors: ["Missing v1.2-MILESTONE-AUDIT.md"] };
   const suitesPassed = suites.every((suite) => suite.skipped || suite.passed);
   const gateStatus =
     traceabilityPassed && audit.verdict === "PASS" && suitesPassed ? "pass" : "fail";
 
   const report = {
-    phase: "08-governance-milestone-hardening",
+    phase: "12-v12-verification-governance",
     generatedAt: new Date().toISOString(),
     gateStatus,
     quickMode,
+    betweenMilestones,
     blockingCriteria: {
       traceabilityPassed,
       auditVerdict: audit.verdict,

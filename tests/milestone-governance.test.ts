@@ -6,7 +6,9 @@ import { describe, expect, it } from "vitest";
 
 import {
   buildMilestoneAuditReport,
-  renderMilestoneAuditMarkdown
+  buildV12MilestoneAuditReport,
+  renderMilestoneAuditMarkdown,
+  renderV12MilestoneAuditMarkdown
 } from "../src/verification/milestone-audit.js";
 import { validateRequirementTraceability, parseTraceabilityTable } from "../src/verification/requirement-traceability.js";
 
@@ -50,8 +52,26 @@ describe("milestone audit aggregation", () => {
   });
 });
 
+describe("v1.2 milestone audit aggregation", () => {
+  it("reports PASS when phase09–12 JSON gateStatus values are pass", () => {
+    const report = buildV12MilestoneAuditReport(REPO_ROOT, { skipTraceabilityCheck: true });
+    expect(report.phases).toHaveLength(4);
+    expect(report.phases.every((phase) => phase.passed)).toBe(true);
+    expect(report.verdict).toBe("PASS");
+  });
+
+  it("generated v1.2 audit markdown includes nine-requirement coverage", () => {
+    const markdown = renderV12MilestoneAuditMarkdown(
+      buildV12MilestoneAuditReport(REPO_ROOT, { skipTraceabilityCheck: true })
+    );
+    expect(markdown).toContain("9/9");
+    expect(markdown).toContain("Content Depth");
+    expect(markdown).toMatch(/\*\*PASS\*\*/);
+  });
+});
+
 describe("milestone governance policy", () => {
-  it("requirement traceability validates active v1.2 requirements with pending milestone-close failures", () => {
+  it("requirement traceability milestone-close reflects Pending row count", () => {
     const result = validateRequirementTraceability();
     expect(result.skipped).toBeUndefined();
     expect(result.errors).toEqual([]);
@@ -62,10 +82,15 @@ describe("milestone governance policy", () => {
     );
 
     const closeResult = validateRequirementTraceability({ milestoneClose: true });
-    expect(closeResult.errors.some((issue) => issue.reason.includes("still Pending"))).toBe(true);
+    if (result.pendingCount > 0) {
+      expect(closeResult.errors.some((issue) => issue.reason.includes("still Pending"))).toBe(true);
+    } else {
+      expect(closeResult.errors).toEqual([]);
+      expect(closeResult.pendingCount).toBe(0);
+    }
   });
 
-  it("package.json exposes governance scripts (CI gates temporarily disabled)", () => {
+  it("package.json exposes governance scripts", () => {
     const pkg = readFileSync(resolve(REPO_ROOT, "package.json"), "utf-8");
     expect(pkg).toContain("validate:requirements");
     expect(pkg).toContain("verify:milestone-governance");

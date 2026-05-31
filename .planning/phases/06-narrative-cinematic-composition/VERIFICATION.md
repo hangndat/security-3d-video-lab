@@ -1,6 +1,6 @@
 # Phase 06 Narrative Composition Verification
 
-Generated: 2026-05-28T13:13:35.090Z
+Generated: 2026-05-31T07:45:31.735Z
 
 ## Gate Status
 
@@ -22,10 +22,11 @@ Generated: 2026-05-28T13:13:35.090Z
 
 ## Assembly Coverage
 
-| Slug | Topics | Window (min-max) |
-| --- | ---: | --- |
-| network-foundations-long-v1 | 3 | 4-6 min |
-| security-expansion-long-v1 | 6 | 8-12 min |
+| Slug | Topics | Branches | Default branch | Window (min-max) |
+| --- | ---: | ---: | --- | --- |
+| network-foundations-long-v1 | 3 | — | — | 4-6 min |
+| security-expansion-long-v1 | 6 | — | — | 8-12 min |
+| content-depth-branched-v1 | 8 | 2 | defense-path | 8-12 min |
 
 ## Caption Maps
 

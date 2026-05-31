@@ -1,34 +1,31 @@
-# Phase 11 Verification: Narration Pipeline
+# Phase 11 Narration Pipeline Verification
 
-**Verified:** 2026-05-31  
-**Verdict:** PASS
+Generated: 2026-05-31T07:45:32.752Z
 
-## Requirement Coverage
+## Gate Status
 
-| REQ-ID | Status | Evidence |
-|--------|--------|----------|
-| VOIC-01 | Complete | `generateNarrationTrack` + stub provider + alignment validator |
-| VOIC-02 | Complete | `buildLongFormExportBundle` links caption + narration metadata |
+| Gate | Status |
+| --- | --- |
+| Phase 11 blocking gate | **PASS** |
+| Narration track tests passed | yes |
+| Export bundle tests passed | yes |
+| Replay suites passed | yes |
 
-## Gate Results
+## Suite Results
 
-| Gate | Result |
-|------|--------|
-| narration-track tests | PASS (14 tests) |
-| narration-export tests | PASS (6 tests) |
-| verify-narration-pipeline --quick | PASS |
-| Full test suite | PASS (147 tests) |
+| Suite | Command | Exit | Pass |
+| --- | --- | ---: | --- |
+| narration-track | `npm run test -- tests/narration-track.test.ts` | 0 | PASS |
+| narration-export | `npm run test -- tests/narration-export.test.ts` | 0 | PASS |
 
-## Coverage Targets
+## Assembly Coverage
 
 | Target | Assembly | Branch |
-|--------|----------|--------|
+| --- | --- | --- |
 | canonical | network-foundations-long-v1 | — |
 | branched-defense-path | content-depth-branched-v1 | defense-path |
 
-## Notes
+## Machine Evidence
 
-- Stub provider only in CI; ElevenLabs/cloud TTS deferred per ADR-001.
-- Video mux and full module export E2E deferred to Phase 12 (VER-04).
+- JSON artifact: `.artifacts/verification/phase11/narration-pipeline.json`
 
-## VERIFICATION PASSED
