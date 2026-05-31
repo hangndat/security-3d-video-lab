@@ -20,8 +20,8 @@ Requirements for the Content Depth milestone.
 
 ### Narration Pipeline
 
-- [ ] **VOIC-01**: Creator can generate narration audio aligned to beat caption timing maps with deterministic duration windows per module.
-- [ ] **VOIC-02**: Long-form export artifacts include synchronized narration track metadata alongside existing caption timing maps.
+- [x] **VOIC-01**: Creator can generate narration audio aligned to beat caption timing maps with deterministic duration windows per module.
+- [x] **VOIC-02**: Long-form export artifacts include synchronized narration track metadata alongside existing caption timing maps.
 
 ### Verification & Governance
 
@@ -57,8 +57,8 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 | CONT-06 | Phase 09 | Complete |
 | NARR-01 | Phase 10 | Complete |
 | NARR-02 | Phase 10 | Complete |
-| VOIC-01 | Phase 11 | Pending |
-| VOIC-02 | Phase 11 | Pending |
+| VOIC-01 | Phase 11 | Complete |
+| VOIC-02 | Phase 11 | Complete |
 | VER-04 | Phase 12 | Pending |
 | VER-05 | Phase 12 | Pending |
 
@@ -69,4 +69,4 @@ Machine-validated by `scripts/validate-requirement-traceability.mjs` on every PR
 
 ---
 *Requirements defined: 2026-05-31*
-*Last updated: 2026-05-31 after Phase 10 Narrative Branch Variants*
+*Last updated: 2026-05-31 after Phase 11 Narration Pipeline*
